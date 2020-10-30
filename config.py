@@ -15,7 +15,7 @@ class Config:
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = "ouleur000@gmail.com"
-    MAIL_PASSWORD = "01709902#gmail"
+    MAIL_PASSWORD = "01709902#ouleur000"
 
 
     @staticmethod

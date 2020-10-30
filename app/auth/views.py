@@ -5,6 +5,7 @@ from ..models import User
 from .forms import RegisterForm,LoginForm
 from .. import db
 from datetime import datetime
+from ..email import *
 
 
 #pour la connexion
@@ -32,13 +33,14 @@ def logout():
 @auth.route('/register', methods=['POST','GET'])
 def register():
     form = RegisterForm()
-    if form.validate_on_submit():
-        
 
+    if form.validate_on_submit():
         user = User(email=form.email.data,password=form.password.data)
         db.session.add(user)
         db.session.commit()
-
+        token = user.generate_confirmation_token()
+        send_email(user.email, 'Confirmez votre compte Podipo','confirm', user=user, token=token)
+        flash('Un email de confirmation vous a été envoyé par email.')
         return redirect(url_for('main.home'))
     return render_template('auth/register.html', form=form)
 
@@ -47,8 +49,15 @@ def register():
 @auth.route('/auth/confirm/<token>') 
 # @login_required
 def confirm(token):
-        return render_template('auth/register.html')
+    if current_user.confirmed:
+        return redirect(url_for('main.index')) 
 
+    if current_user.confirm(token):
+        flash('You have confirmed your account. Thanks!') 
+    else:
+        flash('The confirmation link is invalid or has expired.') 
+
+    return redirect(url_for('main.index'))
 
 #pour changer de mot de pass
 @auth.route('/forgot_password')
@@ -65,6 +74,7 @@ def before_request():
 
 @auth.route('/unconfirmed')
 def unconfirmed():
+    print("ddd")
     if current_user.is_anonymous or current_user.confirmed:
         return redirect('main.index')
     return render_template('auth/unconfirmed.html')

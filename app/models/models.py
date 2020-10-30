@@ -55,7 +55,7 @@ class User(baseModel,db.Model,UserMixin):
     def __init__(self, **kwargs):
             super(User, self).__init__(**kwargs)
             if self.role is None:
-                if self.email == current_app.config['ONE_ADMIN']:
+                if self.email == current_app.config['PO_ADMIN']:
                     self.role = Role.query.filter_by(permissions=0xff).first()
                 if self.role is None :
                     self.role = Role.query.filter_by(default=True).first()
@@ -86,6 +86,10 @@ class User(baseModel,db.Model,UserMixin):
     def generate_confirmation_token(self, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.id})
+    
+    def generate_reset_password_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm': self.email})
     
     def confirm(self, token):
         s = Serializer(current_app.config['SECRET_KEY'])
