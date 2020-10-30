@@ -1,0 +1,70 @@
+
+{% extends "base.html" %}
+
+
+{% block container %}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">{{ infos['title'] }}</h1>
+    <p class="mb-4"></a>.</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Mes {{  infos['title'] }}</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Date création mission</th>
+                <th>Date de RDV</th>
+                <th>N° de mission</th>
+                <th>Nom du client</th>
+                <th>Immatriculation</th>
+                <th>Non roulant</th>
+                <th>Statut Comptabilité</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Date création mission</th>
+                <th>Date de RDV</th>
+                <th>N° de mission</th>
+                <th>Nom du client</th>
+                <th>Immatriculation</th>
+                <th>Non roulant</th>
+                <th>Statut Comptabilité</th>
+                <th>Action</th>
+              </tr>
+            </tfoot>
+            <tbody>
+              {% for mission in infos['missions']  %}
+
+              <tr>
+                <td>{{ mission.sinistre.date_sinistre.strftime('%d-%m-%Y') }}</td>
+                <td>{{ mission.sinistre.rendez_vous[0].date_rdv.strftime('%d-%m-%Y') }}</td>
+                <td>{{ mission.sinistre.id }}</td>
+                <td>{{ mission.automobiliste.prenoms }} {{ mission.automobiliste.nom }}</td>
+                <td>{{ mission.vehicule.immatriculation }}</td>
+                <td>{{ mission.sinistre.etat }}</td>
+                <td>Non PAYE</td>
+                <td><a href="{{ url_for('main.mission_detail',id=mission.sinistre.id) }}" >Edit</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+
+  {% endblock %}

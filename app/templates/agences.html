@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Liste des Agences</h1>
+      <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+      {% if not agence_item %}
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        <i class="fas fa-plus fa-2x "></i>
+      </button>
+      {% endif %}
+    </div>
+
+     <p class="mb-4">
+        
+    </p>  
+    <div class="row">
+      {% if not agence_item %}
+      <div class="col-xl-12 col-md-12 mb-4">
+      {% else %}
+      <div class="col-xl-9 col-md-12 mb-4">
+      {% endif %}
+      
+        <!-- Content Row -->
+        <div class="row">
+          {% for agence in agences %}
+
+          <!-- Earnings (Monthly) Card Example -->
+          {% if not agence_item %}
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6  mb-4">
+          {% else %}
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6  mb-4">
+          {% endif %}
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ agence.denomination }}</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ agence.code }}</div>
+                    </div>
+                    
+                    <div class="col-auto">
+                      <div class="text-xs font-weight-bold  text-uppercase mb-1">{{agence.services|length}} Services</div>
+                      <a href="{{ url_for('main.services',aid=agence.id) }}" title="Les services">
+                        <i class="fas fa-building fa-1-3x text-gray-300"></i>
+                      </a>
+
+                      <a href="{{ url_for('main.update_agences',aid=agence.id) }}" title="Mise à jour de l'agence">
+                        <i class="fas fa-eye fa-1-3x text-gray-300"></i>
+                      </a>
+                      <a href="{{ url_for('main.publicite',aid=agence.id) }}" title="Les publicités">
+                        <i class="fas fa-images fa-1-3x text-gray-300"></i>
+                      </a>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div> 
+      </div>
+      {% if agence_item is defined %}
+      <div class="col-xl-3">
+        <h1 class="h3 mb-0 text-gray-800">Modifier d'une Agence</h1>
+          <form class="" method="POST" action="{{ url_for('main.update_agences',aid=agence_item.id) }}" >
+            {{ form.csrf_token }}
+              <div class="modal-body">
+                  <div class="form-group row">
+    
+                    <div class="col-sm-12">
+                      <label for="date">Denomination</label>
+                      {{ form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value=agence_item.denomination)}}
+                    </div>
+    
+                    <div class="col-sm-12">
+                      <label for="date">Localisation</label>
+                      {{ form.localisation(class_='form-control form-control-user',placeholder="Localisation",type="text",value=agence_item.localisation)}}
+                    </div>
+    
+                    <div class="col-sm-12">
+                      <label for="date">Numero</label>
+                      {{ form.numero(class_='form-control form-control-user',placeholder="Numero",type="text",value=agence_item.numero)}}
+                    </div>
+                     
+                  </div>
+              </div>
+              <div class="modal-footer ">
+                <div class="row">
+              {{ form.submit(class="col-12 btn btn-primary") }}
+
+              <a href="{{ url_for('main.del_agences',aid=agence_item.id) }}" type="button" class="col-6 btn btn-danger" data-dismiss="modal">Supprimer</a>
+              <button type="button" class="col-6 btn btn-secondary" data-dismiss="modal">Annuler</button>
+
+            </div>
+    
+              </div>
+          </form>
+      </div>
+      {% endif %}
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ajout d'une Disponibilité</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="" method="POST" action="{{ url_for('main.agences') }}" >
+        {{ form.csrf_token }}
+          <div class="modal-body">
+              <div class="form-group row">
+
+                <div class="col-sm-6">
+                  <label for="date">Denomination</label>
+                  {{ form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text")}}
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="date">Localisation</label>
+                  {{ form.localisation(class_='form-control form-control-user',placeholder="Localisation",type="text")}}
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="date">Numero</label>
+                  {{ form.numero(class_='form-control form-control-user',placeholder="Numero",type="text")}}
+                </div>
+                 
+              </div>
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+          {{ form.submit(class="btn btn-primary") }}
+
+          </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+  
+
+{% endblock %}
