@@ -70,12 +70,12 @@ def del_agences(aid):
 def get_publicite(code):
    agence = Agence.query.filter_by(code=code).first()
    publicites = Publicite.query.filter_by(agence_id=agence.id).all()
-
+   print(publicites)
    return jsonify({'publicite': [publicite.to_json() for publicite in publicites]})
 
 
 @api.route('/check_agences', methods=['POST','GET'])
 def check_agences():
    print(request)
-   # agence = Agence.query.filter_by(code=code).first()
+   agence = Agence.query.filter_by(code=code).first()
    return jsonify({'agence': "service.to_json()"})

@@ -27,7 +27,7 @@ def send_email_with_file(to,cc, subject, template,document, **kwargs):
 def send_email(to, subject, template, **kwargs):
     app = current_app._get_current_object()
     msg = Message(app.config['PO_MAIL_SUBJECT_PREFIX'] + subject,sender=app.config['PO_MAIL_SENDER'], recipients=[to])
-    msg.body = render_template('email/'+template+ '.txt', **kwargs)
+    # msg.body = render_template('email/'+template+ '.txt', **kwargs)
     msg.html = render_template('email/'+template+ '.html', **kwargs)
     msg.cc = []
     

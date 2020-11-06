@@ -11,28 +11,13 @@
 
       <div class="col-xl-10 col-lg-12 col-md-9">
 
-        <div class="card o-hidden border-0 shadow-lg my-5">
-          <div class="card-body p-0">
-            <!-- Nested Row within Card Body -->
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="p-5">
-                  <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-2">Saissez votre nouveau mot de passe ?</h1>
-                  </div>
-                  <form class="user">
-                    <div class="form-group">
-                      <input type="password" class="form-control form-control-user" id="InputPassWord" aria-describedby="emailHelp" placeholder="Entrez votre mot de passe ...">
-                      <input type="password" class="form-control form-control-user" id="InputPassWordConf" aria-describedby="emailHelp" placeholder="Confirmez votre mot de passe ...">
-                    </div>
-                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-user btn-block">
-                      Enregistrer du mot de passe
-                    </a>
-                  </form>
-                </div>
-              </div>
+        <div class=" o-hidden border-0  my-5">
+          {% for message in get_flashed_messages() %}
+            <div class="alert alert-primary">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
             </div>
-          </div>
+          {% endfor %}
         </div>
 
       </div>

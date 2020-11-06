@@ -5,7 +5,7 @@ from .models.models import Permission
 
 def permission_required(permission):
     def decorator(f):
-        @wraps(f):
+        @wraps(f)
         def decorated_function(*args, **kwargs):
             if not current_user.can(permission):
                 print(current_user.can(permission))
@@ -14,5 +14,8 @@ def permission_required(permission):
         return decorated_function
     return decorator
 
-def admin_required(f):
+def entreprise_admin_required(f):
     return permission_required(Permission.ADMINISTER)(f)
+
+def super_admin_required(f):
+    return permission_required(Permission.SUP_ADMINISTER)(f)

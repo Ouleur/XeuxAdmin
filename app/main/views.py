@@ -8,11 +8,10 @@ from ..models.models import *
 from ..notifications import *
 import datetime
 import json
-
+from ..decorators import *
 
 @main.route('/', methods=['POST','GET'])
 def home():
-   print('test')
    if current_user.is_authenticated:
       data = {
          "agences":Agence.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
@@ -20,22 +19,26 @@ def home():
          "guichets":Guichet.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
          "tickets":Ticket.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
       }
+
       val = [5000, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000]
-      print(data)
       return render_template('index.html',data=data,val=json.dumps(val))
    else:
       return redirect(url_for('auth.login'))
       
 @main.route('/agences', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def agences():
    form = AgenceForm(request.form)
    # print(form.data)
+   entreprise = Entreprise.query.filter_by(create_by=current_user.id).first()
 
-   if form.validate_on_submit():
-      agence = Agence(denomination=form.denomination.data,numero=form.numero.data,localisation=form.localisation.data,code=get_random_alphanumeric_string(5,4),create_by=current_user.id)
-      db.session.add(agence)
-      db.session.commit()
+   if entreprise.state:
+      # L'on poura ajout des agences lorsaue l'entrepris est Validée par Omarks
+      if form.validate_on_submit():
+         agence = Agence(entreprise_id=entreprise.id,denomination=form.denomination.data,numero=form.numero.data,localisation=form.localisation.data,code=get_random_alphanumeric_string(5,4),create_by=current_user.id)
+         db.session.add(agence)
+         db.session.commit()
    # print(get_random_alphanumeric_string(3,3))
    agences = Agence.query.filter_by(create_by=current_user.id)
 
@@ -44,6 +47,7 @@ def agences():
 
 @main.route('/agences/<int:aid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def update_agences(aid):
    agence = Agence.query.filter_by(id=aid).first()
    form = AgenceForm(request.form)
@@ -70,6 +74,7 @@ def update_agences(aid):
 
 @main.route('/del_agences/<int:aid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def del_agences(aid):
    agence = Agence.query.filter_by(id=aid).first()
    form = AgenceForm(request.form)
@@ -91,7 +96,7 @@ def guichet(codeA,codeS,codeG):
    print(cur)
    tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.service_id==guichet.services_id)
    # tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date)
-   return render_template('guichet.html',tickets=tickets,guichet=guichet)
+   return render_template('guichet.html',tickets=tickets,guichet=guichet,service=service,agence=agence)
 
 @main.route('/next_ticket/<gid>', methods=['POST','GET'])
 def next_ticket(gid):
@@ -133,6 +138,7 @@ def recall_ticket(tid,gid):
 
 @main.route('/transfert_ticket/<sid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def transfert_ticket(sid):
    cur_date = datetime.datetime.now()
    tickets = Ticket.query.filter_by(Ticket.date_create>cur_date)
@@ -141,13 +147,14 @@ def transfert_ticket(sid):
 
 @main.route('/services/<int:aid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def services(aid):
    agence = Agence.query.filter_by(id=aid).first()
    form = ServiceForm(request.form)
    print(form.data)
 
    if form.validate_on_submit():
-      service = Service(denomination=form.denomination.data,code=get_random_alphanumeric_string(5,4),agences_id=aid,create_by=current_user.id)
+      service = Service(entreprise_id=agence.entreprise_id,denomination=form.denomination.data,code=get_random_alphanumeric_string(5,4),agences_id=aid,create_by=current_user.id)
       db.session.add(service)
       db.session.commit()
    
@@ -157,6 +164,7 @@ def services(aid):
 
 @main.route('/services/<int:aid>/<int:sid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def update_services(aid,sid):
    service_item = Service.query.filter_by(id=sid).first()
 
@@ -178,6 +186,7 @@ def update_services(aid,sid):
 
 @main.route('/del_ervices/<int:aid>/<int:sid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def del_services(aid,sid):
    service_item = Service.query.filter_by(id=sid).first()
    agence = Agence.query.filter_by(id=aid).first()
@@ -192,6 +201,7 @@ def del_services(aid,sid):
 
 @main.route('/liste_guichets/<int:aid>/<int:sid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def guichets(aid,sid):
    agence = Agence.query.filter_by(id=aid).first()
    service = Service.query.filter_by(id=sid).first()
@@ -209,6 +219,7 @@ def guichets(aid,sid):
 
 @main.route('/liste_guichets/<int:aid>/<int:sid>/<int:gid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def update_guichets(aid,sid,gid):
    guichet_item = Guichet.query.filter_by(id=gid).first()
 
@@ -233,6 +244,7 @@ def update_guichets(aid,sid,gid):
 
 @main.route('/del_guichets/<int:aid>/<int:sid>/<int:gid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def del_guichets(aid,sid,gid):
    guichet_item = Guichet.query.filter_by(id=gid).first()
 
@@ -249,6 +261,7 @@ def del_guichets(aid,sid,gid):
 
 @main.route('/update_collaborateurs/<uid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def update_collaborateurs(uid):
    user = User.query.filter_by(id = uid).first()
   
@@ -281,6 +294,7 @@ def update_collaborateurs(uid):
 
 @main.route('/del_collaborateurs/<uid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def del_collaborateurs(uid):
    user = User.query.filter_by(id=uid).first()
    db.session.delete(user)
@@ -301,6 +315,7 @@ def del_collaborateurs(uid):
 
 @main.route('/collaborateurs', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def collaborateurs():
    
    form = CollaborateurForm(request.form)
@@ -326,6 +341,7 @@ def collaborateurs():
 
 @main.route('/etablissement', methods=['POST','GET'])
 @login_required
+@super_admin_required
 def etablissement():
    user = User.query.filter_by(id=current_user.id).first()
    profil = ProfileForm(request.form)
@@ -350,6 +366,7 @@ def etablissement():
 
 @main.route('/update_etablissement/<int:eid>', methods=['POST','GET'])
 @login_required
+@super_admin_required
 def update_etablissement(eid):
    user = User.query.filter_by(id=current_user.id).first()
    profil = ProfileForm(request.form)
@@ -362,11 +379,16 @@ def update_etablissement(eid):
 
    
    if etablissement.validate_on_submit():
-      ets.denomination = etablissement.name.data
-      ets.localisation = etablissement.localisation.data
-      ets.numero = etablissement.numero.data
-      ets.state = etablissement.state.data
-      db.session.add(ets)
+      ent_item.denomination = etablissement.name.data
+      ent_item.localisation = etablissement.localisation.data
+      ent_item.numero = etablissement.numero.data
+      if etablissement.state.data=='active':
+         ent_item.state = True
+      else:
+         ent_item.state = False
+
+         
+      db.session.add(ent_item)
       db.session.commit()
 
    print(entreprises)
@@ -377,6 +399,7 @@ def update_etablissement(eid):
 
 @main.route('/profil', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def profil():
    user = User.query.filter_by(id=current_user.id).first()
    profil = ProfileForm(request.form)
@@ -407,6 +430,7 @@ def profil():
 
 @main.route('/change_service/<aid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def change_service(aid):
    services = Service.query.filter_by(id=aid)
 
@@ -415,6 +439,7 @@ def change_service(aid):
 
 @main.route('/publicite/<aid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def publicite(aid):
    pubForm = PubliciteForm(request.form)
 
@@ -434,6 +459,7 @@ def publicite(aid):
 
 @main.route('/update_publicite/<aid>/<pid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def update_publicite(aid,pid):
    pubForm = PubliciteForm(request.form)
 
@@ -455,6 +481,7 @@ def update_publicite(aid,pid):
 
 @main.route('/del_publicite/<aid>/<pid>', methods=['POST','GET'])
 @login_required
+@entreprise_admin_required
 def del_publicite(aid,pid):
    agence = Agence.query.filter_by(id=aid).first()
    publicites = Publicite.query.filter_by(agence_id=aid).all()
@@ -472,7 +499,7 @@ def get_publicite():
    agence = Agence.query.filter_by(code=code).first()
    publicites = Publicite.query.filter_by(agence_id=agence.id).all()
 
-   return jsonify({'publicite': ['<img style="width: 100%;height: 100%;" alt="Podipo pub" src="http://192.168.8.107:5000{}">'.format(publicite.url) for publicite in publicites]})
+   return jsonify({'publicite': ['http://127.0.0.1:5000{}'.format(publicite.url) for publicite in publicites]})
 
 
 @main.route('/check_agences', methods=['POST','GET'])

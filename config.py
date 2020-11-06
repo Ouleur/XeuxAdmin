@@ -7,7 +7,7 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     PO_MAIL_SUBJECT_PREFIX = '[Podipo]'
     PO_MAIL_SENDER = 'Podipo Admin <info@podipo.com>'
-    PO_ADMIN = os.environ.get('PO_ADMIN') or 'adoujmv@gmail.com'
+    PO_ADMIN = os.environ.get('PO_ADMIN') or 'admin@popodipo.com'
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

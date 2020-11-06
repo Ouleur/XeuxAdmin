@@ -18,7 +18,7 @@ def add_ticket(sid):
     #recuperer la liste des tickets du service pour creer le numero
     service = Service.query.filter_by(id=sid).first()
 
-    ticket = Ticket(servstr=service.denomination[0:2],
+    ticket = Ticket(servstr=service.denomination[0:2].upper(),
                         numero=tickets.count()+1,
                         etat='nouveau',
                         client_hash=request.json['client_hash'],

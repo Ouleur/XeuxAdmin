@@ -62,6 +62,7 @@
 
 
       <!-- Nav Item - Pages Collapse Menu -->
+      {% if current_user.is_super_administrator() %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#entreprise" aria-expanded="true" aria-controls="entreprise">
           <i class="fas fa-fw fa-building"></i>
@@ -74,7 +75,10 @@
           </div>
         </div>
       </li>
+      {% endif %}
       <!-- Nav Item - Pages Collapse Menu -->
+
+      {% if current_user.is_entreprise_administrator() %}
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
@@ -90,6 +94,7 @@
         </div>
       </li>
       <!-- Nav Item - Pages Collapse Menu -->
+      {% endif %}
       <!--  -->
 
       <!-- <li class="nav-item">
@@ -114,6 +119,7 @@
       </li> -->
 
       
+      {% if current_user.is_entreprise_administrator() %}
       
       <!-- Nav Item - Compte Collapse Menu -->
       <li class="nav-item">
@@ -129,6 +135,8 @@
           </div>
         </div>
       </li>
+
+      {% endif %}
       
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">

@@ -19,7 +19,7 @@ class baseModel():
 class Permission:
     GUICHET = 0x01
     ADMINISTER = 0x02
-    SUP_ADMINISTER = 0x03
+    SUP_ADMINISTER = 0x04
 
 class Role(db.Model):
     __tablename__ = "roles"
@@ -34,7 +34,7 @@ class Role(db.Model):
             'Guichet': (Permission.GUICHET, True),
             'Entreprise Admin' : (Permission.GUICHET |
                            Permission.ADMINISTER , False),
-            'Super Administrator' : (Permission.ADMINISTER, False)
+            'Super Administrator' : (Permission.SUP_ADMINISTER, False)
         }
 
         for r in roles:
@@ -53,14 +53,14 @@ class User(baseModel,db.Model,UserMixin):
     __tablename__ = 'users'
 
     def __init__(self, **kwargs):
-            super(User, self).__init__(**kwargs)
-            if self.role is None:
-                if self.email == current_app.config['PO_ADMIN']:
-                    self.role = Role.query.filter_by(permissions=0xff).first()
-                if self.role is None :
-                    self.role = Role.query.filter_by(default=True).first()
-            if self.email is not None and self.avatar_hash is None:
-                self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
+        super(User, self).__init__(**kwargs)
+        if self.role is None:
+            if self.email == current_app.config['PO_ADMIN']:
+                self.role = Role.query.filter_by(permissions=0x04).first()
+            if self.role is None :
+                self.role = Role.query.filter_by(default=True).first()
+        if self.email is not None and self.avatar_hash is None:
+            self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
 
     email = db.Column(db.String(64), unique=True, index=True)
     name = db.Column(db.String(64))
@@ -69,6 +69,7 @@ class User(baseModel,db.Model,UserMixin):
     avatar_hash = db.Column(db.String(32))
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
+    hash_token = db.Column(db.Text)
 
     role_id = db.Column(db.Integer, db.ForeignKey("roles.id"))
     # role = db.Column(db.String(32))
@@ -83,11 +84,11 @@ class User(baseModel,db.Model,UserMixin):
     role = db.relationship('Role', backref='users')
 
     
-    def generate_confirmation_token(self, expiration=3600):
+    def generate_confirmation_token(self, expiration=43200):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.id})
     
-    def generate_reset_password_token(self, expiration=3600):
+    def generate_reset_password_token(self, expiration=7200):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.email})
     
@@ -101,6 +102,16 @@ class User(baseModel,db.Model,UserMixin):
             return False
         self.confirmed = True
         db.session.add(self)
+        return True
+
+    def pwdConfirmToken(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.email:
+            return False
         return True
 
     @property
@@ -119,7 +130,7 @@ class User(baseModel,db.Model,UserMixin):
         db.session.add(self)
 
     def __repr__(self):
-        return "<User %r>" % self.email
+        return "<User %r>" % self.name
 
     #For API """
     
@@ -140,8 +151,18 @@ class User(baseModel,db.Model,UserMixin):
         print(User.query.get(data['id']))
         return User.query.get(data['id'])
     
-    #For API """
 
+    def can(self, permissions):
+        return self.role is not None and (self.role.permissions & permissions) == permissions
+
+    def is_super_administrator(self):
+        return self.can(Permission.SUP_ADMINISTER)
+    
+    def is_entreprise_administrator(self):
+        return self.can(Permission.ADMINISTER)
+
+
+    #For API """
     def to_json(self):
         entreprise = Entreprise.query.filter_by(id=self.entreprise_id).first()
         

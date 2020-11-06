@@ -2,7 +2,7 @@
 $(".ticket_view").on('click',function(){
     $("#numero-t").html($(this).data("id").split(":")[1]);
     $("#numero-t").attr("data-id",$(this).data("id").split(":")[0]);
-    $("#sidebarToggleTop").click()
+    // $("#sidebarToggleTop").click()
 });
 
 
@@ -44,3 +44,13 @@ $(".debuter").on('click',function(){
 $(".fermer").on('click',function(){
     $("#numero-t").html($(this).data("id").split(":")[1]);
 })
+
+//Resize
+function quarter() {
+    window.resizeTo(
+      window.screen.availWidth / 2,
+      window.screen.availHeight / 2
+    );
+  }
+
+quarter();

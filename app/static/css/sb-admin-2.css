@@ -4044,6 +4044,8 @@ input[type="button"].btn-block {
   }
 }
 
+
+
 @media (min-width: 576px) {
   .navbar-expand-sm {
     flex-flow: row nowrap;
@@ -11132,4 +11134,16 @@ text-align: center;
 
 a.btn{
   color: #fff !important;
+}
+
+@media (max-width: 767.98px) {
+  .item-action_min{
+    display: none;
+  }
+}
+
+@media (min-width: 767.98px) {
+  .item-action{
+    display: none;
+  }
 }

@@ -23,6 +23,7 @@ class EtablissementForm(FlaskForm):
     name = StringField('Dénomination',[DataRequired(message="Saisissez une dénomination SVP.")])
     localisation = StringField('Localisation')
     numero = StringField('Numero',[DataRequired(message="Saisissez un numéro SVP.")])
+    state = SelectField('Etat',choices=[("desactiver","Desactiver"),("active","Activer")])
     submit = SubmitField('Enregistrer')   
 
 

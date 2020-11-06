@@ -23,3 +23,15 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', [DataRequired(message="Saisissez votre mot de passe SVP.")])
     remember_me = BooleanField('Se souvenir de moi')
     submit = SubmitField('Se connecter')         
+
+
+class PasswordInitForm(FlaskForm):
+    """ Password Initialisation """
+    email = StringField('Email',[DataRequired(message="Saisissez votre mail SVP."),Email(message="Votre adresse mail est invalide.")])
+    submit = SubmitField('Reinitialisation du mot de passe')         
+
+class NewPasswordForm(FlaskForm):
+    """ Password Initialisation """
+    password = PasswordField('Password', [EqualTo('confirmPassword', message="Les mots de passe doivent corresponde."),DataRequired(message="Saisissez votre mot de passe SVP.")])
+    confirmPassword = PasswordField("Ressaisissez le mot de passe", [DataRequired(message="Saisissez votre mot de passe SVP.")])
+    submit = SubmitField('Reinitialisation du mot de passe')         
