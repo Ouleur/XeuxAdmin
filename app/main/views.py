@@ -12,6 +12,8 @@ from ..decorators import *
 
 @main.route('/', methods=['POST','GET'])
 def home():
+
+   print(request.host)
    if current_user.is_authenticated:
       data = {
          "agences":Agence.query.filter_by(entreprise_id=current_user.entreprise_id).count(),

@@ -11,6 +11,8 @@ City: Abidjan
 import requests
 import jwt
 import json
+import socket
+
 
 #Mercure Payload, do you add information in subscribe or in publish
 payload = {
@@ -35,7 +37,11 @@ secret= "OmarksMerconSysteme"
 DEMO_JWT = jwt.encode(payload, secret, algorithm='HS256',headers=header).decode("utf-8")
 
 #Mercure instance url
-url = 'http://127.0.0.1:3000/.well-known/mercure'
+try:
+    url = 'http://{}:3000/.well-known/mercure'.format(socket.gethostbyname(socket.gethostname()))
+except:
+    url = 'http://{}:3000/.well-known/mercure'.format(socket.gethostbyname("localhost"))
+
 
 headers = {
     "Content-type": "application/x-www-form-urlencoded",
