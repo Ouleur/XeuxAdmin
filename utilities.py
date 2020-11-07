@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for,send_file
 from  werkzeug.utils import secure_filename
 import random
 import string
+#Vianney
 
 def get_random_alphanumeric_string(letters_count, digits_count):
     sample_str = ''.join((random.choice(string.ascii_uppercase) for i in range(letters_count)))
