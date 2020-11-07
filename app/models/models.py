@@ -72,7 +72,7 @@ class User(baseModel,db.Model,UserMixin):
     hash_token = db.Column(db.Text)
 
     role_id = db.Column(db.Integer, db.ForeignKey("roles.id"))
-    role = db.Column(db.String(32))
+    # role = db.Column(db.String(32))
 
     # entreprises = db.relationship('Entreprise', back_populates="users")
     # agences = db.relationship('Agence')
