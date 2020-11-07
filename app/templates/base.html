@@ -78,6 +78,23 @@
       {% endif %}
       <!-- Nav Item - Pages Collapse Menu -->
 
+      <!-- Nav Item - Pages Collapse Menu -->
+      {% if current_user.is_super_administrator() %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#offre" aria-expanded="true" aria-controls="entreprise">
+          <i class="fas fa-fw fa-building"></i>
+          <span>Les Offres</span>
+        </a>
+        <div id="offre" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">La liste des Offres:</h6>
+            <a class="collapse-item" href="{{ url_for('main.offre') }}">Offres</a>
+          </div>
+        </div>
+      </li>
+      {% endif %}
+      <!-- Nav Item - Pages Collapse Menu -->      
+
       {% if current_user.is_entreprise_administrator() %}
 
       <!-- Nav Item - Pages Collapse Menu -->
@@ -117,7 +134,39 @@
           <span>Les services</span>
         </a>
       </li> -->
+      <!-- Nav Item - Pages Collapse Menu -->
 
+      {% if current_user.is_super_administrator() %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#payementsAll" aria-expanded="true" aria-controls="entreprise">
+          <i class="fas fa-fw fa-building"></i>
+          <span>Les Payements</span>
+        </a>
+        <div id="payementsAll" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">La liste des Payements:</h6>
+            <a class="collapse-item" href="{{ url_for('main.payement') }}">Payements</a>
+          </div>
+        </div>
+      </li>
+      {% endif %}
+      <!-- Nav Item - Pages Collapse Menu -->
+
+      {% if current_user.is_entreprise_administrator() %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#payements" aria-expanded="true" aria-controls="entreprise">
+          <i class="fas fa-fw fa-building"></i>
+          <span>Mes Payements</span>
+        </a>
+        <div id="payements" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">La liste de mes Payements:</h6>
+            <a class="collapse-item" href="{{ url_for('main.mes_payements',eid=current_user.entreprise_id) }}">Payements</a>
+          </div>
+        </div>
+      </li>
+      {% endif %}
+      <!-- Nav Item - Pages Collapse Menu -->
       
       {% if current_user.is_entreprise_administrator() %}
       
@@ -384,7 +433,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Clicquez sur 'Déconnexion' pour fermer votre session.</div>
+        <div class="modal-body">Cliquez sur 'Déconnexion' pour fermer votre session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
           <a class="btn btn-primary" href="{{ url_for('auth.logout') }}">Déconnexion</a>

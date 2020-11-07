@@ -72,7 +72,7 @@ class User(baseModel,db.Model,UserMixin):
     hash_token = db.Column(db.Text)
 
     role_id = db.Column(db.Integer, db.ForeignKey("roles.id"))
-    # role = db.Column(db.String(32))
+    role = db.Column(db.String(32))
 
     # entreprises = db.relationship('Entreprise', back_populates="users")
     # agences = db.relationship('Agence')
@@ -194,7 +194,7 @@ class Entreprise(baseModel,db.Model):
     logo = db.Column(db.String(255))
     numero = db.Column(db.String(64))
     state = db.Column(db.Boolean, default=False)
-    create_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    #create_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     # agences = db.relationship('Agence', backref='entreprises')
     # services = db.relationship('Service', backref='entreprises')
@@ -354,6 +354,67 @@ class Ticket(baseModel,db.Model):
 
     def __repr__(self):
         return "<Ticket %r>" % self.numero
+
+
+#Offres
+class Offre(baseModel,db.Model):
+    __tablename__ = "offres"
+    titre = db.Column(db.String(64))
+    description = db.Column(db.String(64))
+    prix = db.Column(db.String(50))
+    temps = db.Column(db.Integer())
+
+
+    def to_json(self):
+        guichet = Guichet.query.filter_by(id=self.guichet_id).first()
+        json_expert = {
+            'id': self.id,
+            'titre': self.titre,
+            'description': self.description,
+            'prix': self.prix,
+            'temps': self.temps,
+        }
+        return json_expert
+
+    def __repr__(self):
+        return "<Offre %r>" % self.titre
+
+
+#Payements
+class Payement(baseModel,db.Model):
+    __tablename__ = "payements"
+    entreprise = db.Column(db.String(64))
+    temps = db.Column(db.String(64))
+    prix = db.Column(db.String(64))
+    etat = db.Column(db.String(50))
+    offre = db.Column(db.String(50))
+    numero_client = db.Column(db.String(50))
+    numero_omarks = db.Column(db.String(50))
+    date_debut = db.Column(db.DateTime(), default=datetime.utcnow)
+    date_fin = db.Column(db.DateTime())
+
+    entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
+    
+    def to_json(self):
+        guichet = Guichet.query.filter_by(id=self.guichet_id).first()
+        json_expert = {
+            'id': self.id,
+            'entreprise': self.entreprise,
+            'temps': self.temps,
+            'prix': self.prix,
+            'etat': self.etat,
+            'numero_client': self.numero_client,
+            'numero_omarks': self.numero_omarks,
+            "entreprise_id": self.entreprise_id,
+            "offre": self.offre,
+            "date_debut":self.date_debut,
+            "date_fin":self.date_fin
+        }
+        return json_expert
+
+    def __repr__(self):
+        return "<Payement %r>" % self.offre
+
 
 login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader

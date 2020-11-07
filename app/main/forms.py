@@ -58,10 +58,21 @@ class PubliciteForm(FlaskForm):
     media_type = SelectField('Type Media',choices=[("Image","Image")],)
     submit = SubmitField('Enregistrer')  
 
-class DisponibiliteForm(FlaskForm):
-    # ,[DataRequired(message="Saisissez une date SVP.")
-    date = StringField('Date')
-    heure_debut = StringField('Heure debut')
-    heure_fin = StringField('Heure fin', [DataRequired(message="Saisissez une heure de fin SVP.")])
+class OffreForm(FlaskForm):
+    titre = StringField('Titre')
+    description = TextAreaField('Description')
+    prix = StringField('Prix')
+    temps = StringField('Temps')
+
+    submit = SubmitField('Enregistrer')  
+
+
+class PayementForm(FlaskForm):
+    temps = StringField('Temps')
+    prix = StringField('Prix')
+    etat = SelectField('Etat',choices=[("publier","Publier"),("non_publier","Non Publier")])
+    offre = StringField('Offre')
+    date_debut = StringField('Date debut')
+    date_fin = StringField('Date fin')
 
     submit = SubmitField('Enregistrer')  

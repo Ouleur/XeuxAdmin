@@ -387,7 +387,7 @@ def update_etablissement(eid):
       else:
          ent_item.state = False
 
-         
+
       db.session.add(ent_item)
       db.session.commit()
 
@@ -399,7 +399,6 @@ def update_etablissement(eid):
 
 @main.route('/profil', methods=['POST','GET'])
 @login_required
-@entreprise_admin_required
 def profil():
    user = User.query.filter_by(id=current_user.id).first()
    profil = ProfileForm(request.form)
@@ -486,7 +485,7 @@ def del_publicite(aid,pid):
    agence = Agence.query.filter_by(id=aid).first()
    publicites = Publicite.query.filter_by(agence_id=aid).all()
    publicite_item = Publicite.query.filter_by(id=pid)
-   db.delete(publicite_item)
+   db.session.delete(publicite_item)
 
    return render_template('publicite.html',form=pubForm,publicites=publicites,agence=agence)
 
@@ -508,3 +507,179 @@ def check_agences():
    agence = Agence.query.filter_by(code=code).first()
    return jsonify({'agence': "Acune valeur" if not agence else agence.to_json()})
 
+
+
+
+@main.route('/offre', methods=['POST','GET'])
+@login_required
+@super_admin_required
+def offre():
+   offreForm = OffreForm(request.form)
+
+   if offreForm.validate_on_submit():
+      offre = Offre(titre=offreForm.titre.data,description=offreForm.description.data,prix=offreForm.prix.data,temps=offreForm.temps.data)
+      db.session.add(offre)
+      db.session.commit()
+         
+   offres = Offre.query.filter_by().all()
+
+   return render_template('offre.html',form=offreForm,offres=offres)
+
+
+@main.route('/update_offre/<int:oid>', methods=['POST','GET'])
+@login_required
+@super_admin_required
+def update_offre(oid):
+   offreForm = OffreForm(request.form)
+
+   offre = Offre.query.filter_by(id=oid).first()
+
+   if offreForm.validate_on_submit():
+      offre.titre=offreForm.titre.data
+      offre.description=offreForm.description.data
+      offre.temps=offreForm.temps.data
+      offre.prix=offreForm.prix.data
+   
+   offres = Offre.query.all()
+
+
+   return render_template('offre.html',form=offreForm,offres=offres)
+
+
+@main.route('/del_offre/<int:oid>', methods=['POST','GET'])
+@login_required
+@super_admin_required
+def del_offre(oid):
+   offreForm = OffreForm(request.form)
+   offre = Offre.query.filter_by(id=oid).first()
+   print(offre)
+   db.session.delete(offre)
+   offres = Offre.query.filter_by(id=oid).all()
+
+   return render_template('offre.html',form=offreForm,offres=offres)
+
+
+
+@main.route('/payement', methods=['POST','GET'])
+@login_required
+@super_admin_required
+def payement():
+   payementForm = PayementForm(request.form)
+
+   if payementForm.validate_on_submit():
+      payement = Payement(offre=payementForm.offre.data,etat=payementForm.etat.data,prix=payementForm.prix.data,temps=payementForm.temps.data)
+      db.session.add(payement)
+      db.session.commit()
+         
+   payements = Payement.query.filter_by().all()
+
+   return render_template('payement.html',form=payementForm,payements=payements)
+
+
+@main.route('/update_payement/<int:pid>', methods=['POST','GET'])
+@login_required
+@super_admin_required
+def update_payement(pid):
+   payementForm = PayementForm(request.form)
+
+   payement = Payement.query.filter_by(id=pid).first()
+
+   if payementForm.validate_on_submit():
+      payement.temps=payementForm.temps.data
+      payement.prix=payementForm.prix.data
+      payement.etat=payementForm.etat.data
+      payement.offre=payementForm.offre.data
+      payement.date_debut=payementForm.date_debut.data
+      payement.date_fin=payementForm.date_fin.data
+   
+   payements = Payement.query.all()
+
+
+   return render_template('publicite.html',form=payementForm,payements=payements,payement=payement)
+
+
+@main.route('/del_payement/<int:pid>', methods=['POST','GET'])
+@login_required
+@super_admin_required
+def del_payement(pid):
+   payement = Payement.query.filter_by(id=pid).first()
+   db.session.delete(payement)
+   payements = Payement.query.all()
+
+   return render_template('payement.html',form=payementForm,payements=offres)
+
+
+
+@main.route('/payement/<eid>', methods=['POST','GET'])
+@login_required
+@entreprise_admin_required
+def mes_payements(eid):
+   payementForm = PayementForm(request.form)
+
+   offres = Offre.query.all()
+         
+   payements = Payement.query.filter_by(entreprise_id=current_user.entreprise_id).all()
+
+   return render_template('payement.html',form=payementForm,payements=payements,offres=offres)
+
+
+@main.route('/achat_offre/<oid>', methods=['POST','GET'])
+@login_required
+@entreprise_admin_required
+def achat_offre(oid):
+   payementForm = PayementForm(request.form)
+
+   offres = Offre.query.all()
+   offre = Offre.query.filter_by(id=oid).first()
+   entreprise = Entreprise.query.filter_by(id=current_user.entreprise_id).first()
+   payement = Payement(offre=offre.titre,etat="En cours",prix=offre.prix,temps=offre.temps,entreprise_id=current_user.entreprise_id, entreprise=entreprise.denomination)
+   db.session.add(payement)
+   db.session.commit()
+         
+   payements = Payement.query.filter_by(entreprise_id=current_user.entreprise_id).all()
+
+   return render_template('payement.html',form=payementForm,payements=payements,offres=offres)
+
+
+@main.route('/annuler_offre/<pid>', methods=['POST','GET'])
+@login_required
+@entreprise_admin_required
+def annuler_offre(pid):
+   payement = Payement.query.filter_by(id=pid).first()
+   payement.etat = "Annuler"
+   db.session.add(payement)
+   db.session.commit()
+
+   return {"response":True}
+
+@main.route('/valider_offre/<pid>', methods=['POST','GET'])
+@login_required
+@super_admin_required
+def valider_offre(pid):
+   payement = Payement.query.filter_by(id=pid).first()
+   payement.etat = "Payer"
+   db.session.add(payement)
+   db.session.commit()
+
+   return {"response":True}
+
+@main.route('/update_payement/<eid>/<int:pid>', methods=['POST','GET'])
+@login_required
+@entreprise_admin_required
+def update_mes_payement(eid,pid):
+   payementForm = PayementForm(request.form)
+
+   payement = Payement.query.filter_by(id=pid).first()
+
+   if payementForm.validate_on_submit():
+      payement.temps=payementForm.temps.data
+      payement.prix=payementForm.prix.data
+      payement.etat=payementForm.etat.data
+      payement.offre=payementForm.offre.data
+      payement.date_debut=payementForm.date_debut.data
+      payement.date_fin=payementForm.date_fin.data
+   
+   payements = Payement.query.all()
+
+
+   return render_template('publicite.html',form=payementForm,payements=payements,payement=payement)
