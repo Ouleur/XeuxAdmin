@@ -34,10 +34,11 @@ def get_users():
     return jsonify({ 'users': [user.to_json() for user in users] })
 
 
-@api.route('/git_update',methods=['GET'])
+@api.route('/git_update/',methods=['GET'])
 def git_update():
-    home_dir = subprocess.run(["git","add","."],stdout=subprocess.PIPE, text=True,)
-    home_dir = subprocess.run(["git","commit","-a"],stdout=subprocess.PIPE, text=True,)
-    home_dir = subprocess.run(["git","pull"],stdout=subprocess.PIPE, text=True,)
+    home_dir = subprocess.run(["git","add","."])
+    home_dir = subprocess.run(["git","commit","-m","Udate"])
+    home_dir = subprocess.run(["git","pull"],stdout=subprocess.PIPE, text=True)
+    current_app.logger.info('Hello World!')
     return jsonify({ 'users': home_dir.stdout })
     
