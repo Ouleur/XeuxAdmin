@@ -39,6 +39,5 @@ def git_update():
     home_dir = subprocess.run(["git","add","."],stdout=subprocess.PIPE, text=True,)
     home_dir = subprocess.run(["git","commit","-a"],stdout=subprocess.PIPE, text=True,)
     home_dir = subprocess.run(["git","pull"],stdout=subprocess.PIPE, text=True,)
-    print(home_dir)
     return jsonify({ 'users': home_dir.stdout })
     
