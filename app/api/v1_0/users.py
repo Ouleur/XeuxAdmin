@@ -6,6 +6,7 @@ from ...models import User
 from flask import g, jsonify
 from .errors import forbidden,unauthorized
 from flask_httpauth import HTTPBasicAuth
+import subprocess
 
 
 auth = HTTPBasicAuth()
@@ -32,3 +33,10 @@ def get_users():
     users = User.query.all()
     return jsonify({ 'users': [user.to_json() for user in users] })
 
+
+@api.route('/git_update/',methods=['GET'])
+def git_update():
+    home_dir = subprocess.run(["git","pull"],stdout=subprocess.PIPE, text=True,)
+    print(home_dir)
+    return jsonify({ 'users': home_dir.stdout })
+    
