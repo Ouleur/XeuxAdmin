@@ -139,7 +139,7 @@ def before_request():
 def unconfirmed():
     print(current_user)
     if current_user.is_anonymous or current_user.confirmed:
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.home'))
     
     message = Markup('Bienvenue <b>{}</b>, un email de confirmation vous a été envoyé par email.!'.format(current_user.name))
     flash(message)
