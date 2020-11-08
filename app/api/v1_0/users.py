@@ -37,6 +37,7 @@ def get_users():
 @api.route('/update_git',methods=['GET'])
 def git_update():
     #git
+    home_dir = subprocess.run(["cd","/var/www/pozy"])
     home_dir = subprocess.run(["git","add","."])
     home_dir = subprocess.run(["git","commit","-m","Update git"])
     home_dir = subprocess.run(["git","pull","--no-edit"])
