@@ -36,8 +36,6 @@ def get_users():
 
 @api.route('/git_update/',methods=['GET'])
 def git_update():
-    home_dir = subprocess.run(["git","add","."])
-    home_dir = subprocess.run(["git","commit","-m","Update"])
     home_dir = subprocess.run(["git","pull"],stdout=subprocess.PIPE, text=True)
     current_app.logger.info(home_dir.stdout)
     return jsonify({ 'users': home_dir.stdout })
