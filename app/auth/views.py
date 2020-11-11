@@ -48,7 +48,7 @@ def register():
             db.session.commit()
             
 
-            entreprise = Entreprise(denomination=form.entreprise.data,
+            entreprise = Entreprise(denomination=form.entreprise.data.upper(),
                             numero=form.numero_tel.data,
                             localisation=form.adresse.data,
                             create_by=user.id)

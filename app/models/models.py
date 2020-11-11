@@ -224,6 +224,8 @@ class Agence(baseModel,db.Model):
     localisation = db.Column(db.String(255))
     code = db.Column(db.String(10))
     logo = db.Column(db.String(255))
+    ouverture = db.Column(db.Time())
+    fermerture = db.Column(db.Time())
 
     entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
     create_by = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -239,7 +241,7 @@ class Agence(baseModel,db.Model):
             'denomination': self.denomination,
             'numero': self.numero,
             'localisation': self.localisation,
-            'logo': self.logo,
+            'logo': self.logo
         }
         return json_agence
 
@@ -283,6 +285,7 @@ class Service(baseModel,db.Model):
     agences_id = db.Column(db.Integer, db.ForeignKey('agences.id'))
     tickets = db.relationship('Ticket', backref='services')
     guichets = db.relationship('Guichet', backref='services')
+    logo = db.Column(db.String(255))
 
     # users = db.relationship('User', backref='users')
 
@@ -291,6 +294,7 @@ class Service(baseModel,db.Model):
             'id': self.id,
             'denomination': self.denomination,
             'code': self.code,
+            "logo":self.logo
         }
         return json_expert
 
@@ -407,8 +411,6 @@ class Payement(baseModel,db.Model):
             'numero_omarks': self.numero_omarks,
             "entreprise_id": self.entreprise_id,
             "offre": self.offre,
-            "date_debut":self.date_debut,
-            "date_fin":self.date_fin
         }
         return json_expert
 

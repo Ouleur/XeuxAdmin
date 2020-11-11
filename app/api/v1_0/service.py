@@ -46,13 +46,16 @@ def get_service(sid):
 def get_agence_service(aid):
     services = Service.query.filter_by(agences_id=aid)
     agence = Agence.query.filter_by(id=aid).first()
-    tickets = Ticket.query.filter_by(agence_id=aid)
+    cur_date = datetime.now()
+    cur = "{} {}".format(cur_date.strftime("%Y-%m-%d"),"00:00:00")
+    tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.agence_id==aid)
+    tickets_servir = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.agence_id==aid,Ticket.etat=="appeler")
     return jsonify({ 'services':  [ service.to_json() for service in services ],
                      "agence":{
                          "denomination":agence.denomination,
-                         "evolution":"0/{}".format(tickets.count()),
+                         "evolution":"{}/{}".format(tickets_servir.count(),tickets.count()),
                          "tm":"3",
-                         "crenau":"08h00-16h30"
+                         "crenau":"{}-{}".format(agence.ouverture.strftime("%H:%M"),agence.fermerture.strftime("%H:%M"))
                         }
                     }
                 )

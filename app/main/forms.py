@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField,TextAreaField,SubmitField,PasswordField,DateField,SelectField,BooleanField,FloatField
+from wtforms import StringField,TextAreaField,SubmitField,PasswordField,DateField,SelectField,BooleanField,FloatField,TimeField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, URL
 from ..models.models import *
 
@@ -14,16 +14,15 @@ class SecuriteForm(FlaskForm):
 
 
 class ProfileForm(FlaskForm):
-    name = StringField('Nom et prénoms')
-    mail = StringField('Email')
+    name = StringField('Nom et prénoms',[DataRequired(message="Saisissez votre Nom et prénoms SVP.")])
+    mail = StringField('Email',[DataRequired(message="Saisissez une adresse mail SVP.")])
     submit = SubmitField('Enregistrer')  
 
 
 class EtablissementForm(FlaskForm):
-    name = StringField('Dénomination',[DataRequired(message="Saisissez une dénomination SVP.")])
-    localisation = StringField('Localisation')
+    denomination = StringField('Dénomination',[DataRequired(message="Saisissez une dénomination SVP.")])
+    localisation = StringField('Localisation',[DataRequired(message="Saisissez une localisation SVP.")])
     numero = StringField('Numero',[DataRequired(message="Saisissez un numéro SVP.")])
-    state = SelectField('Etat',choices=[("desactiver","Desactiver"),("active","Activer")])
     submit = SubmitField('Enregistrer')   
 
 
@@ -40,6 +39,8 @@ class AgenceForm(FlaskForm):
     denomination = StringField('Dénominationl')
     numero = StringField('Numero')
     localisation = StringField('Localisation')
+    ouverture = TimeField('Overture',format='%H:%M:%S')
+    fermerture = TimeField('Fermeture',format='%H:%M:%S')
     submit = SubmitField('Enregistrer')         
 
 class ServiceForm(FlaskForm):

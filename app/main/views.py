@@ -38,7 +38,23 @@ def agences():
    if entreprise.state:
       # L'on poura ajout des agences lorsaue l'entrepris est Validée par Omarks
       if form.validate_on_submit():
-         agence = Agence(entreprise_id=entreprise.id,denomination=form.denomination.data,numero=form.numero.data,localisation=form.localisation.data,code=get_random_alphanumeric_string(5,4),create_by=current_user.id)
+         image=file_upload('POST',request,'file','one')
+
+         if image:
+            url = url_for('static', filename='uploads/' + image)
+         else:
+            url = ""
+         agence = Agence(
+            entreprise_id=entreprise.id,
+            denomination=form.denomination.data.upper(),
+            numero=form.numero.data,
+            localisation=form.localisation.data,
+            code=get_random_alphanumeric_string(5,4),
+            ouverture=form.ouverture.data,
+            fermerture=form.fermerture.data,
+            create_by=current_user.id,
+            logo=url,
+         )
          db.session.add(agence)
          db.session.commit()
    # print(get_random_alphanumeric_string(3,3))
@@ -54,14 +70,25 @@ def update_agences(aid):
    agence = Agence.query.filter_by(id=aid).first()
    form = AgenceForm(request.form)
    print(form.data)
-
+   
    if form.validate_on_submit():
       
-      agence.denomination=form.denomination.data
+      print(request.files)
+      image=file_upload('POST',request,'file','one')
+   
+      if image:
+         url = url_for('static', filename='uploads/' + image)
+      else:
+         url = ""
+      
+
+      agence.denomination=form.denomination.data.upper()
       agence.numero=form.numero.data
       agence.localisation=form.localisation.data
+      agence.ouverture=form.ouverture.data
+      agence.fermerture=form.fermerture.data
       agence.user_id=current_user.id
-
+      agence.logo=url
 
       db.session.add(agence)
       db.session.commit()
@@ -79,7 +106,6 @@ def update_agences(aid):
 @entreprise_admin_required
 def del_agences(aid):
    agence = Agence.query.filter_by(id=aid).first()
-   form = AgenceForm(request.form)
    
    db.session.delete(agence)
    # print(get_random_alphanumeric_string(3,3))
@@ -156,7 +182,14 @@ def services(aid):
    print(form.data)
 
    if form.validate_on_submit():
-      service = Service(entreprise_id=agence.entreprise_id,denomination=form.denomination.data,code=get_random_alphanumeric_string(5,4),agences_id=aid,create_by=current_user.id)
+      image=file_upload('POST',request,'file','one')
+   
+      if image:
+         url = url_for('static', filename='uploads/' + image)
+      else:
+         url = ""
+
+      service = Service(entreprise_id=agence.entreprise_id,denomination=form.denomination.data.upper(),code=get_random_alphanumeric_string(5,4),agences_id=aid,create_by=current_user.id,logo=url)
       db.session.add(service)
       db.session.commit()
    
@@ -175,9 +208,16 @@ def update_services(aid,sid):
    print(form.data)
 
    if form.validate_on_submit():
-      service_item.denomination=form.denomination.data
+      image=file_upload('POST',request,'file','one')
+   
+      if image:
+         url = url_for('static', filename='uploads/' + image)
+      else:
+         url = ""
+      service_item.denomination=form.denomination.data.upper()
       service_item.code=form.code.data
       service_item.agences_id=aid
+      service_item.logo=url
       
       db.session.add(service_item)
       db.session.commit()
@@ -381,7 +421,7 @@ def update_etablissement(eid):
 
    
    if etablissement.validate_on_submit():
-      ent_item.denomination = etablissement.name.data
+      ent_item.denomination = etablissement.name.data.upper()
       ent_item.localisation = etablissement.localisation.data
       ent_item.numero = etablissement.numero.data
       if etablissement.state.data=='active':
@@ -405,9 +445,7 @@ def profil():
    user = User.query.filter_by(id=current_user.id).first()
    profil = ProfileForm(request.form)
    securiteForm = SecuriteForm(request.form)
-
-   nom = Agence.query.filter_by(create_by=user.id).order_by(Agence.denomination)
-   mail = Service.query.filter_by(create_by=user.id).order_by(Service.denomination)
+   etablissement = EtablissementForm(request.form)
 
    print(profil.validate_on_submit(),profil.data)
    if profil.validate_on_submit():
@@ -423,11 +461,20 @@ def profil():
 
 
    
-   ets = Entreprise.query.filter_by(id=user.entreprise_id).first()
-   etablissement = EtablissementForm(request.form)
+   ent_item = Entreprise.query.filter_by(id=user.entreprise_id).first()
+
+   print(etablissement.validate_on_submit(),etablissement.data)
+
+   if etablissement.validate_on_submit():
+      ent_item.denomination = etablissement.denomination.data.upper()
+      ent_item.localisation = etablissement.localisation.data
+      ent_item.numero = etablissement.numero.data
+
+      db.session.add(ent_item)
+      db.session.commit()
 
 
-   return render_template('profil.html',formP=profil,formE=etablissement,user=user,ets=ets,securiteForm=securiteForm)
+   return render_template('profil.html',formP=profil,formE=etablissement,user=user,ets=ent_item,securiteForm=securiteForm)
 
 @main.route('/change_service/<aid>', methods=['POST','GET'])
 @login_required

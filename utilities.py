@@ -22,17 +22,17 @@ uploads_dir = "app/static/uploads/"
 os.makedirs(uploads_dir, exist_ok=True)
 
 def file_upload(method,files_data,name,nb='one'):
-    if method == 'POST':
+    if method == 'POST' and files_data.files:
         # save the single "profile" file
         print(files_data.files[name].filename)
-        if (nb=='one') and files_data.files[name].filename!="":
+        if (nb=='one') and files_data.files[name].filename:
             print(files_data.files)
             data = files_data.files[name]
             filename = secure_filename(data.filename)
             data.save(os.path.join(uploads_dir, filename))
             return filename
 
-        if (nb=='*'):
+        if (nb=='*') and files_data.files[name].filename:
             filename = []
             for file in files_data.files.getlist(name):
                 filename.append(secure_filename(data.filename))

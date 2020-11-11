@@ -27,9 +27,17 @@ from flask_login import login_user,login_required,logout_user,current_user
 
 
 #Read agence
-@api.route('/agences',methods=['GET'])
+@api.route('/agences',methods=['GET',"POST"])
 def get_agences():
-    agences = Agence.query
+    tag = request.json['tag']
+    print(request)
+
+    if tag:
+        search = "%{}%".format(tag)
+        print(search)
+        agences = Agence.query.filter(Agence.denomination.like(search)).all()
+    else:
+        agences = Agence.query.all()
     return jsonify({ 'agences': [ agence.to_json() for agence in agences ] })
 
 
