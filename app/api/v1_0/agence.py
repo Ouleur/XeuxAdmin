@@ -33,7 +33,7 @@ def get_agences():
     print(request)
 
     if tag:
-        search = "%{}%".format(tag)
+        search = "%{}%".format(tag.upper())
         print(search)
         agences = Agence.query.filter(Agence.denomination.like(search)).all()
     else:

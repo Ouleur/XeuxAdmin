@@ -116,7 +116,7 @@ def del_agences(aid):
 
 @main.route('/guichet/<codeA>/<codeS>/<codeG>', methods=['POST','GET'])
 def guichet(codeA,codeS,codeG):
-   cur_date = datetime.datetime.now()
+   cur_date = datetime.now()
    agence = Agence.query.filter_by(code=codeA).first()
    service = Service.query.filter_by(code=codeS).first()
    guichet = Guichet.query.filter_by(code=codeG).first()
@@ -128,9 +128,11 @@ def guichet(codeA,codeS,codeG):
 
 @main.route('/next_ticket/<gid>', methods=['POST','GET'])
 def next_ticket(gid):
-   cur_date = datetime.datetime.now()
+   cur_date = datetime.now()
    guichet = Guichet.query.filter_by(id=gid).first()
-   ticket = Ticket.query.filter(Ticket.date_create<cur_date,Ticket.etat=='nouveau',Ticket.service_id==guichet.services_id).first()
+   cur = "{} {}".format(cur_date.strftime("%Y-%m-%d"),"00:00:00")
+
+   ticket = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.etat=='nouveau',Ticket.service_id==guichet.services_id).first()
    if ticket:
       return jsonify({"ticket":[ticket.to_json()]})
    return jsonify({"ticket":[]})
@@ -168,7 +170,7 @@ def recall_ticket(tid,gid):
 @login_required
 @entreprise_admin_required
 def transfert_ticket(sid):
-   cur_date = datetime.datetime.now()
+   cur_date = datetime.now()
    tickets = Ticket.query.filter_by(Ticket.date_create>cur_date)
    return render_template('guichet.html',tickets=tickets)
 

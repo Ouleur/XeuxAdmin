@@ -3,6 +3,8 @@ from flask import render_template, request, redirect, url_for,send_file
 from  werkzeug.utils import secure_filename
 import random
 import string
+from datetime import timedelta
+
 #Vianney
 
 def get_random_alphanumeric_string(letters_count, digits_count):
@@ -45,3 +47,27 @@ def file_upload(method,files_data,name,nb='one'):
 def dowloadFile():
     path = os.path.join(uploads_dir,"carte_grise.jpg")
     return send_file(path, as_attachment=True)
+
+
+def time_Average(tickets):
+    e = 0
+    allTickets = tickets.all()
+    time = timedelta(days=365) - timedelta(days=365)
+    for ticket in allTickets:
+
+        if e > 0 and ticket.date_modify:
+            time += ticket.date_modify-allTickets[e-1].date_modify
+        e+=1
+    
+    if tickets.count()>0:
+        # print(time,tickets.count())
+
+        time = time/tickets.count()
+        return round(time.total_seconds()/60)
+    else :
+        return 0
+
+
+def wait_time_Average(tickets,tickets_new):
+    print(time_Average(tickets),tickets_new.count())
+    return time_Average(tickets)*tickets_new.count()

@@ -6,8 +6,8 @@ from ...models import *
 from flask import g, jsonify
 from .errors import forbidden,unauthorized
 from flask_httpauth import HTTPBasicAuth
-
 from flask_login import login_user,login_required,logout_user,current_user
+from ... import time_Average
 
 
 #Create service
@@ -50,11 +50,17 @@ def get_agence_service(aid):
     cur = "{} {}".format(cur_date.strftime("%Y-%m-%d"),"00:00:00")
     tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.agence_id==aid)
     tickets_servir = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.agence_id==aid,Ticket.etat=="appeler")
+    
+    ######### - get time average - #############
+    
+
+    ######### - get time average - #############
+
     return jsonify({ 'services':  [ service.to_json() for service in services ],
                      "agence":{
                          "denomination":agence.denomination,
                          "evolution":"{}/{}".format(tickets_servir.count(),tickets.count()),
-                         "tm":"3",
+                         "tm":time_Average(tickets_servir),
                          "crenau":"{}-{}".format(agence.ouverture.strftime("%H:%M"),agence.fermerture.strftime("%H:%M"))
                         }
                     }
@@ -85,3 +91,5 @@ def del_services(sid):
     service = Service.query.filter_by(id=sid)
     db.session.delete(service)
     return jsonify({'operations': 'DELETE', 'stat': "Succesfull"})
+
+

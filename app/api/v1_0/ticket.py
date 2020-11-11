@@ -7,6 +7,7 @@ from flask import g, jsonify
 from .errors import forbidden,unauthorized
 from flask_httpauth import HTTPBasicAuth
 import datetime
+from ... import wait_time_Average
 
 #Create ticket
 @api.route('/tickets/<int:sid>',methods=['POST'])
@@ -54,6 +55,9 @@ def check_tickets(sid):
     cur = "{} {}".format(cur_date.strftime("%Y-%m-%d"),"00:00:00")
     tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.service_id==sid)
     
+    tickets_new = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.service_id==sid,Ticket.etat=="nouveau")
+    tickets_servir = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.service_id==sid,Ticket.etat=="appeler")
+    
     ticket = {
             'servstr': service.denomination[0:2],
             'numero': tickets.count()+1,
@@ -62,7 +66,7 @@ def check_tickets(sid):
     return jsonify({ 'tickets': ticket,
                     'agence':agence.to_json(),
                     'service':service.to_json(),
-                    'info':{"tm":"1h 30 min"}})
+                    'info':{"tm":"{} min".format(wait_time_Average(tickets_servir,tickets_new))}})
 
 
 #Read one ticket
