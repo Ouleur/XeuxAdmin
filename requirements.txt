@@ -14,3 +14,4 @@ flask_httpauth
 Flask-User
 nose2
 pdfkit
+python-dotenv
