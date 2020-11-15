@@ -9,6 +9,7 @@ from ..notifications import *
 import datetime
 import json
 from ..decorators import *
+import os
 
 @main.route('/', methods=['POST','GET'])
 def home():
@@ -126,7 +127,7 @@ def guichet(codeA,codeS,codeG):
    print(cur)
    tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.service_id==guichet.services_id)
    # tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date)
-   return render_template('guichet.html',tickets=tickets,guichet=guichet,service=service,agence=agence,url=app.config['WEB_URL'])
+   return render_template('guichet.html',tickets=tickets,guichet=guichet,service=service,agence=agence,url=os.getenv('FLASK_CONFIG'))
 
 @main.route('/next_ticket/<gid>', methods=['POST','GET'])
 def next_ticket(gid):
@@ -149,7 +150,7 @@ def call_ticket(tid,gid):
       db.session.add(tickets)
       db.session.commit()
 
-      ticket_ecran_notification(url,{"data":tickets.to_json(),"type":"call"},tickets.id)
+      ticket_ecran_notification({"data":tickets.to_json(),"type":"call"},tickets.id)
       return jsonify({"ticket":[tickets.to_json()]})
 
    return jsonify({"ticket":[]})
@@ -163,7 +164,7 @@ def recall_ticket(tid,gid):
       tickets.guichet_id=gid
       db.session.add(tickets)
       db.session.commit()
-      ticket_ecran_notification(url,{"data":tickets.to_json(),"type":"recall"},tickets.id)
+      ticket_ecran_notification({"data":tickets.to_json(),"type":"recall"},tickets.id)
       return jsonify({"ticket":[tickets.to_json()]})
 
    return jsonify({"ticket":[]})
