@@ -7,6 +7,8 @@ from datetime import timedelta
 
 #Vianney
 
+
+
 def get_random_alphanumeric_string(letters_count, digits_count):
     sample_str = ''.join((random.choice(string.ascii_uppercase) for i in range(letters_count)))
     sample_str += ''.join((random.choice(string.digits) for i in range(digits_count)))
@@ -20,6 +22,7 @@ def get_random_alphanumeric_string(letters_count, digits_count):
 
 #Create a directory in a known location to save files to . 
 app = current_app._get_current_object()
+app.app_context()
 
 uploads_dir = app.config['UPLOADS_DIR']
 # uploads_dir = "app/static/uploads/" 

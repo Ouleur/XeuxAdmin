@@ -12,7 +12,7 @@ from ..decorators import *
 
 
 app = current_app._get_current_object()
-
+app.app_context()
 @main.route('/', methods=['POST','GET'])
 def home():
 

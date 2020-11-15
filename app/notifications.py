@@ -16,7 +16,7 @@ from flask import current_app
 
 
 app = current_app._get_current_object()
-
+app.app_context()
 #Mercure Payload, do you add information in subscribe or in publish
 payload = {
  "mercure": {
