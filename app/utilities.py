@@ -21,14 +21,18 @@ def get_random_alphanumeric_string(letters_count, digits_count):
 
 
 #Create a directory in a known location to save files to . 
-app = current_app._get_current_object()
-app.app_context()
+def get_path(app,uploads_dir):
+    with app.get_context():
+        os.makedirs(uploads_dir, exist_ok=True)
+        return uploads_dir
 
-uploads_dir = app.config['UPLOADS_DIR']
-# uploads_dir = "app/static/uploads/" 
-os.makedirs(uploads_dir, exist_ok=True)
+
 
 def file_upload(method,files_data,name,nb='one'):
+    app = current_app._get_current_object()
+
+    uploads_dir = app.config['UPLOADS_DIR']
+
     if method == 'POST' and files_data.files:
         # save the single "profile" file
         print(files_data.files[name].filename)
@@ -50,6 +54,10 @@ def file_upload(method,files_data,name,nb='one'):
 
 
 def dowloadFile():
+    app = current_app._get_current_object()
+
+    uploads_dir = app.config['UPLOADS_DIR']
+    
     path = os.path.join(uploads_dir,"carte_grise.jpg")
     return send_file(path, as_attachment=True)
 

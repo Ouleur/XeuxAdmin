@@ -12,11 +12,9 @@ import requests
 import jwt
 import json
 import socket
-from flask import current_app
+from flask import current_app,g
 
 
-app = current_app._get_current_object()
-app.app_context()
 #Mercure Payload, do you add information in subscribe or in publish
 payload = {
  "mercure": {
@@ -40,7 +38,6 @@ secret= "OmarksMerconSysteme"
 DEMO_JWT = jwt.encode(payload, secret, algorithm='HS256',headers=header).decode("utf-8")
 
 #Mercure instance url
-url = '{}/.well-known/mercure'.format(app.config['MERCURE_URL'])
 
 
 headers = {
@@ -50,7 +47,9 @@ headers = {
 
 #use the 'headers' parameter to set the HTTP headers:
 def execute(postData):
-    x = requests.post(url, data = postData, headers = headers)
+    app = current_app._get_current_object()
+    
+    x = requests.post(app.config['MERCURE_URL'], data = postData, headers = headers)
     # show request value
     print('Publish #ID ',x.text)
     # print(DEMO_JWT)
@@ -62,7 +61,7 @@ def sinistre_notification(data,id):
         'topic': 'https://example.com/notif/{}'.format(id),
         'data' : json.dumps(data),
     }
-    execute(postData)
+    execute(url,postData)
 
 def ticket_ecran_notification(data,id):
     #the Data you will to send id the content on data key and topic is the topic on that you publish data

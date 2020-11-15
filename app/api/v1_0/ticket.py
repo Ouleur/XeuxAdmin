@@ -3,12 +3,13 @@ from flask import jsonify, request, current_app, url_for
 from . import api
 from ... import db
 from ...models import *
-from flask import g, jsonify
+from flask import g, jsonify,current_app
 from .errors import forbidden,unauthorized
 from flask_httpauth import HTTPBasicAuth
 import datetime
-from ... import wait_time_Average
+from ...utilities import wait_time_Average
 from ...notifications import *
+
 
 #Create ticket
 @api.route('/tickets/<int:sid>',methods=['POST'])

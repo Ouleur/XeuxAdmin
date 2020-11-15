@@ -1,7 +1,7 @@
 from datetime import datetime
-from flask import render_template,session, redirect, url_for,flash,make_response,request, g, jsonify,current_app
+from flask import render_template,session, redirect, url_for,flash,make_response,request, g, jsonify
 from . import main
-from .. import get_random_alphanumeric_string,file_upload
+from ..utilities import *
 from .forms import *
 from flask_login import login_user,login_required,logout_user,current_user
 from ..models.models import *
@@ -10,9 +10,6 @@ import datetime
 import json
 from ..decorators import *
 
-
-app = current_app._get_current_object()
-app.app_context()
 @main.route('/', methods=['POST','GET'])
 def home():
 
@@ -119,6 +116,8 @@ def del_agences(aid):
 
 @main.route('/guichet/<codeA>/<codeS>/<codeG>', methods=['POST','GET'])
 def guichet(codeA,codeS,codeG):
+   app = current_app._get_current_object()
+
    cur_date = datetime.now()
    agence = Agence.query.filter_by(code=codeA).first()
    service = Service.query.filter_by(code=codeS).first()
@@ -149,7 +148,8 @@ def call_ticket(tid,gid):
       tickets.guichet_id=gid
       db.session.add(tickets)
       db.session.commit()
-      ticket_ecran_notification({"data":tickets.to_json(),"type":"call"},tickets.id)
+
+      ticket_ecran_notification(url,{"data":tickets.to_json(),"type":"call"},tickets.id)
       return jsonify({"ticket":[tickets.to_json()]})
 
    return jsonify({"ticket":[]})
@@ -163,7 +163,7 @@ def recall_ticket(tid,gid):
       tickets.guichet_id=gid
       db.session.add(tickets)
       db.session.commit()
-      ticket_ecran_notification({"data":tickets.to_json(),"type":"recall"},tickets.id)
+      ticket_ecran_notification(url,{"data":tickets.to_json(),"type":"recall"},tickets.id)
       return jsonify({"ticket":[tickets.to_json()]})
 
    return jsonify({"ticket":[]})

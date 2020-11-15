@@ -7,7 +7,7 @@ from flask import g, jsonify
 from .errors import forbidden,unauthorized
 from flask_httpauth import HTTPBasicAuth
 from flask_login import login_user,login_required,logout_user,current_user
-from ... import time_Average
+from ...utilities import time_Average
 
 
 #Create service
