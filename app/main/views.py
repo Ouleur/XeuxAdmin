@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template,session, redirect, url_for,flash,make_response,request, g, jsonify
+from flask import render_template,session, redirect, url_for,flash,make_response,request, g, jsonify,current_app
 from . import main
 from .. import get_random_alphanumeric_string,file_upload
 from .forms import *
@@ -9,6 +9,9 @@ from ..notifications import *
 import datetime
 import json
 from ..decorators import *
+
+
+app = current_app._get_current_object()
 
 @main.route('/', methods=['POST','GET'])
 def home():
@@ -124,7 +127,7 @@ def guichet(codeA,codeS,codeG):
    print(cur)
    tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.service_id==guichet.services_id)
    # tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date)
-   return render_template('guichet.html',tickets=tickets,guichet=guichet,service=service,agence=agence)
+   return render_template('guichet.html',tickets=tickets,guichet=guichet,service=service,agence=agence,url=app.config['WEB_URL'])
 
 @main.route('/next_ticket/<gid>', methods=['POST','GET'])
 def next_ticket(gid):

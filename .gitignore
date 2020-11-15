@@ -2,7 +2,6 @@
 *.pyc
 /__pycache__
 /app/static/uploads
-config.py
 uwsgi.ini
 start.sh
 Dockerfile

@@ -44,6 +44,11 @@ class DevelopmentConfig(Config):
     POSTGRES_URL="127.0.0.1:5432"
     POSTGRES_USER="odoo"
     POSTGRES_PW="odoo"
+    WEB_URL="http://127.0.0.1:5000"
+    MERCURE_URL="http://127.0.0.1:3000"
+    UPLOADS_DIR = "app/static/uploads/"
+
+
 
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
@@ -54,6 +59,10 @@ class TestingConfig(Config):
     POSTGRES_URL="127.0.0.1:5432"
     POSTGRES_USER="odoo"
     POSTGRES_PW="odoo"
+    WEB_URL="http://144.91.127.68/pozy"
+    MERCURE_URL="http://144.91.127.68:4040"
+    UPLOADS_DIR = "/var/www/pozy/app/static/uploads/"
+
 
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
     # SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
@@ -63,6 +72,9 @@ class ProdcutionConfig(Config):
     POSTGRES_URL="127.0.0.1:5432"
     POSTGRES_USER="odoo"
     POSTGRES_PW="odoo"
+    WEB_URL="http://144.91.127.68/pozy"
+    MERCURE_URL="http://144.91.127.68:4040"
+    UPLOADS_DIR = "/var/www/pozy/app/static/uploads/"
 
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data.sqlite')

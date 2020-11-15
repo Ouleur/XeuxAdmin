@@ -1,4 +1,4 @@
-from flask import render_template, session, redirect, url_for, flash,request,Markup
+from flask import render_template, session, redirect, url_for, flash,request,Markup,current_app
 from flask_login import login_user,login_required,logout_user,current_user
 from . import auth
 from ..models import *
@@ -7,6 +7,7 @@ from .. import db
 from datetime import datetime
 from ..email import *
 from sqlalchemy.exc import SQLAlchemyError 
+
 #pour la connexion
 @auth.route('/login', methods=['POST','GET'])
 def login():

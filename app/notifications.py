@@ -12,7 +12,10 @@ import requests
 import jwt
 import json
 import socket
+from flask import current_app
 
+
+app = current_app._get_current_object()
 
 #Mercure Payload, do you add information in subscribe or in publish
 payload = {
@@ -37,10 +40,7 @@ secret= "OmarksMerconSysteme"
 DEMO_JWT = jwt.encode(payload, secret, algorithm='HS256',headers=header).decode("utf-8")
 
 #Mercure instance url
-try:
-    url = 'http://{}:3000/.well-known/mercure'.format(socket.gethostbyname(socket.gethostname()))
-except:
-    url = 'http://{}:3000/.well-known/mercure'.format(socket.gethostbyname("localhost"))
+url = '{}/.well-known/mercure'.format(app.config['MERCURE_URL'])
 
 
 headers = {

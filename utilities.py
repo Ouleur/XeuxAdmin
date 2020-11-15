@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, redirect, url_for,send_file
+from flask import render_template, request, redirect, url_for,send_file,current_app
 from  werkzeug.utils import secure_filename
 import random
 import string
@@ -19,7 +19,9 @@ def get_random_alphanumeric_string(letters_count, digits_count):
 
 
 #Create a directory in a known location to save files to . 
-uploads_dir = "app/static/uploads/"
+app = current_app._get_current_object()
+
+uploads_dir = app.config['UPLOADS_DIR']
 # uploads_dir = "app/static/uploads/" 
 os.makedirs(uploads_dir, exist_ok=True)
 

@@ -13,3 +13,4 @@ email_validator
 flask_httpauth
 Flask-User
 nose2
+pdfkit
