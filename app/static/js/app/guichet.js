@@ -1,8 +1,12 @@
 // TICKET_VIEW
-$(".ticket_view").on('click',function(){
+$("body").delegate('.ticket_view','click',function(){
     $("#numero-t").html($(this).data("id").split(":")[1]);
     $("#numero-t").attr("data-id",$(this).data("id").split(":")[0]);
     // $("#sidebarToggleTop").click()
+});
+
+$("body").delegate('.item-action','click',function(){
+    $("#sidebarToggleTop").click()
 });
 
 
@@ -45,12 +49,21 @@ $(".fermer").on('click',function(){
     $("#numero-t").html($(this).data("id").split(":")[1]);
 })
 
-//Resize
-function quarter() {
-    window.resizeTo(
-      window.screen.availWidth / 2,
-      window.screen.availHeight / 2
-    );
-  }
+function tickets_list(){
+    url_code = window.location.pathname.split('/');
+    const eventSource = new EventSource("http://"+window.location.hostname+"/.well-known/mercure?topic=https://example.com/tickets/"+url_code[2]+"/"+url_code[3]);
+    eventSource.onmessage = ({ data }) => {
+        console.log(JSON.parse(data));
+        var ticket =JSON.parse(data)
+        tic= '<div class="ticket-item col-12">';
+        tic+= '<div class="row">';
+        tic+= '<div class="item-info col-8">N '+ticket.servstr+''+ticket.numero+'</div>';
+        tic+= '<div class="item-action_min col-4"><i class="fas fa-eye fa-2x text-gray-300 ticket_view" data-id="'+ticket.id+':'+ticket.servstr+''+ticket.numero+'"></i></div>';
+        tic+= '<div class="item-action col-4"><i class="fas fa-eye fa-2x text-gray-300 ticket_view" data-id="'+ticket.id+':'+ticket.servstr+''+ticket.numero+'"></i></div>';
+        tic+= '</div>';
+        tic+= '</div>';
+        $("#ticket-list").append(tic);
+    };
+}
 
-quarter();
+tickets_list();

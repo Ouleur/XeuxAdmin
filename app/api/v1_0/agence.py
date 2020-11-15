@@ -1,5 +1,5 @@
 
-from flask import jsonify, request, current_app, url_for
+from flask import jsonify, request, current_app, url_for,make_response
 from . import api
 from ... import db
 from ...models import *
@@ -8,7 +8,7 @@ from .errors import forbidden,unauthorized
 from flask_httpauth import HTTPBasicAuth
 
 from flask_login import login_user,login_required,logout_user,current_user
-
+import pdfkit
 #Create agence
 # @api.route('/agences',methods=['POST'])
 # def add_agence():
@@ -87,3 +87,16 @@ def check_agences():
    print(request)
    agence = Agence.query.filter_by(code=code).first()
    return jsonify({'agence': "service.to_json()"})
+
+
+@api.route('/get_pdf', methods=['POST','GET'])
+def get_pdf():
+
+   path = '/usr/local/bin/wkhtmltopdf'
+   config = pdfkit.configuration(wkhtmltopdf=path)
+   pdf = pdfkit.from_string('test',False)
+
+   response = make_response(pdf)
+   response.headers['Content-Type'] = "application/pdf"
+   response.headers['Content-Disposition'] = "inline; out.pdf"
+   return response

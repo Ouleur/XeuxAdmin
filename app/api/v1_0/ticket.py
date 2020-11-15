@@ -8,6 +8,7 @@ from .errors import forbidden,unauthorized
 from flask_httpauth import HTTPBasicAuth
 import datetime
 from ... import wait_time_Average
+from ...notifications import *
 
 #Create ticket
 @api.route('/tickets/<int:sid>',methods=['POST'])
@@ -28,6 +29,9 @@ def add_ticket(sid):
                         service_id=service.id)
     db.session.add(ticket)
     db.session.commit()
+    agence = Agence.query.filter_by(id=service.agences_id).first()
+
+    ticket_guichet_device("{}/{}".format(agence.code,service.denomination[0:2].upper()),ticket.to_json())
 
     return jsonify({ 'ticket': ticket.to_json() })
 

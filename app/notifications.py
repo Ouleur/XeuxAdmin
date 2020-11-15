@@ -84,8 +84,12 @@ def ticket_client_notification(data,id):
 
 def ticket_guichet_device(topic,data):
     #La notification des guichet du service lorsqu'un client prend un ticket
-     
-    return ""
+    print(str(data))
+    postData = {
+        'topic': 'https://example.com/tickets/{}'.format(topic),
+        'data' : json.dumps(data),
+    }
+    execute(postData)
 
 def ticket_client_device(topic,data):
     #La notification divice du client lorsqu'on l'appel
@@ -96,5 +100,4 @@ def publicite_media_notification(topic,data):
     #La notification des medias de la publicité
      
     return ""
-
 
