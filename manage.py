@@ -11,8 +11,8 @@ from app.models.models import *
 
 load_dotenv()
 
-print(os.getenv('FLASK_CONFIG') or 'default')
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+print(os.environ.get('FLASK_CONFIG'))
+app = create_app(os.environ.get('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app,db)
 
