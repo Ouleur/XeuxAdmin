@@ -1,4 +1,4 @@
-web_url = $("#container_cont").data('url');
+url = $("#container_cont").data('url').split("||");
 
 // TICKET_VIEW
 $("body").delegate('.ticket_view','click',function(){
@@ -14,7 +14,7 @@ $("body").delegate('.item-action','click',function(){
 
 // SUIVANT
 $(".suivant").on('click',function(){
-    fetch(web_url+"/next_ticket"+"/"+$("#nb-ticket").attr("data-id")).then(function(response){
+    fetch(url[1]+"/next_ticket"+"/"+$("#nb-ticket").attr("data-id")).then(function(response){
         response.json().then(function(data){
             $("#numero-t").html(data.ticket[0].servstr+""+data.ticket[0].numero);
             $("#numero-t").attr("data-id",data.ticket[0].id);
@@ -25,19 +25,19 @@ $(".suivant").on('click',function(){
 
 // APPEL
 $(".appel").on('click',function(){
-    fetch(web_url+"/call_ticket/"+$("#numero-t").attr("data-id")+"/"+$("#nb-ticket").attr("data-id")).then(function(response){});
+    fetch(url[1]+"/call_ticket/"+$("#numero-t").attr("data-id")+"/"+$("#nb-ticket").attr("data-id")).then(function(response){});
     // $("#numero-t").html($(this).data("id").split(":")[1]);
 })
 
 // RAPPEL
 $(".rappel").on('click',function(){
-    fetch(web_url+"/recall_ticket/"+$("#numero-t").attr("data-id")+"/"+$("#nb-ticket").attr("data-id")).then(function(response){});
+    fetch(url[1]+"/recall_ticket/"+$("#numero-t").attr("data-id")+"/"+$("#nb-ticket").attr("data-id")).then(function(response){});
     $("#numero-t").html($(this).data("id").split(":")[1]);
 })
 
 // TRANSFERT
 $(".transfert").on('click',function(){
-    fetch(web_url+"/transfert_ticket/"+$("#numero-t").attr("data-id")).then(function(response){});
+    fetch(url[1]+"/transfert_ticket/"+$("#numero-t").attr("data-id")).then(function(response){});
     $("#numero-t").html($(this).data("id").split(":")[1]);
 })
 
@@ -53,7 +53,7 @@ $(".fermer").on('click',function(){
 
 function tickets_list(){
     url_code = window.location.pathname.split('/');
-    const eventSource = new EventSource(web_url+"/.well-known/mercure?topic=https://example.com/tickets/"+url_code[3]+"/"+url_code[4]);
+    const eventSource = new EventSource(url[0]+"/.well-known/mercure?topic=https://example.com/tickets/"+url_code[3]+"/"+url_code[4]);
     eventSource.onmessage = ({ data }) => {
         console.log(JSON.parse(data));
         var ticket =JSON.parse(data)
