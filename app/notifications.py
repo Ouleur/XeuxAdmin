@@ -38,7 +38,9 @@ secret= "OmarksMerconSysteme"
 DEMO_JWT = jwt.encode(payload, secret, algorithm='HS256',headers=header).decode("utf-8")
 
 #Mercure instance url
-
+app = current_app._get_current_object()
+print(app.config['MERCURE_URL'])
+url = "{}/.well-known/mercure".format(app.config['MERCURE_URL'])
 
 headers = {
     "Content-type": "application/x-www-form-urlencoded",
@@ -47,11 +49,7 @@ headers = {
 
 #use the 'headers' parameter to set the HTTP headers:
 def execute(postData):
-    app = current_app._get_current_object()
-
-    print(app.config['MERCURE_URL'])
-
-    x = requests.post("{}/.well-known/mercure".format(app.config['MERCURE_URL']), data = postData, headers = headers)
+    x = requests.post(url, data = postData, headers = headers)
     # show request value
     print('Publish #ID ',x.text)
     # print(DEMO_JWT)
