@@ -66,7 +66,7 @@ function tickets_list(){
         tic+= '</div>';
         $("#ticket-list").append(tic);
 
-        $(".info-val").html(eval($(".info-val").html())+1)
+        $("#count_ticket").html(eval($("#count_ticket").html())+1)
     };
 }
 
