@@ -65,6 +65,8 @@ function tickets_list(){
         tic+= '</div>';
         tic+= '</div>';
         $("#ticket-list").append(tic);
+
+        $(".info-val").html(eval($(".info-val").html())+1)
     };
 }
 
