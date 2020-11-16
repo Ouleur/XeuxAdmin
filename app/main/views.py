@@ -126,7 +126,7 @@ def guichet(codeA,codeS,codeG):
    print(cur)
    tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date,Ticket.service_id==guichet.services_id)
    # tickets = Ticket.query.filter(Ticket.date_create>=cur ,Ticket.date_create<=cur_date)
-   return render_template('guichet.html',tickets=tickets,guichet=guichet,service=service,agence=agence,mercure_url=app.config['MERCURE_URL'],web_url=app.config['MERCURE_URL'])
+   return render_template('guichet.html',tickets=tickets,guichet=guichet,service=service,agence=agence,mercure_url=app.config['MERCURE_URL'],web_url=app.config['WEB_URL'])
 
 @main.route('/next_ticket/<gid>', methods=['POST','GET'])
 def next_ticket(gid):
