@@ -11147,5 +11147,5 @@ a.btn{
 }
 
 .actions-btn.btn{
-  margin: 2px;
+  margin: 2px !important;
 }
