@@ -32,7 +32,7 @@ def add_ticket(sid):
     db.session.commit()
     agence = Agence.query.filter_by(id=service.agences_id).first()
 
-    ticket_guichet_device("{}/{}".format(agence.code,service.denomination[0:2].upper()),ticket.to_json())
+    ticket_guichet_device("{}/{}".format(agence.code,service.code),ticket.to_json())
 
     return jsonify({ 'ticket': ticket.to_json() })
 

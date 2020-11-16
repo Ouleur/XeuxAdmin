@@ -48,7 +48,9 @@ headers = {
 #use the 'headers' parameter to set the HTTP headers:
 def execute(postData):
     app = current_app._get_current_object()
-    
+
+    print(app.config['MERCURE_URL'])
+
     x = requests.post(app.config['MERCURE_URL'], data = postData, headers = headers)
     # show request value
     print('Publish #ID ',x.text)
