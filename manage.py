@@ -3,7 +3,7 @@ import os
 
 from dotenv import load_dotenv
 
-from flask import url_for
+from flask import url_for, Flask, request
 from app import create_app,db
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
@@ -11,7 +11,7 @@ from app.models.models import *
 
 load_dotenv()
 
-print(os.environ.get('FLASK_CONFIG'))
+print(request.environ['FLASK_CONFIG'])
 app = create_app(os.environ.get('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app,db)
