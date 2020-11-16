@@ -11146,6 +11146,6 @@ a.btn{
   }
 }
 
-.actions-btn > .btn{
+button{
   margin: 2px !important;
 }
