@@ -42,7 +42,14 @@
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ guichet.denomination }}</div>
                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{ guichet.code }}</div>
+                    <div class="h6 mb-0 text-gray-700">
+                      <div class="row">
+                        <code class="col-9" id="tocopy"> {{url}}/guichet/{{agence.code}}/{{service.code}}/{{ guichet.code }}</code>
+                        <i class="col-1 fas fa-copy fa-2x js-copy" data-toggle="tooltip" title="Copier le lien !" data-balloon-pos="down" data-target="#tocopy"></i>
+                      </div>
+                    </div>
                   </div>
+                  
                   <div class="col-auto">
                     
                     <div class="text-xs font-weight-bold  text-uppercase mb-1">{{guichet.tickets|length}}</div>

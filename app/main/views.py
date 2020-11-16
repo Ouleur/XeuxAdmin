@@ -250,6 +250,8 @@ def del_services(aid,sid):
 @login_required
 @entreprise_admin_required
 def guichets(aid,sid):
+   app = current_app._get_current_object()
+
    agence = Agence.query.filter_by(id=aid).first()
    service = Service.query.filter_by(id=sid).first()
    form = GuichetForm(request.form)
@@ -262,12 +264,14 @@ def guichets(aid,sid):
    
    guichets = Guichet.query.filter_by(services_id=sid)
 
-   return render_template('liste_guichets.html',form=form,guichets=guichets,agence=agence,service=service)
+   return render_template('liste_guichets.html',form=form,guichets=guichets,agence=agence,service=service,url=app.config['WEB_URL'])
 
 @main.route('/liste_guichets/<int:aid>/<int:sid>/<int:gid>', methods=['POST','GET'])
 @login_required
 @entreprise_admin_required
 def update_guichets(aid,sid,gid):
+   app = current_app._get_current_object()
+
    guichet_item = Guichet.query.filter_by(id=gid).first()
 
    agence = Agence.query.filter_by(id=aid).first()
@@ -287,12 +291,14 @@ def update_guichets(aid,sid,gid):
    
    guichets = Guichet.query.filter_by(services_id=sid)
 
-   return render_template('liste_guichets.html',form=form,guichets=guichets,agence=agence,service=service,guichet_item=guichet_item)
+   return render_template('liste_guichets.html',form=form,guichets=guichets,agence=agence,service=service,guichet_item=guichet_item,url=app.config['WEB_URL'])
 
 @main.route('/del_guichets/<int:aid>/<int:sid>/<int:gid>', methods=['POST','GET'])
 @login_required
 @entreprise_admin_required
 def del_guichets(aid,sid,gid):
+   app = current_app._get_current_object()
+
    guichet_item = Guichet.query.filter_by(id=gid).first()
 
    agence = Agence.query.filter_by(id=aid).first()
@@ -303,7 +309,7 @@ def del_guichets(aid,sid,gid):
    
    guichets = Guichet.query.filter_by(services_id=sid)
 
-   return render_template('liste_guichets.html',form=form,guichets=guichets,agence=agence,service=service)
+   return render_template('liste_guichets.html',form=form,guichets=guichets,agence=agence,service=service,url=app.config['WEB_URL'])
 
 
 @main.route('/update_collaborateurs/<uid>', methods=['POST','GET'])
