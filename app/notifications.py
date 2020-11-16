@@ -51,7 +51,7 @@ def execute(postData):
 
     print(app.config['MERCURE_URL'])
 
-    x = requests.post(app.config['MERCURE_URL'], data = postData, headers = headers)
+    x = requests.post("{}/.well-known/mercure".format(app.config['MERCURE_URL']), data = postData, headers = headers)
     # show request value
     print('Publish #ID ',x.text)
     # print(DEMO_JWT)
