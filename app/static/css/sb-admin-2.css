@@ -11145,3 +11145,7 @@ a.btn{
     display: none;
   }
 }
+
+.actions-btn.btn{
+  margin: 2px;
+}
