@@ -4,6 +4,5 @@
 /app/static/uploads
 uwsgi.ini
 start.sh
-/uploads
 Dockerfile
 .env

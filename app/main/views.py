@@ -559,7 +559,7 @@ def get_publicite():
    agence = Agence.query.filter_by(code=code).first()
    publicites = Publicite.query.filter_by(agence_id=agence.id).all()
 
-   return jsonify({'publicite': ['{}{}'.format(app.config['WEB_URL'],publicite.url) for publicite in publicites]})
+   return jsonify({'publicite': ['{}{}'.format(app.config['WEB_URL'].replace('/pozy',''),publicite.url) for publicite in publicites]})
 
 
 @main.route('/check_agences', methods=['POST','GET'])
