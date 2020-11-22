@@ -70,9 +70,21 @@
         <h1 class="h3 mb-0 text-gray-800">Modifier d'une Agence</h1>
           <form class="" method="POST" action="{{ url_for('main.update_agences',aid=agence_item.id) }}" enctype="multipart/form-data">
             {{ form.csrf_token }}
-              <div class="modal-body">
+              <div class="">
                   <div class="form-group row">
-    
+                    <div class="col-sm-12 logo" >
+
+                    {% if agence_item.logo %}
+                    <img id="output_image" height="100" src="{{ agence_item.logo }}"/>
+
+                    {% else %}
+                    <img id="output_image" height="100" src="{{ url_for('static', filename='img/rect2252.png') }}""/>
+
+                    {% endif %}
+                    
+                      <input class="box__file" type="file" id="file" hidden accept="image/*" name="file" onchange="preview_image(event)"/>
+                    </div>
+
                     <div class="col-sm-12">
                       <label for="denomination">Denomination</label>
                       {{ form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value=agence_item.denomination)}}
@@ -97,23 +109,20 @@
                       {{ form.fermerture(class_='form-control form-control-user',placeholder="Heure de Fermerture",type="time",step="2",value=agence_item.fermerture)}}
                     </div>
                     
-                    <div class="col-sm-12">
-                      <label for="date">Ficher</label>
-                      <input class="box__file" type="file" name="file" data-multiple-caption="{count} files selected" multiple />
-                    </div>
+                    
 
                     
                      
                   </div>
               </div>
-              <div class="modal-footer ">
-                <div class="row">
-              {{ form.submit(class="col-12 btn btn-primary") }}
+              <div class="modal-footer">
+                <div class="form-group row">
+                  {{ form.submit(class=" btn btn-primary") }}
 
-              <a href="{{ url_for('main.del_agences',aid=agence_item.id) }}" type="button" class="col-6 btn btn-danger" data-dismiss="modal">Supprimer</a>
-              <button type="button" class="col-6 btn btn-secondary" data-dismiss="modal">Annuler</button>
+                  <a href="{{ url_for('main.del_agences',aid=agence_item.id) }}" type="button" class=" btn btn-danger" >Supprimer</a>
+                  <button type="button" class=" btn btn-secondary" >Annuler</button>
 
-            </div>
+                </div>
     
               </div>
           </form>
@@ -127,7 +136,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Ajout d'une Disponibilité</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Ajout d'une Agence</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

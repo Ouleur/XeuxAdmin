@@ -40,10 +40,11 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"> <img src="{{ publicite.url }}" alt="" style="height: 50px;" srcset=""></div>
+                      <div class="text-xs font-weight-bold  text-uppercase mb-1"> <img src="{{ publicite.url }}" alt="" style="height: 50px;" srcset=""></div>
                     </div>
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ publicite.titre }}</div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">{{ publicite.etat }}</div>
                     </div>
                     
                     <div class="col-auto">
@@ -83,18 +84,25 @@
                       {{ form.media_type(class_='form-control form-control-user',placeholder="Type du media",value=publicite_item.numero)}}
                     </div>
                     
-                    <div class="col-sm-6">
-                      <label for="date">Ficher</label>
-                      <input class="box__file" type="file" name="file" id="file" data-multiple-caption="{count} files selected" multiple />
-                    </div>
+                    <div class="col-sm-12 logo">
+                      {% if publicite_item.url %}
+                      <img id="output_image" height="300" src="{{ publicite_item.url }}"/>
+  
+                      {% else %}
+                      <img id="output_image" height="300" src="{{ url_for('static', filename='img/rect2252.png') }}"/>
+  
+                      {% endif %}
+                      
+                        <input class="box__file" type="file" id="file" hidden accept="image/*" name="file" onchange="preview_image(event)"/>
+                      </div>
                   </div>
               </div>
               <div class="modal-footer ">
                 <div class="row">
-              {{ form.submit(class="col-12 btn btn-primary") }}
+              {{ form.submit(class=" btn btn-primary") }}
 
-              <button type="button" class="col-6 btn btn-danger" data-dismiss="modal">Supprimer</button>
-              <button type="button" class="col-6 btn btn-secondary" data-dismiss="modal">Annuler</button>
+              <button type="button" class=" btn btn-danger" data-dismiss="modal">Supprimer</button>
+              <button type="button" class=" btn btn-secondary" data-dismiss="modal">Annuler</button>
 
             </div>
     

@@ -70,7 +70,18 @@
             {{ form.csrf_token }}
               <div class="modal-body">
                   <div class="form-group row">
-    
+                    <div class="col-sm-12 logo">
+                    {% if service_item.logo %}
+                    <img id="output_image" height="100" src="{{ service_item.logo }}"/>
+
+                    {% else %}
+                    <img id="output_image" height="100" src="{{ url_for('static', filename='img/rect2252.png') }}"/>
+
+                    {% endif %}
+                    
+                      <input class="box__file" type="file" id="file" hidden accept="image/*" name="file" onchange="preview_image(event)"/>
+                    </div>
+
                     <div class="col-sm-12">
                       <label for="date">Denomination</label>
                       {{ form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value=service_item.denomination)}}
@@ -80,10 +91,7 @@
                       <label for="date">Code</label>
                       {{ form.code(class_='form-control form-control-user',placeholder="Code",type="text",value=service_item.code)}}
                     </div>
-                    <div class="col-sm-12">
-                      <label for="date">Ficher</label>
-                      <input class="box__file" type="file" name="file" data-multiple-caption="{count} files selected" multiple />
-                    </div>
+                    
                   </div>
               </div>
               <div class="modal-footer">
