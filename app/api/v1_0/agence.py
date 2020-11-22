@@ -94,7 +94,7 @@ def get_pdf():
 
    path = '/usr/local/bin/wkhtmltopdf'
    config = pdfkit.configuration(wkhtmltopdf=path)
-   pdf = pdfkit.from_string('test',False)
+   pdf = pdfkit.from_string('test',False,configuration=config)
 
    response = make_response(pdf)
    response.headers['Content-Type'] = "application/pdf"

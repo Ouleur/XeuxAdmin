@@ -109,7 +109,7 @@ function docopy() {
         if (result) {
             // La copie a réussi
             this.setAttribute("title","Lien copié !");
-            $('[data-toggle="tooltip"]').tooltip();
+            
         }
     }
     catch(err) {

@@ -553,12 +553,13 @@ def del_publicite(aid,pid):
 
 @main.route('/get_publicite', methods=['POST','GET'])
 def get_publicite():
+   app = current_app._get_current_object()
    code = request.json["code"]
    print(code)
    agence = Agence.query.filter_by(code=code).first()
    publicites = Publicite.query.filter_by(agence_id=agence.id).all()
 
-   return jsonify({'publicite': ['http://127.0.0.1:5000{}'.format(publicite.url) for publicite in publicites]})
+   return jsonify({'publicite': ['{}{}'.format(app.config['WEB_URL'],publicite.url) for publicite in publicites]})
 
 
 @main.route('/check_agences', methods=['POST','GET'])
