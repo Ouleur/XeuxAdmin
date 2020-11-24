@@ -90,9 +90,9 @@ class BetaConfig(Config):
     POSTGRES_URL="127.0.0.1:5432"
     POSTGRES_USER="odoo"
     POSTGRES_PW="odoo"
-    WEB_URL="htt://app.filevit.com"
-    SITE_URL="htt://www.filevit.com"
-    SCREEN_URL="htt://screen.filevit.com"
+    WEB_URL="http://app.filevit.com"
+    SITE_URL="http://www.filevit.com"
+    SCREEN_URL="http://screen.filevit.com"
     MERCURE_URL="http://app.filevit.com:4040"
     UPLOADS_DIR = "/var/www/vitapp/app/static/uploads/"
 
