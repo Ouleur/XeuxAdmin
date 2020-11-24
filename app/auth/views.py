@@ -39,7 +39,7 @@ def register():
         if User.query.filter_by(email=form.email.data.replace(" ","")).count():
             flash('Cette adresse mail existe déja !') 
         else:
-            user = User(email=form.email.data,password=form.password.data,name="{} {}".format(form.last_name.data,form.first_name.data))
+            user = User(email=form.email.data,password=form.password.data,name="{} {}".format(form.last_name.data,form.first_name.data),role_id=2)
 
             db.session.add(user)
             db.session.commit()
@@ -142,7 +142,7 @@ def unconfirmed():
     if current_user.is_anonymous or current_user.confirmed:
         return redirect(url_for('main.home'))
     
-    message = Markup('Bienvenue <b>{}</b>, un email de confirmation vous a été envoyé par email.!'.format(current_user.name))
+    message = Markup('Bienvenue <b>{}</b>, un email de confirmation vous a été envoyé!'.format(current_user.name))
     flash(message)
 
     return render_template('auth/unconfirmed.html')
@@ -153,5 +153,5 @@ def resend_confirmation():
     token = current_user.generate_confirmation_token()
     send_email(current_user.email, 'Confirm Your Account',
                    'auth/email/confirm', user=current_user, token=token)
-    flash('Un nouveau mail de confirmation vous a été envoyé par mail.') 
+    flash('Un nouveau email de confirmation vous a été envoyé.') 
     return redirect(url_for('main.index'))
