@@ -22,7 +22,11 @@ $(".update_offre").on('click',function(){
     $("#update_form #prix").val(data[2]);
     $("#update_form #temps").val(data[3]);
     $("#update_form #description").val(data[4]);
+<<<<<<< HEAD
     $("#update_form").attr("action","/update_offre/"+data[0])
+=======
+    $("#update_form").attr("action","/pozy/update_offre/"+data[0])
+>>>>>>> d9b6f3502c686e1c5ea5988b9a2b7fac5032be72
 })
 
 var offre_id=0;

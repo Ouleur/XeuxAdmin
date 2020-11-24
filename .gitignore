@@ -1,11 +1,19 @@
 /migrations
 *.pyc
+<<<<<<< HEAD
 /__pycache__
+=======
+*/__pycache__
+>>>>>>> d9b6f3502c686e1c5ea5988b9a2b7fac5032be72
 /app/static/uploads
 uwsgi.ini
 start.sh
 Dockerfile
+<<<<<<< HEAD
 .env
 vitapp.ini
 vitapp.sock
 wsgi.py
+=======
+.env
+>>>>>>> d9b6f3502c686e1c5ea5988b9a2b7fac5032be72

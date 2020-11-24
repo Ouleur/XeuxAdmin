@@ -19,7 +19,10 @@ migrate = Migrate(app,db)
 def make_shell_context():
     return dict(app=app,db=db,User=User,Role=Role)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d9b6f3502c686e1c5ea5988b9a2b7fac5032be72
 @manager.command
 def list_routes():
     import urllib
@@ -45,4 +48,8 @@ manager.add_command('shell',Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     manager.run()
+=======
+    manager.run()
+>>>>>>> d9b6f3502c686e1c5ea5988b9a2b7fac5032be72
