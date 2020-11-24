@@ -32,12 +32,14 @@ def home():
 @entreprise_admin_required
 def agences():
    form = AgenceForm(request.form)
-   # print(form.data)
+   print(form.data)
    entreprise = Entreprise.query.filter_by(create_by=current_user.id).first()
 
    if entreprise.state:
       # L'on poura ajout des agences lorsaue l'entrepris est Validée par Omarks
       if form.validate_on_submit():
+         print(entreprise.state)
+
          image=file_upload('POST',request,'file','one')
 
          if image:
@@ -652,7 +654,8 @@ def update_payement(pid):
       payement.offre=payementForm.offre.data
       payement.date_debut=payementForm.date_debut.data
       payement.date_fin=payementForm.date_fin.data
-   
+
+
    payements = Payement.query.all()
 
 
@@ -721,6 +724,12 @@ def valider_offre(pid):
    payement.etat = "Payer"
    db.session.add(payement)
    db.session.commit()
+
+   if payement.etat =="Payer":
+      entreprise = Entreprise.filter_by(id=payement.entreprise_id).first()
+      entreprise.etat = True
+      db.session.add(entreprise)
+      db.session.commit()
 
    return {"response":True}
 
