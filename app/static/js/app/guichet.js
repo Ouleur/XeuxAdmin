@@ -53,7 +53,7 @@ $(".fermer").on('click',function(){
 
 function tickets_list(){
     url_code = window.location.pathname.split('/');
-    const eventSource = new EventSource(url[0]+"/.well-known/mercure?topic=https://example.com/tickets/"+url_code[3]+"/"+url_code[4]);
+    const eventSource = new EventSource(url[0]+"/.well-known/mercure?topic=https://example.com/tickets/"+url_code[2]+"/"+url_code[3]);
     eventSource.onmessage = ({ data }) => {
         console.log(JSON.parse(data));
         var ticket =JSON.parse(data)
