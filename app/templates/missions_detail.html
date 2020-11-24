@@ -1,0 +1,126 @@
+
+{% extends "base.html" %}
+
+
+{% block container %}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">{{ infos['title'] }} > Modification </h1>
+    <p class="mb-4"></a>.</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Modification du sinistre N {{ infos.mission.sinistre.id  }} </h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+
+          <form class="" method="POST" action="{{ url_for('main.mission',exp_id=infos.mission.sinistre.expert_id) }}">
+            {{ form.csrf_token }}
+            <div class="modal-body">
+                <div class="form-group row">
+                  
+                        {{ form.sinistre_id(class_='form-control form-control-user',placeholder="Statut",value=infos.mission.sinistre.id,hidden=true,readonly=true)}}
+                    <div class="col-12">
+                      <div class="form-group row">
+                    <div class="col-sm-3">
+                      <label for="date">Lieu</label><br>
+                      {{ infos.mission.sinistre.lieu }}
+                    </div>
+                    <div class="col-sm-3">
+                      <label for="date">Type sinistre</label><br>
+                      {{ infos.mission.sinistre.type_sinistre }}
+                    </div>
+                    
+                    <div class="col-sm-3">
+                      <label for="date">Remplacement</label><br>
+                      {{ infos.mission.sinistre.remplacement }}
+                    </div>
+
+                    <div class="col-sm-3">
+                      <label for="date">Etat</label><br>
+                      {{ infos.mission.sinistre.etat }}
+                    </div>
+
+                    <br><br>
+                    <br><br>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group row">
+                    <div class="col-sm-4">
+                        <label for="statut">Statut</label>
+                        {{ form.statut(class_='form-control form-control-user',placeholder="Statut")}}
+                    </div>
+                    <div class="col-sm-4 mb-4 mb-sm-0">
+                        <label for="date_estimer_ft">Date estimé fin des travaux</label>
+                        {{ form.date_estimer_ft(class_='form-control form-control-user',placeholder="Date estimé fin des travaux",type="date")}}
+                    </div>
+                    <div class="col-sm-4 mb-4 mb-sm-0">
+                        <label for="date_prevue_rest">Date estimé prévu restitution</label>
+                        {{ form.date_prevue_rest(class_='form-control form-control-user',placeholder="Date estimé prévu restitution",type="date")}}
+                    </div>
+                      <div class="col-12">
+                        <div class="form-group row">
+                      <div class="col-sm-3 mb-3 mb-sm-0">
+                          <label for="montantT">Montant Total</label>
+                          {{ form.montantT(class_='form-control form-control-user',placeholder="Montant Total")}}
+                      </div>
+                      <div class="col-sm-3 mb-3 mb-sm-0">
+                          <label for="montantAP">Montant à payer</label>
+                          {{ form.montantAP(class_='form-control form-control-user',placeholder="Montant à payer")}}
+                      </div>
+                      <div class="col-sm-3 mb-3 mb-sm-0">
+                          <label for="montantOne">Montant payé par One</label>
+                          {{ form.montantOne(class_='form-control form-control-user',placeholder="Montant payé par One")}}
+                      </div>
+                      <div class="col-sm-3 mb-3 mb-sm-0">
+                        <label for="montantAP">Montant payé</label>
+                        {{ form.montantP(class_='form-control form-control-user',placeholder="Montant payé")}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <br><br>
+                  </div>
+                </div>
+                  <div class="col-12">
+                    <div class="form-group row">
+                  <div class="col-sm-6">
+                    <label for="date">Detail</label><br>
+                    {{ infos.mission.sinistre.detail }}
+                  </div>
+                  <div class="col-sm-6">
+                    <label for="date">Zone domage</label><br>
+                    {{ infos.mission.sinistre.zone_domage }}
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            {{ form.submit(class="btn btn-primary") }}
+
+            </div>
+        </form>
+          <div class="form-group row">
+                  
+            <div class="col-sm-6">
+            </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+
+  {% endblock %}

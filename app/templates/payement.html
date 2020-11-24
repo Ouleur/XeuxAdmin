@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+
+  <!-- Begin Page Content -->
+  <div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Payements</h1>
+  </div>
+  <div class="container-fluid">
+
+    <div class="col-xl-12 col-md-12 mb-4">
+      <div class="row">
+
+        {% for offre in offres %}
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4 offre" data-toggle="modal" data-target="#detailOffre" data-offre="{{offre.id}}:{{offre.titre}}:{{offre.prix}}:{{offre.temps}}:{{offre.description}}">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ offre.titre }}</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{ offre.temps }} jours</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{ offre.prix }} Fcfa</div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Liste des Payements</h6>
+      </div>
+      
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Entreprise</th>
+                <th>Offre</th>
+                <th>Prix</th>
+                <th>Payer du</th>
+                <th>Payer sur</th>
+                <th>Date operation</th>
+                <th>Temps</th>
+                <th>Date debut</th>
+                <th>Date fin</th>
+                <th>Etat</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Entreprise</th>
+                <th>Offre</th>
+                <th>Prix</th>
+                <th>Payer du</th>
+                <th>Payer sur</th>
+                <th>Date operation</th>
+                <th>Temps</th>
+                <th>Date debut</th>
+                <th>Date fin</th>
+                <th>Etat</th>
+              </tr>
+            </tfoot>
+            <tbody>
+              {% for payement in payements %}
+              <tr>
+                <td>{{ payement.entreprise}}</td>
+                <td>{{ payement.offre }}</td>
+                <td>{{ payement.prix }} Fcfa</td>
+                <td>{{ payement.numero_client }}</td>
+                <td>{{ payement.numero_omarks }}</td>
+                <td>{{ payement.date_create }}</td>
+                <td>{{ payement.temps }}</td>
+                <td>{{ payement.date_debut }}</td>
+                <td>{{ payement.date_fin }}</td>
+                <td>{{ payement.etat }} 
+                  {% if current_user.is_entreprise_administrator() and payement.etat == 'En cours'%}
+
+                  | <a href="#" class="btn btn-danger btn-icon-split btn-sm cancel_item" data-toggle="modal" data-target="#cancelModal" data-id="{{ payement.id }}">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-times"></i>
+                    </span>
+                    
+                  </a>
+                  {% endif %}
+                  {% if current_user.is_super_administrator() and payement.etat == 'En cours'%}
+                  | <a href="#" class="btn btn-success btn-icon-split btn-sm valid_item" data-toggle="modal" data-target="#validModal" data-id="{{ payement.id }}">
+                      <span class="icon text-white-50">
+                        <i class="fas fa-check"></i>
+                      </span>
+                  {% endif %}
+              </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+  <div class="modal fade" id="detailOffre" tabindex="-1" role="dialog" aria-labelledby="detailOffreLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailOffreLabel">Detail de l'Offre</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="card shadow mb-4">
+         
+          <!-- Card Body -->
+          <div class="card-body">
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Titre :</b> <span class="col-8 titre"> jours</span>
+              </div>
+            </div>
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Temps :</b> <span class="col-8 temps"> jours</span>
+              </div>
+            </div>
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Prix :</b> <span class="col-8 prix"> Fcfa</span>
+              </div>
+            </div>
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Description :</b> <span class="col-8 description"></span>
+              </div>
+            </div>
+          
+            <button  data-dismiss="modal" class="btn btn-primary btn-icon-split achat">
+              <span class="icon text-white-50">
+                <i class="fas fa-flag"></i>
+              </span>
+              <span class="text">Acheter cette offre</span>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+<!-- Logout Modal-->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pret à annuler votre achat ?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Cliquez sur 'Valider' pour annuler votre achat.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+        <button class="btn btn-primary cancel_valide" data-dismiss="modal">Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% if current_user.is_super_administrator() %}
+<!-- Logout Modal-->
+<div class="modal fade" id="validModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pret à valider ce payement ?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Cliquez sur 'Valider' pour accepter ce payement.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+        <button class="btn btn-primary valid_valide" data-dismiss="modal">Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+{% endblock %}

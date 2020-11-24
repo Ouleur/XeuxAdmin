@@ -1,0 +1,50 @@
+{% extends "base_g.html" %}
+
+
+{% block container %}
+
+<div class="container-fluid d-flex flex-column" data-url="{{mercure_url}}||{{web_url}}" id="container_cont">
+    <div class="row">
+      <div class="col-md-12 col-sm-12" id="client">
+        <div class="col-12" id="client_ticket">
+          <div id="ticket_info" class="card shadow" >
+            <div class="row">
+              <div class="col-6">
+                <p>Total tickets</p>
+                <p class="info-val" id="count_ticket">{{tickets.count()}}</p>
+              </div>
+              <div class="col-6">
+                <p>Perfomance</p>
+                <p class="info-val" id="perf">Excellente</p>
+              </div>
+            </div>
+
+            <p>Visiteur actuel</p>
+            <div id="nb-ticket" data-id="{{guichet.id}}" >
+              <p id="numero-t" data-id=""></p>
+            </div>
+
+
+            <div class="col-md-4 col-sm-4 col-8 actions-btn">
+              <div class="row">
+                <button type="button" class="btn btn-primary shadow g_action suivant col-md-5 col-5">Suivant</button>
+                <button type="button" class="btn btn-primary shadow g_action appel col-md-5 col-5">Appel</button>
+                <button type="button" class="btn btn-primary shadow g_action rappel col-md-10 col-10" >Rappel</button>
+                <!-- <button type="button" class="btn btn-primary shadow g_action transfert col-md-6 col-6">Transfert</button> -->
+              </div>
+            </div>
+            <!-- <p>Temps de service</p>
+
+            <h3>00:00:00</h3> -->
+          </div>
+          
+        </div>
+        
+      </div>
+      
+      <div class="col-3">
+      </div>
+    </div>
+</div>
+
+{% endblock %}

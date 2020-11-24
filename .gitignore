@@ -1,0 +1,11 @@
+/migrations
+*.pyc
+/__pycache__
+/app/static/uploads
+uwsgi.ini
+start.sh
+Dockerfile
+.env
+vitapp.ini
+vitapp.sock
+wsgi.py

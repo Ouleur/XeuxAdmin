@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Liste des Services [ {{agence.denomination}} ]</h1>
+      <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+      {% if not service_item %}
+
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        <i class="fas fa-plus fa-2x "></i>
+      </button>
+
+      {% endif %}
+    </div>
+
+     <p class="mb-4">
+        
+    </p>
+
+    <div class="row">
+      {% if not service_item %}
+      <div class="col-xl-12 col-md-12 mb-4">
+      {% else %}
+      <div class="col-xl-9 col-md-12 mb-4">
+      {% endif %}
+
+        <!-- Content Row -->
+        <div class="row">
+
+          {% for service in services %}
+
+          <!-- Earnings (Monthly) Card Example -->
+          <div class="col-xl-3 col-md-6 mb-4" onclick="'window.location.href='{{ url_for('main.services',aid=agence.id) }}';">
+            <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ service.denomination }}</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ service.code }}</div>
+                  </div>
+                  <div class="col-auto">
+                    
+                    <div class="text-xs font-weight-bold  text-uppercase mb-1">{{service.guichets|length}}</div>
+                    <div class="text-xs font-weight-bold  text-uppercase mb-1">guichets</div>
+                    <a href="{{ url_for('main.guichets',aid=agence.id,sid=service.id) }}" title="La liste des guichets">
+                      <i class="fas fa-ticket-alt fa-2x text-gray-300"></i>
+                    </a>
+                    <a href="{{ url_for('main.update_services',aid=agence.id,sid=service.id) }}" title="Mise à jour du service">
+                      <i class="fas fa-eye fa-2x text-gray-300"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+        </div>
+      </div>
+      
+      {% if service_item is defined %}
+      <div class="col-xl-3">
+        <h1 class="h3 mb-0 text-gray-800">Modifier un Service</h1>
+          <form class="" method="POST" action="{{ url_for('main.update_services',aid=agence.id,sid=service_item.id) }}" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+              <div class="modal-body">
+                  <div class="form-group row">
+                    <div class="col-sm-12 logo">
+                    {% if service_item.logo %}
+                    <img id="output_image" height="100" src="{{ service_item.logo }}"/>
+
+                    {% else %}
+                    <img id="output_image" height="100" src="{{ url_for('static', filename='img/rect2252.png') }}"/>
+
+                    {% endif %}
+                    
+                      <input class="box__file" type="file" id="file" hidden accept="image/*" name="file" onchange="preview_image(event)"/>
+                    </div>
+
+                    <div class="col-sm-12">
+                      <label for="date">Denomination</label>
+                      {{ form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value=service_item.denomination)}}
+                    </div>
+    
+                    <div class="col-sm-12">
+                      <label for="date">Code</label>
+                      {{ form.code(class_='form-control form-control-user',placeholder="Code",type="text",value=service_item.code)}}
+                    </div>
+                    
+                  </div>
+              </div>
+              <div class="modal-footer">
+              <a href="{{ url_for('main.del_services',aid=agence.id,sid=service_item.id) }}" type="button" class="btn btn-danger" data-dismiss="modal">Supprimer</a>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+              {{ form.submit(class="btn btn-primary") }}
+    
+              </div>
+          </form>
+      </div>
+      {% endif %}
+
+    </div>
+    
+   <!-- Modal -->
+   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ajout d'un Service</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form class="" method="POST" action="{{ url_for('main.services',aid=agence.id) }}" enctype="multipart/form-data">
+          {{ form.csrf_token }}
+            <div class="modal-body">
+                <div class="form-group row">
+  
+                  <div class="col-sm-6">
+                    <label for="date">Denomination</label>
+                    {{ form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text")}}
+                  </div>
+                  
+                  <div class="col-sm-6">
+                    <label for="date">Code</label>
+                    {{ form.code(class_='form-control form-control-user',placeholder="Code",type="text")}}
+                  </div>
+                  <div class="col-sm-12">
+                    <label for="date">Ficher</label>
+                    <input class="box__file" type="file" name="file" data-multiple-caption="{count} files selected" multiple />
+                  </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            {{ form.submit(class="btn btn-primary") }}
+  
+            </div>
+        </form>
+      </div>
+  
+    </div>
+  </div>
+  </div>
+
+{% endblock %}

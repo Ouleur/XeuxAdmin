@@ -1,0 +1,98 @@
+
+{% extends "base.html" %}
+
+
+{% block container %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Disponibilités</h1>
+    <p class="mb-4">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Ajout de Disponibilités
+      </button>
+    </p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Mes Disponibilités</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Jour</th>
+                  <th>Heure début</th>
+                  <th>Heure fin</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                    <th>Jour</th>
+                    <th>Heure début</th>
+                    <th>Heure fin</th>
+                    <th>Action</th>
+                </tr>
+              </tfoot>
+              <tbody>
+                  {% for dispo in dispos %}
+                    <tr>
+                        <td>{{ dispo.date_debut.strftime('%d-%m-%Y') }}</td>
+                        <td>{{ dispo.date_debut.strftime('%H:%M') }}</td>
+                        <td>{{ dispo.date_fin.strftime('%H:%M') }}</td>
+                        <td>x</td>
+                    </tr>
+                  {% endfor %}
+                
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ajout d'une Disponibilité</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form class="" method="POST" action="{{ url_for('main.disponibilite',id=current_user.experts.id) }}">
+            {{ form.csrf_token }}
+            <div class="modal-body">
+                <div class="form-group row">
+                    
+                    <div class="col-sm-5">
+                        <label for="date">Date</label>
+                        {{ form.date(class_='form-control form-control-user',placeholder="Date",type="date")}}
+                    </div>
+                    <div class="col-sm-3 mb-3 mb-sm-0">
+                        <label for="debut">Heure début</label>
+                        {{ form.heure_debut(class_='form-control form-control-user',placeholder="heure debut",type="time")}}
+                    </div>
+                    <div class="col-sm-3 mb-3 mb-sm-0">
+                        <label for="fin">Heure fin</label>
+                        {{ form.heure_fin(class_='form-control form-control-user',placeholder="heure fin",type="time")}}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            {{ form.submit(class="btn btn-primary") }}
+
+            </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}

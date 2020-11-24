@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Liste des Publicites</h1>
+      <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+      {% if not publicite_item %}
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        <i class="fas fa-plus fa-2x "></i>
+      </button>
+      {% endif %}
+    </div>
+
+     <p class="mb-4">
+        
+    </p>  
+    <div class="row">
+      {% if not publicite_item %}
+      <div class="col-xl-12 col-md-12 mb-4">
+      {% else %}
+      <div class="col-xl-9 col-md-12 mb-4">
+      {% endif %}
+      
+        <!-- Content Row -->
+        <div class="row">
+          {% for publicite in publicites %}
+
+          <!-- Earnings (Monthly) Card Example -->
+          {% if not publicite_item %}
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6  mb-4">
+          {% else %}
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6  mb-4">
+          {% endif %}
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold  text-uppercase mb-1"> <img src="{{ publicite.url }}" alt="" style="height: 50px;" srcset=""></div>
+                    </div>
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ publicite.titre }}</div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">{{ publicite.etat }}</div>
+                    </div>
+                    
+                    <div class="col-auto">
+                      <a href="{{ url_for('main.update_publicite',aid=agence.id,pid=publicite.id) }}">
+                        <i class="fas fa-eye fa-1-3x text-gray-300"></i>
+                      </a>
+
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div> 
+      </div>
+      {% if publicite_item is defined %}
+      <div class="col-xl-3">
+        <h1 class="h3 mb-0 text-gray-800">Modifier d'une publicite</h1>
+          <form class="" method="POST" action="{{ url_for('main.update_publicite',aid=agence.id,pid=publicite_item.id) }}" enctype="multipart/form-data" >
+            {{ form.csrf_token }}
+              <div class="modal-body">
+                  <div class="form-group row">
+    
+                    <div class="col-sm-12">
+                      <label for="date">Titre</label>
+                      {{ form.titre(class_='form-control form-control-user',placeholder="Titre",type="text",value=publicite_item.titre)}}
+                    </div>
+    
+                    <div class="col-sm-12">
+                      <label for="date">Etat</label>
+                      {{ form.etat(class_='form-control form-control-user',placeholder="Etat",type="text",value=publicite_item.localisation)}}
+                    </div>
+    
+                    <div class="col-sm-12">
+                      <label for="date">Type du media</label>
+                      {{ form.media_type(class_='form-control form-control-user',placeholder="Type du media",value=publicite_item.numero)}}
+                    </div>
+                    
+                    <div class="col-sm-12 logo">
+                      {% if publicite_item.url %}
+                      <img id="output_image" height="300" src="{{ publicite_item.url }}"/>
+  
+                      {% else %}
+                      <img id="output_image" height="300" src="{{ url_for('static', filename='img/rect2252.png') }}"/>
+  
+                      {% endif %}
+                      
+                        <input class="box__file" type="file" id="file" hidden accept="image/*" name="file" onchange="preview_image(event)"/>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer ">
+                <div class="row">
+              {{ form.submit(class=" btn btn-primary") }}
+
+              <button type="button" class=" btn btn-danger" data-dismiss="modal">Supprimer</button>
+              <button type="button" class=" btn btn-secondary" data-dismiss="modal">Annuler</button>
+
+            </div>
+    
+              </div>
+          </form>
+      </div>
+      {% endif %}
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ajout d'une Disponibilité</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="" method="POST" action="{{ url_for('main.publicite',aid=agence.id) }}" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+          <div class="modal-body">
+              <div class="form-group row">
+
+                <div class="col-sm-12">
+                  <label for="date">Denomination</label>
+                  {{ form.titre(class_='form-control form-control-user',placeholder="Titre",type="text")}}
+                </div>
+                
+                
+                <div class="col-sm-6">
+                  <label for="date">Etat</label>
+                  {{ form.etat(class_='form-control form-control-user',placeholder="Etat",type="text")}}
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="date">Type du media</label>
+                  {{ form.media_type(class_='form-control form-control-user',placeholder="Type du media")}}
+                </div>
+                <div class="col-sm-6">
+                  <label for="date">Ficher</label>
+                  <input class="box__file" type="file" name="file" id="file" data-multiple-caption="{count} files selected" multiple />
+                </div>
+                
+              </div>
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+          {{ form.submit(class="btn btn-primary") }}
+
+          </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+  
+
+{% endblock %}
