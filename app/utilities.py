@@ -61,10 +61,6 @@ def dowloadFile():
     path = os.path.join(uploads_dir,"carte_grise.jpg")
     return send_file(path, as_attachment=True)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d9b6f3502c686e1c5ea5988b9a2b7fac5032be72
 def time_Average(tickets):
     e = 0
     allTickets = tickets.all()
@@ -86,9 +82,4 @@ def time_Average(tickets):
 
 def wait_time_Average(tickets,tickets_new):
     print(time_Average(tickets),tickets_new.count())
-<<<<<<< HEAD
     return time_Average(tickets)*tickets_new.count()
-
-=======
-    return time_Average(tickets)*tickets_new.count()
->>>>>>> d9b6f3502c686e1c5ea5988b9a2b7fac5032be72
