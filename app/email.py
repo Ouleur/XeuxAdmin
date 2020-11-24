@@ -28,11 +28,7 @@ def send_email(to, subject, template, **kwargs):
     app = current_app._get_current_object()
     msg = Message(app.config['PO_MAIL_SUBJECT_PREFIX'] + subject,sender=app.config['PO_MAIL_SENDER'], recipients=[to])
     # msg.body = render_template('email/'+template+ '.txt', **kwargs)
-<<<<<<< HEAD
-    msg.html = render_template('email/'+template+ '.html',web_url=app.config['WEB_URL'], **kwargs)
-=======
     msg.html = render_template('email/'+template+ '.html',web_url=app.config['WEB_URL'],site_url=app.config['SITE_URL'], **kwargs)
->>>>>>> d9b6f3502c686e1c5ea5988b9a2b7fac5032be72
     msg.cc = []
     
     thr = Thread(target=send_async_email, args=[app, msg])

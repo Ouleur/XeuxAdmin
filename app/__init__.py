@@ -22,10 +22,6 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
-<<<<<<< HEAD
-=======
-    
->>>>>>> d9b6f3502c686e1c5ea5988b9a2b7fac5032be72
 
     from .main import main as main_bleuprint
     app.register_blueprint(main_bleuprint)
