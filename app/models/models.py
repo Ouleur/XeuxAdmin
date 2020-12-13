@@ -422,3 +422,25 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+
+#Contact
+class Contact(baseModel,db.Model):
+    __tablename__ = "contact"
+    nom = db.Column(db.String(64))
+    mail = db.Column(db.String(64))
+    message = db.Column(db.String(50))
+
+    def to_json(self):
+        guichet = Guichet.query.filter_by(id=self.guichet_id).first()
+        json_expert = {
+            'id': self.id,
+            'nom': self.nom,
+            'mail': self.mail,
+            'message': self.message,
+        }
+        return json_expert
+
+    def __repr__(self):
+        return "<Contact %r>" % self.nom

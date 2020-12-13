@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Vit - Dashboard</title>
+  <title>Vit - {% block title %} {% endblock %}</title>
 
   <!-- Custom fonts for this template-->
   <link href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -50,9 +50,21 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="{{ url_for('main.home') }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#tableauBord" aria-expanded="true" aria-controls="tableauBord">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span></a>
+          <span>Tableau de bord</span>
+        </a>
+
+        <div id="tableauBord" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Entreprise</h6>
+            <a class="collapse-item" href="{{ url_for('main.home') }}">Entreprise</a>
+          
+            <a class="collapse-item" href="{{ url_for('main.home') }}">Agences</a>
+        
+            <a class="collapse-item" href="{{ url_for('main.home') }}">Service</a>
+          </div>
+        </div>
       </li>
 
       <!-- Divider -->
@@ -462,17 +474,25 @@
   <script src="{{ url_for('static', filename='vendor/chart.js/Chart.min.js') }}"></script>
 
   <!-- Page level custom scripts -->
+  {% if current_user.is_entreprise_administrator() %}
   <script src="{{ url_for('static', filename='js/demo/chart-area-demo.js') }}"></script>
   <script src="{{ url_for('static', filename='js/demo/chart-pie-demo.js') }}"></script>
+  {% endif %}
 
+  {% if current_user.is_super_administrator %}
+  <script src="{{ url_for('static', filename='js/admin/chart-area-demo.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/chart-pie-demo.js') }}"></script>
+  {% endif %}
    <!-- Page level plugins -->
    <script src="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.js') }}"></script>
    <script src="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
  
    <!-- Page level custom scripts -->
    <script src="{{ url_for('static', filename='js/demo/datatables-demo.js') }}"></script>
    <script src="{{ url_for('static', filename='js/app/core.js') }}"></script>
    <script src="{{ url_for('static', filename='js/app/guichet.js') }}"></script>
+
   {% endblock %}
 
 </body>

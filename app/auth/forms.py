@@ -13,7 +13,7 @@ class RegisterForm(FlaskForm):
     entreprise = StringField('Entreprise',[DataRequired(message="Saisissez le nom d'Entreprise.")])
     adresse = StringField('Adresse',[DataRequired(message="Saisissez l'adresse d'Entreprise.")])
     numero_tel = StringField('Contact',[DataRequired(message="Saisissez votre contact.")])
-    remember_me = BooleanField('Se souvenir de moi')
+    contidion = BooleanField("")
 
     # recaptcha = RecaptchaField()
     submit = SubmitField('Enregistrer')         

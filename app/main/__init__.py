@@ -1,8 +1,9 @@
 from flask import Blueprint
 from ..models.models import Permission
+
 main = Blueprint('main', __name__)
 
-from . import views, errors
+from . import views, errors, dashboard
 
 
 

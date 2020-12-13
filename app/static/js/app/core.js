@@ -130,6 +130,9 @@ function docopy() {
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();   
   });
+  
+var qr;
+
 
 function preview_image(event) 
 {
@@ -145,3 +148,28 @@ function preview_image(event)
 $("#output_image").click(function(){
     $("#file").click()
 });
+
+
+// Qr code 
+
+$(".keû-qrcode").click(function(){
+    generateQRCode($(this).data("qrhash"));
+})
+
+var qr;
+(function() {
+    qr = new QRious({
+        element: document.getElementById('qr-code'),
+        size: 200,
+        value: 'Vit app'
+    });
+})();
+
+
+function generateQRCode(qrtext) {
+    qr.set({
+        foreground: 'black',
+        size: 200,
+        value: qrtext
+    });
+}

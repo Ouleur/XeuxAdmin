@@ -29,9 +29,11 @@
                   <form class="user" method="POST" action="{{ url_for('auth.login') }}">
                     {{ form.csrf_token }}
                     <div class="form-group">
+                      <label for="email" class="text-gray-900">Adresse mail</label>
                       {{ form.email(class_='form-control form-control-user',placeholder="Entrez votre adresse email...")}}
                     </div>
                     <div class="form-group">
+                      <label for="password" class="text-gray-900">Mot de passe</label>
                       {{ form.password(class_='form-control form-control-user',placeholder="Entrez votre mot de passe...")}}
                     </div>
                     <div class="form-group">

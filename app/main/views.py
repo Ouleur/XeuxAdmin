@@ -11,19 +11,33 @@ import json
 from ..decorators import *
 
 @main.route('/', methods=['POST','GET'])
+@login_required
 def home():
 
    print(request.host)
    if current_user.is_authenticated:
-      data = {
-         "agences":Agence.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
-         "services":Service.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
-         "guichets":Guichet.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
-         "tickets":Ticket.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
-      }
+      if not current_user.can(Permission.SUP_ADMINISTER):
+         data = {
+            "agences":Agence.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
+            "services":Service.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
+            "guichets":Guichet.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
+            "tickets":Ticket.query.filter_by(entreprise_id=current_user.entreprise_id).count(),
+         }
 
-      val = [5000, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000]
-      return render_template('index.html',data=data,val=json.dumps(val))
+         val = [5000, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000]
+         return render_template('index.html',data=data,val=json.dumps(val))
+      else:
+         data = {
+            "entreprises":Entreprise.query.count(),
+            "agences":Agence.query.count(),
+            "services":Service.query.count(),
+            "guichets":Guichet.query.count(),
+            "tickets":Ticket.query.count(),
+         }
+
+         val = [5000, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000]
+         return render_template('admin_index.html',data=data,val=json.dumps(val))
+
    else:
       return redirect(url_for('auth.login'))
       

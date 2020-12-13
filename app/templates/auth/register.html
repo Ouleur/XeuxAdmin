@@ -24,6 +24,7 @@
                 {% endfor %}
               <form class="user" method="POST" action="{{ url_for('auth.register') }}">
                 {{ form.csrf_token }}
+                <fieldset>
                 <div class="form-group row">
                   
                   <div class="col-sm-6">
@@ -33,6 +34,7 @@
                     {{ form.first_name(class_='form-control form-control-user',placeholder="Prénoms")}}
                   </div>
                 </div>
+              </fieldset>
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                     {{ form.entreprise(class_='form-control form-control-user',placeholder="Nom d'Entreprise")}}
@@ -60,8 +62,14 @@
                   <div class="col-sm-6">
                     {{ form.confirmPassword(class_='form-control form-control-user',placeholder="Ressaisissez le mot de passe")}}
                   </div>
-                  
                 </div>
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox small">
+                  {{ form.contidion(class="custom-control-input")}}
+                  <!-- <input type="checkbox" class="custom-control-input" id="customCheck" value=""> -->
+                  <label class="custom-control-label" for="contidion">J'ai lu et j'accepte les <a href=''>contions d'utilisation</a></label>
+                    <!-- {{ form.contidion.label(class="custom-control-label")}} -->
+                  </div>
                 {{ form.submit(class="btn btn-primary btn-user btn-block") }}
                 
                 <hr>

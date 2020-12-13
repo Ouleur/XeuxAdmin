@@ -1,5 +1,5 @@
 
-from flask import jsonify, request, current_app, url_for
+from flask import jsonify, request, current_app, url_for,redirect
 from . import api
 from ... import db
 from ...models import *
@@ -42,6 +42,11 @@ def get_service(sid):
 
 
 #Read one service
+@api.route('/agences_services/<code>',methods=['GET'])
+def get_agence_service_code(code):
+    agence = Agence.query.filter_by(code=code).first()
+    return redirect(url_for('api.get_agence_service',aid=agence.id))
+
 @api.route('/agences_services/<int:aid>',methods=['GET'])
 def get_agence_service(aid):
     services = Service.query.filter_by(agences_id=aid)

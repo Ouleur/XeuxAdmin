@@ -6,90 +6,103 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-      <h1 class="h3 mb-0 text-gray-800">Liste des Guichets [ {{agence.denomination}} | {{service.denomination}} ]</h1>
-      <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
-      {% if not guichet_item %}
+    <div class="card  shadow h-100 py-2">
+      <div class="card-body pt-0 pb-0">
+        <div class="d-sm-flex align-items-center justify-content-between ">
+          <h1 class="h3 mb-0 text-gray-800">Liste des Guichets [ {{agence.denomination}} | {{service.denomination}} ]</h1>
+          <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+          {% if not guichet_item %}
 
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        <i class="fas fa-plus fa-2x "></i>
-      </button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <i class="fas fa-plus fa-2x "></i>
+          </button>
 
-      {% endif %}
+          {% endif %}
+        </div>
+      </div>
     </div>
-
      <p class="mb-4">
         
     </p>
 
     <div class="row">
       {% if not guichet_item %}
-      <div class="col-xl-12 col-md-12 mb-4">
+      <div class="col-xl-12 col-md-12 ">
       {% else %}
-      <div class="col-xl-9 col-md-12 mb-4">
+      <div class="col-xl-9 col-md-12 ">
       {% endif %}
+        <div class="card  shadow h-100 py-2">
+          <div class="card-body item-card-body">
+            <!-- Content Row -->
+            <div class="row">
 
-        <!-- Content Row -->
-        <div class="row">
+              {% for guichet in guichets %}
+              {% if not guichet_item %}
+              <div class="col-xl-3 col-md-6 mb-4" onclick="'window.location.href='{{ url_for('main.guichets',aid=agence.id,sid=service.id) }}';">
+              {% else %}
+              <div class="col-xl-4 col-md-6 mb-4" onclick="'window.location.href='{{ url_for('main.guichets',aid=agence.id,sid=service.id) }}';">
+              {% endif %}
 
-          {% for guichet in guichets %}
-
-          <!-- Earnings (Monthly) Card Example -->
-          <div class="col-xl-3 col-md-6 mb-4" onclick="'window.location.href='{{ url_for('main.guichets',aid=agence.id,sid=service.id) }}';">
-            <div class="card border-left-primary shadow h-100 py-2">
-              <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                  <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ guichet.denomination }}</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ guichet.code }}</div>
-                    <div class="h6 mb-0 text-gray-700">
-                      <div class="row">
-                        <code class="col-9" id="tocopy"> {{url}}/guichet/{{agence.code}}/{{service.code}}/{{ guichet.code }}</code>
-                        <i class="col-1 fas fa-copy fa-2x js-copy" data-toggle="tooltip" title="Copier le lien !" data-balloon-pos="down" data-target="#tocopy"></i>
+              <!-- Earnings (Monthly) Card Example -->
+                <div class="card border-left-primary shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ guichet.denomination }}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ guichet.code }}</div>
+                        <div class="h6 mb-0 text-gray-700">
+                          <div class="row">
+                            <code class="col-9" id="tocopy"> {{url}}/guichet/{{agence.code}}/{{service.code}}/{{ guichet.code }}</code>
+                            <i class="col-1 fas fa-copy fa-2x js-copy text-gray-900" data-toggle="tooltip" title="Copier le lien !" data-balloon-pos="down" data-target="#tocopy"></i>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="col-auto">
+                        
+                        <div class="text-xs font-weight-bold  text-uppercase mb-1">{{guichet.tickets|length}} tickets</div>
+                      
+                        <a href="{{ url_for('main.update_guichets',aid=agence.id,sid=service.id,gid=guichet.id) }}" title="Mise à jour du guichet"  >
+                          <i class="fas fa-eye fa-2x text-gray-800"></i>
+                        </a>
+                        
                       </div>
                     </div>
                   </div>
-                  
-                  <div class="col-auto">
-                    
-                    <div class="text-xs font-weight-bold  text-uppercase mb-1">{{guichet.tickets|length}}</div>
-                    <div class="text-xs font-weight-bold  text-uppercase mb-1">tickets</div>
-                   
-                    <a href="{{ url_for('main.update_guichets',aid=agence.id,sid=service.id,gid=guichet.id) }}" title="Mise à jour du guichet"  >
-                      <i class="fas fa-eye fa-2x text-gray-300"></i>
-                    </a>
-                    
-                  </div>
                 </div>
               </div>
+            {% endfor %}
+
             </div>
           </div>
-        {% endfor %}
-
         </div>
       </div>
       
       {% if guichet_item is defined %}
       <div class="col-xl-3">
-        <h1 class="h3 mb-0 text-gray-800">Modifier un Guichet</h1>
-          <form class="" method="POST" action="{{ url_for('main.update_guichets',aid=agence.id,sid=service.id,gid=guichet_item.id) }}" >
-            {{ form.csrf_token }}
-              <div class="modal-body">
-                  <div class="form-group row">
-                    <div class="col-sm-12">
-                      <label for="date">Code</label>
-                      {{ form.code(class_='form-control form-control-user',placeholder="Code",type="text",value=guichet_item.code)}}
+        <div class="card  shadow h-100 py-2">
+          <div class="card-body item-card-body">
+            <h1 class="h3 mb-0 text-gray-800">Modifier un Guichet</h1>
+            <form class="" method="POST" action="{{ url_for('main.update_guichets',aid=agence.id,sid=service.id,gid=guichet_item.id) }}" >
+              {{ form.csrf_token }}
+                <div class="modal-body">
+                    <div class="form-group row">
+                      <div class="col-sm-12">
+                        <label for="date">Code</label>
+                        {{ form.code(class_='form-control form-control-user',placeholder="Code",type="text",value=guichet_item.code)}}
+                      </div>
+                      
                     </div>
-                     
-                  </div>
-              </div>
-              <div class="modal-footer">
-              <a href="{{ url_for('main.del_guichets',aid=agence.id,sid=service.id,gid=guichet_item.id) }}" type="button" class="btn btn-danger">Supprimer</a>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-              {{ form.submit(class="btn btn-primary") }}
-    
-              </div>
-          </form>
+                </div>
+                <div class="modal-footer">
+                <a href="{{ url_for('main.del_guichets',aid=agence.id,sid=service.id,gid=guichet_item.id) }}" type="button" class="btn btn-danger text-xs">Supprimer</a>
+                <button type="button" class="btn btn-secondary text-xs" data-dismiss="modal">Annuler</button>
+                {{ form.submit(class="btn btn-primary text-xs") }}
+      
+                </div>
+            </form>
+          </div>
+        </div>
       </div>
       {% endif %}
 
