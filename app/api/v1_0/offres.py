@@ -16,13 +16,13 @@ def get_offres():
     return jsonify({ 'offres': [ offre.to_json() for offre in offres ] })
 
 
-@api.route('/contactform-process',methods=['POST'])
+@api.route('/contactform-process',methods=['POST','GET'])
 def add_contact():
     if request.json['terms']=="Agreed-to-Terms":
-        contact = Contact(nom=request.json['name'],email=email,message=message)
+        contact = Contact(nom=request.json['name'],mail=request.json['email'],message=request.json['message'])
         db.session.add(contact)
-        bd.session.commit()
-    return jsonify({ 'Contact': contact.to_json() })
+        db.session.commit()
+    return jsonify({"response":'success'})
 
 @api.route('/get_contact',methods=['GET'])
 def get_contacts():

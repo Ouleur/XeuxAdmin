@@ -430,10 +430,9 @@ class Contact(baseModel,db.Model):
     __tablename__ = "contact"
     nom = db.Column(db.String(64))
     mail = db.Column(db.String(64))
-    message = db.Column(db.String(50))
+    message = db.Column(db.Text())
 
     def to_json(self):
-        guichet = Guichet.query.filter_by(id=self.guichet_id).first()
         json_expert = {
             'id': self.id,
             'nom': self.nom,

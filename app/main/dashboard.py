@@ -10,7 +10,7 @@ import datetime
 import json
 from ..decorators import *
 
-@main.route('/dash_entreprise', methods=['POST','GET'])
+@main.route('/dash_admin_entreprise', methods=['POST','GET'])
 @login_required
 @super_admin_required
 def dash_entreprise():
@@ -34,11 +34,22 @@ def dash_entreprise():
       return redirect(url_for('auth.login'))
 
 
-@main.route('/dash_admin_entreprise', methods=['POST','GET'])
+@main.route('/dash_entreprise', methods=['POST','GET'])
 @login_required
-@super_admin_required
+@entreprise_admin_required
 def dash_admin_entreprise():
+   return dataReturn()
 
+
+@main.route('/dash_entreprise_agence', methods=['POST','GET'])
+@login_required
+@entreprise_admin_required
+def dash_entreprise_agence():
+   return dataReturn()
+
+
+
+def dataReturn():
    print(request.host)
    if current_user.is_authenticated:
       data = {

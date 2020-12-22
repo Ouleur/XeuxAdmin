@@ -6,4 +6,4 @@ api = Blueprint('api', __name__)
 
 CORS(api, supports_credentials=True)
 
-from . import *
+from . import agence,entreprise,offres,service,users,ticket
