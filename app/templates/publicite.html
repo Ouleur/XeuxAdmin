@@ -91,26 +91,26 @@
                       {{ form.media_type(class_='form-control form-control-user',placeholder="Type du media",value=publicite_item.numero)}}
                     </div>
                     
-                    <div class="col-sm-12 logo">
+                    <div class="col-sm-12 logo mt-3">
                       {% if publicite_item.url %}
-                      <img id="output_image" height="300" src="{{ publicite_item.url }}"/>
+                      <img id="output_image" width="200" heigth="300" src="{{ publicite_item.url }}"/>
   
                       {% else %}
-                      <img id="output_image" height="300" src="{{ url_for('static', filename='img/rect2252.png') }}"/>
+                      <img id="output_image" width="200" heigth="300" src="{{ url_for('static', filename='img/rect2252.png') }}"/>
   
                       {% endif %}
                       
-                        <input class="box__file" type="file" id="file" hidden accept="image/*" name="file" onchange="preview_image(event)"/>
+                        <input class="box__file" type="file" id="file"  hidden accept="image/*" name="file" onchange="preview_image(event)"/>
                       </div>
                   </div>
               </div>
-              <div class="modal-footer ">
-                <div class="row">
-              <button type="button" class=" btn btn-danger text-xs" data-dismiss="modal">Supprimer</button>
-              <button type="button" class=" btn btn-secondary text-xs" data-dismiss="modal">Annuler</button>
-              {{ form.submit(class=" btn btn-primary text-xs") }}
+              <div class="modal-footer  " style="padding: none !important;">
+                <div class="row" class="text-align:center;">
+                <button type="button" class=" btn btn-danger text-xs" data-dismiss="modal">Supprimer</button>
+                <button type="button" class=" btn btn-secondary text-xs" data-dismiss="modal">Annuler</button>
+                {{ form.submit(class=" btn btn-primary text-xs") }}
               
-            </div>
+              </div>
     
               </div>
           </form>

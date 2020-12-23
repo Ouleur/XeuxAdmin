@@ -752,7 +752,6 @@ def valider_offre(pid):
 @entreprise_admin_required
 def update_mes_payement(eid,pid):
    payementForm = PayementForm(request.form)
-
    payement = Payement.query.filter_by(id=pid).first()
 
    if payementForm.validate_on_submit():
@@ -764,6 +763,5 @@ def update_mes_payement(eid,pid):
       payement.date_fin=payementForm.date_fin.data
    
    payements = Payement.query.all()
-
 
    return render_template('publicite.html',form=payementForm,payements=payements,payement=payement)

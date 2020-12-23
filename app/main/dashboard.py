@@ -47,20 +47,23 @@ def dash_admin_entreprise():
 def dash_entreprise_agence():
    return dataReturn()
 
-
+@main.route('/dash_agence_agence', methods=['POST','GET'])
+@login_required
+@entreprise_admin_required
+def dash_agence_agence():
+   return dataReturn()
 
 def dataReturn():
    print(request.host)
    if current_user.is_authenticated:
-      data = {
-         "agences":Agence.query.count(),
-         "services":Service.query.count(),
-         "guichets":Guichet.query.count(),
-         "tickets":Ticket.query.count(),
-      }
+      val_list = [0,0,0,0,0,0,0,0,0,0,0,0]
+      data = db.session.execute("select to_char(date_create, 'MM') as mois, count(id) as nombre from tickets where to_char(date_create, 'YYYY')=:annee group by to_char(date_create, 'MM') order by 1",{'annee':'2020'})
+
+      for v in data:
+         val_list[int(v.mois)-1] = v.nombre
 
       val = {
-         "evolution":[50000, 10000, 5000, 15000, 17000, 20000, 15000, 28000, 20000, 30000, 25000, 40000],
+         "evolution":val_list,
          "etat":[
             Ticket.query.filter_by(etat="nouveau").count(),
             Ticket.query.filter_by(etat="appeler").count(),
@@ -71,3 +74,23 @@ def dataReturn():
       return json.dumps(val)
    else:
       return redirect(url_for('auth.login'))
+
+
+@main.route('/agence_dash', methods=['POST','GET'])
+@login_required
+@entreprise_admin_required
+def agence_dash():
+   return render_template('agence_dash.html')
+
+
+@main.route('/service_dash', methods=['POST','GET'])
+@login_required
+@entreprise_admin_required
+def service_dash():
+   return render_template('service_dash.html')
+
+@main.route('/guichet_dash', methods=['POST','GET'])
+@login_required
+@entreprise_admin_required
+def guichet_dash():
+   return render_template('guichet_dash.html')

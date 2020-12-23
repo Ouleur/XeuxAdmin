@@ -80,7 +80,7 @@
             <h1 class="h3 mb-0 text-gray-800">Modifier un Service</h1>
             <form class="" method="POST" action="{{ url_for('main.update_services',aid=agence.id,sid=service_item.id) }}" enctype="multipart/form-data">
               {{ form.csrf_token }}
-                <div class="modal-body">
+                <div class="modal-body" >
                     <div class="form-group row">
                       <div class="col-sm-12 logo">
                       {% if service_item.logo %}
@@ -106,7 +106,7 @@
                       
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="padding: 0 !important;">
                 <a href="{{ url_for('main.del_services',aid=agence.id,sid=service_item.id) }}" type="button" class="btn btn-danger text-xs" data-dismiss="modal">Supprimer</a>
                 <button type="button" class="btn btn-secondary text-xs" data-dismiss="modal">Annuler</button>
                 {{ form.submit(class="btn btn-primary text-xs") }}
