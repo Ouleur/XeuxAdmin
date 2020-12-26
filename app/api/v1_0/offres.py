@@ -7,6 +7,7 @@ from flask import g, jsonify
 from .errors import forbidden,unauthorized
 from flask_httpauth import HTTPBasicAuth
 import datetime
+from ...email import *
 
 
 #Read ticket
@@ -22,6 +23,9 @@ def add_contact():
         contact = Contact(nom=request.json['name'],mail=request.json['email'],message=request.json['message'])
         db.session.add(contact)
         db.session.commit()
+
+        send_email(request.json['email'], '[Equipe Vit] Contact','contact')
+
     return jsonify({"response":'success'})
 
 @api.route('/get_contact',methods=['GET'])

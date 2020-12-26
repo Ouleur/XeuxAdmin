@@ -35,7 +35,7 @@ function evolution(datas){
     data: {
       labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"],
       datasets: [{
-        label: "Earnings",
+        label: "Ticket",
         lineTension: 0.3,
         backgroundColor: "rgba(78, 115, 223, 0.05)",
         borderColor: "rgba(78, 115, 223, 1)",
