@@ -370,7 +370,6 @@ class Offre(baseModel,db.Model):
 
 
     def to_json(self):
-        guichet = Guichet.query.filter_by(id=self.guichet_id).first()
         json_expert = {
             'id': self.id,
             'titre': self.titre,
