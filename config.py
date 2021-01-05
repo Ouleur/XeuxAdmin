@@ -84,7 +84,7 @@ class BetaConfig(Config):
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = "infos@filevit.com"
-    MAIL_PASSWORD = "01709902@Vit"
+    MAIL_PASSWORD = "wR4_Dyjpr!"
 
     POSTGRES_DB = "popodipo_dev"
     POSTGRES_URL="127.0.0.1:5432"
