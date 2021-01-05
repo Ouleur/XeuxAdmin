@@ -6,7 +6,6 @@ from .forms import *
 from flask_login import login_user,login_required,logout_user,current_user
 from ..models.models import *
 from ..notifications import *
-import datetime
 import json
 from ..decorators import *
 
@@ -57,7 +56,8 @@ def dataReturn():
    print(request.host)
    if current_user.is_authenticated:
       val_list = [0,0,0,0,0,0,0,0,0,0,0,0]
-      data = db.session.execute("select to_char(date_create, 'MM') as mois, count(id) as nombre from tickets where to_char(date_create, 'YYYY')=:annee group by to_char(date_create, 'MM') order by 1",{'annee':'2020'})
+      year = datetime.now().year
+      data = db.session.execute("select to_char(date_create, 'MM') as mois, count(id) as nombre from tickets where to_char(date_create, 'YYYY')=:annee group by to_char(date_create, 'MM') order by 1",{'annee':str(year)})
 
       for v in data:
          val_list[int(v.mois)-1] = v.nombre

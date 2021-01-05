@@ -38,7 +38,7 @@
 
               {% for guichet in guichets %}
               {% if not guichet_item %}
-              <div class="col-xl-3 col-md-6 mb-4" onclick="'window.location.href='{{ url_for('main.guichets',aid=agence.id,sid=service.id) }}';">
+              <div class="col-xl-4 col-md-6 mb-4" onclick="'window.location.href='{{ url_for('main.guichets',aid=agence.id,sid=service.id) }}';">
               {% else %}
               <div class="col-xl-4 col-md-6 mb-4" onclick="'window.location.href='{{ url_for('main.guichets',aid=agence.id,sid=service.id) }}';">
               {% endif %}
@@ -51,19 +51,21 @@
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ guichet.denomination }}</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">{{ guichet.code }}</div>
                         <div class="h6 mb-0 text-gray-700">
-                          <div class="row">
-                            <code class="col-9" id="tocopy"> {{url}}/guichet/{{agence.code}}/{{service.code}}/{{ guichet.code }}</code>
-                            <i class="col-1 fas fa-copy fa-2x js-copy text-gray-900" data-toggle="tooltip" title="Copier le lien !" data-balloon-pos="down" data-target="#tocopy"></i>
+                          <div class="row ">
+                            <code id="tocopy" style="font-size: 9px;"> {{url}}/guichet/{{agence.code}}/{{service.code}}/{{ guichet.code }}</code>
                           </div>
                         </div>
                       </div>
                       
                       <div class="col-auto">
+                        <i class="col-1 fas fa-copy fa-2x js-copy text-gray-900" data-toggle="tooltip" title="Copier le lien !" data-balloon-pos="down" data-target="#tocopy"></i>
+                      </div>
+                      <div class="col-auto">
                         
                         <div class="text-xs font-weight-bold  text-uppercase mb-1">{{guichet.tickets|length}} tickets</div>
                       
                         <a href="{{ url_for('main.update_guichets',aid=agence.id,sid=service.id,gid=guichet.id) }}" title="Mise à jour du guichet"  >
-                          <i class="fas fa-eye fa-2x text-gray-800"></i>
+                          <i class="fas fa-eye fa-1-3x text-gray-800"></i>
                         </a>
                         
                       </div>
@@ -94,7 +96,7 @@
                       
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="padding: 0 !important;">
                 <a href="{{ url_for('main.del_guichets',aid=agence.id,sid=service.id,gid=guichet_item.id) }}" type="button" class="btn btn-danger text-xs">Supprimer</a>
                 <button type="button" class="btn btn-secondary text-xs" data-dismiss="modal">Annuler</button>
                 {{ form.submit(class="btn btn-primary text-xs") }}

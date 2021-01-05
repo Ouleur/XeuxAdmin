@@ -83,7 +83,7 @@ class BetaConfig(Config):
     MAIL_SERVER = 'mail47.lwspanel.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = "infos@filevit.com "
+    MAIL_USERNAME = "infos@filevit.com"
     MAIL_PASSWORD = "01709902@Vit"
 
     POSTGRES_DB = "popodipo_dev"
