@@ -10586,19 +10586,19 @@ a:focus {
 }
 
 .bg-login-image {
-  background: url("../img/undraw_Queue_j6ij.png");
+  /* background: url("../img/undraw_Queue_j6ij.png"); */
   background-position: center;
   background-size: cover;
 }
 
 .bg-register-image {
-  background: url("../img/undraw_online_everywhere_cd90.png");
+  /* background: url("../img/undraw_online_everywhere_cd90.png"); */
   background-position: center;
   background-size: cover;
 }
 
 .bg-password-image {
-  background: url("../img/undraw_confirmed_81ex.png");
+  /* background: url("../img/undraw_confirmed_81ex.png"); */
   background-position: center;
   background-size: cover;
 }

@@ -19,12 +19,23 @@ class ProfileForm(FlaskForm):
     submit = SubmitField('Enregistrer')  
 
 
-class EtablissementForm(FlaskForm):
+class EquipementForm(FlaskForm):
     denomination = StringField('Dénomination',[DataRequired(message="Saisissez une dénomination SVP.")])
-    localisation = StringField('Localisation',[DataRequired(message="Saisissez une localisation SVP.")])
-    numero = StringField('Numero',[DataRequired(message="Saisissez un numéro SVP.")])
+    position = StringField('Position',[DataRequired(message="Saisissez une position SVP.")])
+    emei = StringField('Emei',[DataRequired(message="Saisissez un emei SVP.")])
+    status = StringField('Status',[DataRequired(message="Saisissez un Status SVP.")])
     submit = SubmitField('Enregistrer')   
+    
 
+class EtudiantForm(FlaskForm):
+    matricule = StringField('Matricule',[DataRequired(message="Saisissez une matricule SVP.")])
+    nom = StringField('Nom',[DataRequired(message="Saisissez une nom SVP.")])
+    prenoms = StringField('Prenoms',[DataRequired(message="Saisissez un Prenoms SVP.")])
+    filiere = SelectField("Filiere",choices=[],coerce=str)
+    niveau = SelectField("Niveau",choices=['1ere Année','2e Année','3e Année'],coerce=str)
+    id_carte = StringField('Id Carte',[DataRequired(message="Saisissez un Id Carte SVP.")])
+    submit = SubmitField('Enregistrer')   
+    
 
 class CollaborateurForm(FlaskForm):
     name = StringField('Dénomination')

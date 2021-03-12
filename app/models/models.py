@@ -17,7 +17,7 @@ class baseModel():
     modify_by = db.Column(db.Integer)
 
 class Permission:
-    GUICHET = 0x01
+    USER = 0x01
     ADMINISTER = 0x02
     SUP_ADMINISTER = 0x04
 
@@ -31,8 +31,8 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         roles = {
-            'Guichet': (Permission.GUICHET, True),
-            'Entreprise Admin' : (Permission.GUICHET |
+            'User': (Permission.USER, True),
+            'Ecole Admin' : (Permission.USER |
                            Permission.ADMINISTER , False),
             'Super Administrator' : (Permission.SUP_ADMINISTER, False)
         }
@@ -78,7 +78,7 @@ class User(baseModel,db.Model,UserMixin):
     # agences = db.relationship('Agence')
     # services = db.relationship('Service')
 
-    entreprise_id = db.Column(db.Integer, db.ForeignKey("entreprises.id"))
+    # entreprise_id = db.Column(db.Integer, db.ForeignKey("entreprises.id"))
 
 
     role = db.relationship('Role', backref='users')
@@ -164,7 +164,6 @@ class User(baseModel,db.Model,UserMixin):
 
     #For API """
     def to_json(self):
-        entreprise = Entreprise.query.filter_by(id=self.entreprise_id).first()
         
         json_user = {
             'id': self.id,
@@ -176,7 +175,6 @@ class User(baseModel,db.Model,UserMixin):
             'date_modify':self.date_modify,
             'create_by': self.create_by,
             'modify_by':self.modify_by,
-            'entreprise':"" if not entreprise else entreprise.denomination,
         }
         return json_user
 
@@ -187,235 +185,176 @@ class AnonymousUser(AnonymousUserMixin):
     def is_administrator(self):
         return False
 
-class Entreprise(baseModel,db.Model):
-    __tablename__ = "entreprises"
-    denomination = db.Column(db.String(255))
-    localisation = db.Column(db.String(255))
-    logo = db.Column(db.String(255))
-    numero = db.Column(db.String(64))
-    state = db.Column(db.Boolean, default=False)
-    #create_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+class Etudiant(baseModel,db.Model):
+    __tablename__ = "etudiants"
+    nom = db.Column(db.String(255))
+    prenoms = db.Column(db.String(255))
+    matricule = db.Column(db.String(255))
+    card_id = db.Column(db.String(255))
+    niveau = db.Column(db.String(255))
+    date_naissance = db.Column(db.Date())
+
+    filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
     
-    # agences = db.relationship('Agence', backref='entreprises')
+    presences = db.relationship('Presence', backref='etudiants')
     # services = db.relationship('Service', backref='entreprises')
     # tickets = db.relationship('Ticket', backref='entreprises')
 
 
     def to_json(self):
-        vehicule_json = {
+        filiere = Filiere.query.filter_by(id=self.filiere_id).first()
+        etudiant_json = {
             "id":self.id,
-            "denomination":self.denomination,
-            "localisation":self.localisation,
-            "numero":self.numero,
-            "state":self.state,
-            "logo":self.logo,
+            "nom":self.nom,
+            "prenoms":self.prenoms,
+            "matricule":self.matricule,
+            "niveau":self.niveau,
+            "card_id":self.card_id,
+            "filiere_id":filiere.id,
+            "filiere":filiere.denomination,
+            "date_naissance":self.date_naissance,
         } 
 
-        return vehicule_json
+        return etudiant_json
 
     def __repr__(self):
-        return "<Entreprise %r>" % self.denomination
+        return "<Etudiant %r>" % self.denomination
     
-class Agence(baseModel,db.Model):
-    """Agence()"""
-    __tablename__ = "agences"
+class Filiere(baseModel,db.Model):
+    """Filiere()"""
+    __tablename__ = "filieres"
     denomination = db.Column(db.String(255))
-    numero = db.Column(db.String(255))
-    localisation = db.Column(db.String(255))
-    code = db.Column(db.String(10))
-    logo = db.Column(db.String(255))
-    ouverture = db.Column(db.Time())
-    fermerture = db.Column(db.Time())
 
-    entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
-    create_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    # entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
+    # create_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    # users = db.relationship('User', backref='agences')
-    services = db.relationship('Service', backref='agences')
-    tickets = db.relationship('Ticket', backref='agences')
+    etudiants = db.relationship('Etudiant', backref='filieres')
+    presences = db.relationship('Presence', backref='filieres')
+    # tickets = db.relationship('Ticket', backref='agences')
 
 
     def to_json(self):
-        json_agence = {
+        json_filiere = {
             'id': self.id,
             'denomination': self.denomination,
-            'numero': self.numero,
-            'localisation': self.localisation,
-            'logo': self.logo
         }
-        return json_agence
+        return json_filiere
 
     def __repr__(self):
-        return "<Agence %r>" % self.denomination
+        return "<Filiere %r>" % self.denomination
 
-class Publicite(baseModel,db.Model):
-    __tablename__ = "publicites"
-    titre = db.Column(db.String(64))
-    etat = db.Column(db.String(50))
-    url = db.Column(db.String(255))
-    media_type = db.Column(db.String(255))
+class Presence(baseModel,db.Model):
+    __tablename__ = "presences"
+    etudiant_id = db.Column(db.Integer, db.ForeignKey('etudiants.id'))
+    filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
+    matiere_id = db.Column(db.Integer, db.ForeignKey('matieres.id'))
+    device_id = db.Column(db.Integer, db.ForeignKey('devices.id'))
+    niveau = db.Column(db.String(255))
+    annee_academic_id = db.Column(db.Integer, db.ForeignKey('anneeAcademics.id'))
 
-    entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
-    agence_id = db.Column(db.Integer, db.ForeignKey('agences.id'))
+    # entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
+    # agence_id = db.Column(db.Integer, db.ForeignKey('agences.id'))
     
 
     def to_json(self):
-        json_expert = {
+
+        etudiant = etudiant.query.filter_by(id=etudiant_id).first()
+        filiere = filiere.query.filter_by(id=filiere_id).first()
+        matiere = matiere.query.filter_by(id=matiere_id).first()
+        device = device.query.filter_by(id=device_id).first()
+        annee_academic = annee_academic.query.filter_by(id=annee_academic_id).first()
+
+        json_presence= {
             'id': self.id,
-            'titre': self.titre,
-            'etat': self.etat,
-            'media_type': self.media_type,
-            'url': self.url,
-            'entreprise_id': self.entreprise_id,
-            'agence_id': self.agence_id,
+            'etudiant_id': self.etudiant_id,
+            'etudiant':etudiant,
+            'filiere_id': self.filiere_id,
+            'filiere': filiere,
+            'niveau': self.niveau,
+            'device_id': self.device_id,
+            'device': device,
+            'annee_academic_id': self.annee_academic_id,
+            'annee_academic':annee_academic
         }
-        return json_expert
+        return json_presence
 
     def __repr__(self):
-        return "<Publicite %r>" % self.titre
+        return "<Presence %r>" % self.titre
 
 
-class Service(baseModel,db.Model):
-    __tablename__ = "services"
+class Matiere(baseModel,db.Model):
+    __tablename__ = "matieres"
     denomination = db.Column(db.String(64))
-    code = db.Column(db.String(200))
 
-    create_by = db.Column(db.Integer, db.ForeignKey('users.id'))
-    entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
-    agences_id = db.Column(db.Integer, db.ForeignKey('agences.id'))
-    tickets = db.relationship('Ticket', backref='services')
-    guichets = db.relationship('Guichet', backref='services')
-    logo = db.Column(db.String(255))
-
-    # users = db.relationship('User', backref='users')
+    presences = db.relationship('Presence', backref='matieres')
 
     def to_json(self):
-        json_expert = {
+        json_matiere = {
             'id': self.id,
             'denomination': self.denomination,
-            'code': self.code,
-            "logo":self.logo
         }
-        return json_expert
+        return json_matiere
 
     def __repr__(self):
-        return "<Service %r>" % self.denomination
+        return "<Matiere %r>" % self.denomination
 
-class Guichet(baseModel,db.Model):
-    __tablename__ = "guichets"
+class Device(baseModel,db.Model):
+    __tablename__ = "devices"
 
-    code = db.Column(db.String(200))
+    denomination = db.Column(db.String(200))
+    position = db.Column(db.String(200))
+    emei = db.Column(db.String(200))
+    status = db.Column(db.String(200))
 
-    create_by = db.Column(db.Integer, db.ForeignKey('users.id'))
-    entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
-    agences_id = db.Column(db.Integer, db.ForeignKey('agences.id'))
-    services_id = db.Column(db.Integer, db.ForeignKey('services.id'))
-    tickets = db.relationship('Ticket', backref='guichets')
-
-    # users = db.relationship('User', backref='users')
+    presences = db.relationship('Presence', backref='devices')
 
     def to_json(self):
-        json_expert = {
+        json_device = {
             'id': self.id,
-            'code': self.code,
+            'denomination': self.denomination,
+            'position': self.position,
+            'emei': self.emei,
+            'status': self.status,
         }
-        return json_expert
+        return json_device
 
     def __repr__(self):
-        return "<Guichet %r>" % self.code
+        return "<Device %r>" % self.code
 
 
-class Ticket(baseModel,db.Model):
-    __tablename__ = "tickets"
-    servstr = db.Column(db.String(64))
-    numero = db.Column(db.String(64))
-    etat = db.Column(db.String(50))
-    date_appel = db.Column(db.DateTime())
-    client_hash = db.Column(db.String(255))
-
-
-    entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
-    agence_id = db.Column(db.Integer, db.ForeignKey('agences.id'))
-    service_id = db.Column(db.Integer, db.ForeignKey('services.id'))
-    guichet_id = db.Column(db.Integer, db.ForeignKey('guichets.id'))
-
+class AnneeAcademic(baseModel,db.Model):
+    __tablename__ = "anneeAcademics"
+    denomination = db.Column(db.String(64))
+    presences = db.relationship('Presence', backref='annee_academics')
 
     def to_json(self):
-        guichet = Guichet.query.filter_by(id=self.guichet_id).first()
-        json_expert = {
+        json_anneeAcademic = {
             'id': self.id,
-            'servstr': self.servstr,
-            'numero': self.numero,
-            'etat': self.etat,
-            'client_hash': self.client_hash,
-            'entreprise_id': self.entreprise_id,
-            'agence_id': self.agence_id,
-            'service': self.service_id,
-            'date_create': self.date_create.strftime("%Y-%m-%d"),
-            'guichet': "" if not guichet else guichet.to_json(),
+            'denomination': self.denomination,
         }
-        return json_expert
+        return json_anneeAcademic
 
     def __repr__(self):
-        return "<Ticket %r>" % self.numero
+        return "<AnneeAcademic %r>" % self.denomination
 
-
-#Offres
-class Offre(baseModel,db.Model):
-    __tablename__ = "offres"
-    titre = db.Column(db.String(64))
-    description = db.Column(db.String(64))
-    prix = db.Column(db.String(50))
-    temps = db.Column(db.Integer())
-
-
-    def to_json(self):
-        json_expert = {
-            'id': self.id,
-            'titre': self.titre,
-            'description': self.description,
-            'prix': self.prix,
-            'temps': self.temps,
-        }
-        return json_expert
-
-    def __repr__(self):
-        return "<Offre %r>" % self.titre
-
-
-#Payements
-class Payement(baseModel,db.Model):
-    __tablename__ = "payements"
-    entreprise = db.Column(db.String(64))
-    temps = db.Column(db.String(64))
-    prix = db.Column(db.String(64))
-    etat = db.Column(db.String(50))
-    offre = db.Column(db.String(50))
-    numero_client = db.Column(db.String(50))
-    numero_omarks = db.Column(db.String(50))
-    date_debut = db.Column(db.DateTime(), default=datetime.utcnow)
-    date_fin = db.Column(db.DateTime())
-
-    entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
+class Progression(baseModel,db.Model):
+    __tablename__ = "progressions"
+    niveau = db.Column(db.String(64))
+    etudiant_id = db.Column(db.Integer, db.ForeignKey('etudiants.id'))
+    annee_academic_id = db.Column(db.Integer, db.ForeignKey('anneeAcademics.id'))
     
+
     def to_json(self):
-        guichet = Guichet.query.filter_by(id=self.guichet_id).first()
-        json_expert = {
+        json_anneeAcademic = {
             'id': self.id,
-            'entreprise': self.entreprise,
-            'temps': self.temps,
-            'prix': self.prix,
-            'etat': self.etat,
-            'numero_client': self.numero_client,
-            'numero_omarks': self.numero_omarks,
-            "entreprise_id": self.entreprise_id,
-            "offre": self.offre,
+            'niveau': self.niveau,
+            'etudiant_id': self.etudiant_id,
+            'annee_academic_id': self.annee_academic_id,
         }
-        return json_expert
+        return json_anneeAcademic
 
     def __repr__(self):
-        return "<Payement %r>" % self.offre
-
+        return "<Progression %r>" % self.niveau
 
 login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
@@ -423,22 +362,3 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-
-#Contact
-class Contact(baseModel,db.Model):
-    __tablename__ = "contact"
-    nom = db.Column(db.String(64))
-    mail = db.Column(db.String(64))
-    message = db.Column(db.Text())
-
-    def to_json(self):
-        json_expert = {
-            'id': self.id,
-            'nom': self.nom,
-            'mail': self.mail,
-            'message': self.message,
-        }
-        return json_expert
-
-    def __repr__(self):
-        return "<Contact %r>" % self.nom

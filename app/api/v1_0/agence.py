@@ -9,21 +9,22 @@ from flask_httpauth import HTTPBasicAuth
 
 from flask_login import login_user,login_required,logout_user,current_user
 import pdfkit
-#Create agence
-# @api.route('/agences',methods=['POST'])
-# def add_agence():
-#     print('Alo')
 
-#     agence = Agence(denomination=request.json['denomination'],
-#                         numero=request.json['numero'],
-#                         localisation=request.json['localisation'],
-#                         code=request.json['code'],
-#                         entreprise_id=request.json['entreprise'],
-#                         user_id=current_user.id)
-#     db.session.add(agence)
-#     db.session.commit()
+# Create agence
+@api.route('/agences',methods=['POST'])
+def add_agence():
+    print('Alo')
 
-#     return jsonify({ 'agence': agence.to_json() })
+    agence = Agence(denomination=request.json['denomination'],
+                        numero=request.json['numero'],
+                        localisation=request.json['localisation'],
+                        code=request.json['code'],
+                        entreprise_id=request.json['entreprise'],
+                        user_id=current_user.id)
+    db.session.add(agence)
+    db.session.commit()
+
+    return jsonify({ 'agence': agence.to_json() })
 
 
 #Read agence

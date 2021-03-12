@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+  <div class="row">
+    <div class="container-fluid col-6">
+
+      <div id="accordion">  
+        <div class="card shadow mb-4">
+          <div class="card-header py-3" id="headingImportFiliere">
+            
+            <h5 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseImportFiliere" aria-expanded="false" aria-controls="collapseImportFiliere">
+              Import des filières
+            </h5>
+          </div>
+          <div id="collapseImportFiliere" class="collapse" aria-labelledby="headingImportFiliere" data-parent="#accordion">
+            <div class="card-body">
+              <h1>Upload your CSV file</h1>
+              <form method="POST" action="{{ url_for('main.create_filiere') }}" enctype="multipart/form-data">
+                <p><input type="file" name="file"></p>
+                <p><input type="submit" value="Submit"></p>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow mb-4">
+          <div class="card-header py-3" id="headingAjoutFiliere">
+            
+            <h5 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseAjoutFiliere" aria-expanded="false" aria-controls="collapseAjoutFiliere">
+              Ajout d'une filière
+            </h5>
+          </div>
+          <div id="collapseAjoutFiliere" class="collapse" aria-labelledby="headingAjoutFiliere" data-parent="#accordion">
+            <div class="card-body">
+              <form class="" method="POST" action="" >
+                
+                <div class="modal-body">
+                  <div class="form-group row">
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Liste des filières</h6>
+        </div>
+        
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Libelle</th>
+                  <!-- <th>Etat</th> -->
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>#</th>
+                  <th>Libelle</th>
+                </tr>
+              </tfoot>
+              <tbody>
+            {% for filiere in filieres %}
+                
+                <tr>
+                  <td>{{ filiere.id}}</td>
+                  <td>{{ filiere.denomination }}</td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="container-fluid col-6">
+
+      <div id="accordion">  
+        <div class="card shadow mb-4">
+          <div class="card-header py-3" id="headingImportMatiere">
+            
+            <h5 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseImportMatiere" aria-expanded="false" aria-controls="collapseImportMatiere">
+              Import des filières
+            </h5>
+          </div>
+          <div id="collapseImportMatiere" class="collapse" aria-labelledby="headingImportMatiere" data-parent="#accordion">
+            <div class="card-body">
+              <h1>Upload your CSV file</h1>
+              <form method="POST" action="{{ url_for('main.create_matiere') }}" enctype="multipart/form-data">
+                <p><input type="file" name="file"></p>
+                <p><input type="submit" value="Submit"></p>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow mb-4">
+          <div class="card-header py-3" id="headingAjoutMatiere">
+            
+            <h5 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseAjoutMatiere" aria-expanded="false" aria-controls="collapseAjoutMatiere">
+              Ajout d'une filières
+            </h5>
+          </div>
+          <div id="collapseAjoutMatiere" class="collapse" aria-labelledby="headingAjoutMatiere" data-parent="#accordion">
+            <div class="card-body">
+              <form class="" method="POST" action="" >
+                
+                  <div class="modal-body">
+                    <div class="form-group row">
+                    </div>
+                  </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Liste des Matières</h6>
+        </div>
+        
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataMatiereTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Libelle</th>
+                  <!-- <th>Etat</th> -->
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>#</th>
+                  <th>Libelle</th>
+                </tr>
+              </tfoot>
+              <tbody>
+            {% for matiere in matieres %}
+                
+                <tr>
+                  <td>{{ matiere.id}}</td>
+                  <td>{{ matiere.denomination }}</td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+  <div class="modal fade" id="detailOffre" tabindex="-1" role="dialog" aria-labelledby="detailOffreLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailOffreLabel">Detail de l'Offre</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="card shadow mb-4">
+         
+          <!-- Card Body -->
+          <div class="card-body">
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Titre :</b> <span class="col-8 titre"> jours</span>
+              </div>
+            </div>
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Temps :</b> <span class="col-8 temps"> jours</span>
+              </div>
+            </div>
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Prix :</b> <span class="col-8 prix"> Fcfa</span>
+              </div>
+            </div>
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Description :</b> <span class="col-8 description"></span>
+              </div>
+            </div>
+          
+            <button  data-dismiss="modal" class="btn btn-primary btn-icon-split achat">
+              <span class="icon text-white-50">
+                <i class="fas fa-flag"></i>
+              </span>
+              <span class="text">Acheter cette offre</span>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+<!-- Logout Modal-->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pret à annuler votre achat ?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Cliquez sur 'Valider' pour annuler votre achat.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+        <button class="btn btn-primary cancel_valide" data-dismiss="modal">Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% if current_user.is_super_administrator() %}
+<!-- Logout Modal-->
+<div class="modal fade" id="validModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pret à valider ce payement ?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Cliquez sur 'Valider' pour accepter ce payement.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+        <button class="btn btn-primary valid_valide" data-dismiss="modal">Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+{% endblock %}

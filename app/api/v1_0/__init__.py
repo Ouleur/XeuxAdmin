@@ -6,4 +6,4 @@ api = Blueprint('api', __name__)
 
 CORS(api, supports_credentials=True)
 
-from . import agence,entreprise,offres,service,users,ticket
+from . import agence,etudiant,presence # import les autres fichiers ,entreprise,offres,service,users,ticket

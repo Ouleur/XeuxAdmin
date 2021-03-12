@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Vit - {% block title %} {% endblock %}</title>
+  <title>Xeux - {% block title %} {% endblock %}</title>
 
   <!-- Custom fonts for this template-->
   <link href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -41,7 +41,7 @@
           <!-- <i class="fas fa-laugh-wink"></i> -->
           <img src="{{ url_for('static', filename='img/logo.png') }}" alt="" width="50" srcset="">
         </div>
-        <div class="sidebar-brand-text mx-3">Vit</div>
+        <div class="sidebar-brand-text mx-3">Xeux</div>
       </a>
 
 
@@ -57,12 +57,8 @@
 
         <div id="tableauBord" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Entreprise</h6>
-            <a class="collapse-item" href="{{ url_for('main.home') }}">Entreprise</a>
-          
-            <a class="collapse-item" href="{{ url_for('main.agence_dash') }}">Agences</a>
-        
-            <a class="collapse-item" href="{{ url_for('main.service_dash') }}">Service</a>
+            <h6 class="collapse-header">Evolution</h6>
+            <a class="collapse-item" href="{{ url_for('main.home') }}">Evolution</a>
           </div>
         </div>
       </li>
@@ -75,18 +71,34 @@
         Interface
       </div> -->
 
+      <!-- Nav Item - Pages Collapse Menu -->
+      {% if current_user.is_super_administrator() %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#presence" aria-expanded="true" aria-controls="presence">
+          <i class="fas fa-fw fa-building"></i>
+          <span>Les Presences</span>
+        </a>
+        <div id="presence" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">La liste des Presences:</h6>
+            <a class="collapse-item" href="{{ url_for('main.presence') }}">Presences</a>
+          </div>
+        </div>
+      </li>
+      {% endif %}
+      <!-- Nav Item - Pages Collapse Menu -->
 
       <!-- Nav Item - Pages Collapse Menu -->
       {% if current_user.is_super_administrator() %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#entreprise" aria-expanded="true" aria-controls="entreprise">
           <i class="fas fa-fw fa-building"></i>
-          <span>Les Entreprises</span>
+          <span>Les Etudiants</span>
         </a>
         <div id="entreprise" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">La liste des Entreprises:</h6>
-            <a class="collapse-item" href="{{ url_for('main.etablissement') }}">Entreprises</a>
+            <h6 class="collapse-header">La liste des Etudiants:</h6>
+            <a class="collapse-item" href="{{ url_for('main.etudiant') }}">Etudiants</a>
           </div>
         </div>
       </li>
@@ -98,34 +110,15 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#offre" aria-expanded="true" aria-controls="entreprise">
           <i class="fas fa-fw fa-building"></i>
-          <span>Les Offres</span>
+          <span>Les Filières et Matières</span>
         </a>
         <div id="offre" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">La liste des Offres:</h6>
-            <a class="collapse-item" href="{{ url_for('main.offre') }}">Offres</a>
+            <h6 class="collapse-header">Filières et Matières:</h6>
+            <a class="collapse-item" href="{{ url_for('main.filiereMatiere') }}">Filières et Matières</a>
           </div>
         </div>
       </li>
-      {% endif %}
-      <!-- Nav Item - Pages Collapse Menu -->      
-
-      {% if current_user.is_entreprise_administrator() %}
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-building"></i>
-          <span>Les Agences</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">La liste des Agences:</h6>
-            <a class="collapse-item" href="{{ url_for('main.agences') }}">Agences</a>
-          </div>
-        </div>
-      </li>
-      <!-- Nav Item - Pages Collapse Menu -->
       {% endif %}
       <!--  -->
 
@@ -137,7 +130,7 @@
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">La liste des Publicités:</h6>
-            <a class="collapse-item" href="{{ url_for('main.agences') }}">Publicités</a>
+            <a class="collapse-item" href="">Publicités</a>
           </div>
         </div>
       </li> -->
@@ -149,23 +142,6 @@
           <span>Les services</span>
         </a>
       </li> -->
-      <!-- Nav Item - Pages Collapse Menu -->
-
-      {% if current_user.is_super_administrator() %}
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#payementsAll" aria-expanded="true" aria-controls="entreprise">
-          <i class="fas fa-fw fa-building"></i>
-          <span>Les Payements</span>
-        </a>
-        <div id="payementsAll" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">La liste des Payements:</h6>
-            <a class="collapse-item" href="{{ url_for('main.payement') }}">Payements</a>
-          </div>
-        </div>
-      </li>
-      {% endif %}
-      <!-- Nav Item - Pages Collapse Menu -->
 
       {% if current_user.is_entreprise_administrator() %}
       <li class="nav-item">
@@ -176,14 +152,29 @@
         <div id="payements" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">La liste de mes Payements:</h6>
-            <a class="collapse-item" href="{{ url_for('main.mes_payements',eid=current_user.entreprise_id) }}">Payements</a>
+            <a class="collapse-item" href="">Payements</a>
+          </div>
+        </div>
+      </li>
+      {% endif %}
+
+      {% if current_user.is_super_administrator() %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#equipement" aria-expanded="true" aria-controls="equipement">
+          <i class="fas fa-fw fa-building"></i>
+          <span>Mes Equipements</span>
+        </a>
+        <div id="equipement" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">La liste de mes Equipements:</h6>
+            <a class="collapse-item" href="{{ url_for('main.device') }}">Equipements</a>
           </div>
         </div>
       </li>
       {% endif %}
       <!-- Nav Item - Pages Collapse Menu -->
       
-      {% if current_user.is_entreprise_administrator() %}
+      {% if current_user.is_super_administrator() %}
       
       <!-- Nav Item - Compte Collapse Menu -->
       <li class="nav-item">
@@ -194,7 +185,6 @@
         <div id="collapseComptes" class="collapse" aria-labelledby="headingComptes" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Mon Compte:</h6>
-            <!-- <a class="collapse-item" href="{{ url_for('main.collaborateurs') }}">Mes colaborateurs</a> -->
             <a class="collapse-item" href="{{ url_for('main.profil') }}">Mon Profil</a>
           </div>
         </div>
@@ -224,7 +214,7 @@
             <i class="fa fa-bars"></i>
           </button>
 
-      <div class="sidebar-brand-text mx-3"><b>{{current_user.to_json().entreprise}}</b></div>
+      <div class="sidebar-brand-text mx-3"><b>{{current_user.name}}</b></div>
           
 
           <!-- Topbar Search -->
@@ -378,7 +368,7 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="{{ url_for('main.profil') }}">
+                <a class="dropdown-item" href="">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profil
                 </a>
@@ -418,7 +408,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Vit 2020</span>
+            <span>Xeux 2020</span>
           </div>
         </div>
       </footer>
@@ -451,7 +441,7 @@
         <div class="modal-body">Cliquez sur 'Déconnexion' pour fermer votre session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-          <a class="btn btn-primary" href="{{ url_for('auth.logout') }}">Déconnexion</a>
+          <a class="btn btn-primary" href="">Déconnexion</a>
         </div>
       </div>
     </div>

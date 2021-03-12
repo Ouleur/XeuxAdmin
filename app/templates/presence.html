@@ -4,45 +4,10 @@
 {% block container %}
 
   <div class="container-fluid">
-
-    <div class="card shadow mb-4">
-      <div class="card-header py-3">
-        
-        <h6 class="m-0 font-weight-bold text-primary">Liste des offres</h6>
-      </div>
-      <div class="card-body py-3">
-        <div class="col-xl-12 col-md-12 ">
-          <div class="row">
-
-          {% for offre in offres %}
-
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4 offre" data-toggle="modal" data-target="#detailOffre" data-offre="{{offre.id}}:{{offre.titre}}:{{offre.prix}}:{{offre.temps}}:{{offre.description}}">
-              <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ offre.titre }}</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ offre.temps }} jours</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ offre.prix }} Fcfa</div>
-                    </div>
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container-fluid">
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Liste des Payements</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Liste des presences</h6>
       </div>
       
       <div class="card-body">
@@ -50,45 +15,35 @@
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
-                <th>Entreprise</th>
-                <th>Offre</th>
-                <th>Prix</th>
-                <th>Payer du</th>
-                <th>Payer sur</th>
-                <th>Date operation</th>
-                <th>Temps</th>
-                <th>Date debut</th>
-                <th>Date fin</th>
+                <th>Nom</th>
+                <th>Prenoms</th>
+                <th>Filière</th>
+                <th>Niveau</th>
+                <th>Date</th>
                 <th>Etat</th>
               </tr>
             </thead>
             <tfoot>
               <tr>
-                <th>Entreprise</th>
-                <th>Offre</th>
-                <th>Prix</th>
-                <th>Payer du</th>
-                <th>Payer sur</th>
+                <th>Nom</th>
+                <th>Prenoms</th>
+                <th>Filière</th>
+                <th>Niveau</th>
                 <th>Date operation</th>
-                <th>Temps</th>
-                <th>Date debut</th>
-                <th>Date fin</th>
                 <th>Etat</th>
               </tr>
             </tfoot>
             <tbody>
-              {% for payement in payements %}
+          {% for presence in presences %}
+              
               <tr>
-                <td>{{ payement.entreprise}}</td>
-                <td>{{ payement.offre }}</td>
-                <td>{{ payement.prix }} Fcfa</td>
-                <td>{{ payement.numero_client }}</td>
-                <td>{{ payement.numero_omarks }}</td>
-                <td>{{ payement.date_create }}</td>
-                <td>{{ payement.temps }}</td>
-                <td>{{ payement.date_debut }}</td>
-                <td>{{ payement.date_fin }}</td>
-                <td>{{ payement.etat }} 
+                <td>{{ presence.id}}</td>
+                <td>{{ presence.id }}</td>
+                <td>{{ presence.id }} Fcfa</td>
+                <td>{{ presence.id }}</td>
+                <td>{{ presence.id }}</td>
+                <td>{{ presence.id }}</td>
+                <td>{{ presence.id }} 
                   {% if current_user.is_entreprise_administrator() and payement.etat == 'En cours'%}
 
                   | <a href="#" class="btn btn-danger btn-icon-split btn-sm cancel_item" data-toggle="modal" data-target="#cancelModal" data-id="{{ payement.id }}">
