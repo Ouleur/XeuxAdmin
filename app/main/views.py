@@ -83,15 +83,15 @@ def create_etudiant():
    uploaded_file = request.files['file']
    form = EtudiantForm(request.form)
    if uploaded_file.filename != '':
-      fieldnames = ['Matricule','Nom','Prenoms','Filiere','Niveau','Date de naissance','ID Carte']
-      csv.delimiter = ','
+      fieldnames = ['Matricule','Nom','Prenoms','Date de naissance','Filiere','Antenne','Niveau','ID Carte']
+      csv.delimiter = ';'
       stream = io.StringIO(uploaded_file.stream.read().decode("UTF8"), newline=None)
       reader = csv.DictReader(stream)
       
       for row in reader:
          print(row)
          filiere = Filiere.query.filter_by(denomination=row['Filiere']).first()
-         etudiant = Etudiant(matricule=row['Matricule'],nom=row['Nom'],prenoms=row['Prenoms'],filiere_id=filiere.id,niveau=row['Niveau'],date_naissance=row['Date de naissance'],card_id=row['ID Carte'])
+         etudiant = Etudiant(matricule=row['Matricule'],nom=row['Nom'],prenoms=row['Prenoms'],filiere_id=filiere.id,niveau=row['Niveau'],date_naissance=row['Date de naissance'],card_id=row['ID Carte'],antenne=row['antenne'])
          db.session.add(etudiant)
          db.session.commit()
 

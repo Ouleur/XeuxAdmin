@@ -12,17 +12,34 @@ auth = HTTPBasicAuth()
 
 
 #Create presence
-@api.route('/add_presence',methods=['POST','GET'])
-def add_presence():
+@api.route('/add_card_presence/<card>',methods=['POST','GET'])
+def add_card_presence(card):
 
     #recherche du matricule 
     ###### OU ######
     #recherche de la Card ID
-    etudiant = Etudiant()
-    if hasattr(request.json,'matricule'):
-        etudiant = Etudiant.query.filter_by(matricule=request.json['matricule']).first()
-    elif hasattr(request.json,'card_id'):
-        etudiant = Etudiant.query.filter_by(card_id=request.json['card_id']).first()
+    etudiant = Etudiant.query.filter_by(card_id=card).first()
+
+    
+    if etudiant:
+        #Etudiant trouver 
+        #Creation de la presence
+        presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,device_id="1",niveau=etudiant.niveau,annee_academic_id="1")
+        #revoie des informations de l'Etudian
+        db.session.add(presence)
+        db.session.commit()
+
+        return jsonify({"Message":"Vous êtes présent !!"})
+    return jsonify({"Message":"Une erreur s'est produite!!"})
+
+#Create presence
+@api.route('/add_mtle_presence/<mtle>',methods=['POST','GET'])
+def add_mtle_presence(mtle):
+
+    #recherche du matricule 
+    ###### OU ######
+    #recherche de la Card ID
+    etudiant = Etudiant.query.filter_by(matricule=request.json['matricule']).first()
 
     
     if etudiant:

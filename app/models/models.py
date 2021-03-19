@@ -192,7 +192,8 @@ class Etudiant(baseModel,db.Model):
     matricule = db.Column(db.String(255))
     card_id = db.Column(db.String(255))
     niveau = db.Column(db.String(255))
-    date_naissance = db.Column(db.Date())
+    date_naissance = db.Column(db.String(255))
+    antenne = db.Column(db.String(255))
 
     filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
     
@@ -212,6 +213,7 @@ class Etudiant(baseModel,db.Model):
             "card_id":self.card_id,
             "filiere_id":filiere.id,
             "filiere":filiere.denomination,
+            "antenne":self.antenne,
             "date_naissance":self.date_naissance,
         } 
 
