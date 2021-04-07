@@ -5,6 +5,63 @@
 
   <div class="container-fluid">
     <!-- DataTales Example -->
+    <div id="accordion" class="">  
+      <!-- <div class="row"> -->
+        <div class="card shadow mb-4 ">
+          <div class="card-header py-3" id="headingImportEtudiant">
+            
+            <h6 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseImportEtudiant" aria-expanded="false" aria-controls="collapseImportEtudiant">
+              Recherche
+            </h6>
+          </div>
+          <div id="collapseImportEtudiant" class="collapse" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
+            <div class="card-body">
+
+                <!-- <form method="POST" action="{{ url_for('main.create_etudiant') }}" enctype="multipart/form-data">
+                  <p><input type="file" name="file"></p>
+                  <p><input type="submit" value="Submit"></p>
+                </form> -->
+                <form class="" method="POST" action="{{ url_for('main.presence') }}" >
+                  {{ form.csrf_token }}
+                    <div class="modal-body">
+                        <div class="form-group row">
+  
+                          <div class="col-sm-1"></div>
+                            <div class="col-sm-2">
+                            <label for="date">Date</label>
+                            {{ form.date(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
+                          </div>
+          
+                          <div class="col-sm-2">
+                            <label for="filiere">Filiere</label>
+                            {{ form.filiere(class_='form-control form-control-user',placeholder="Filiere",value="")}}
+                          </div>
+          
+                          <div class="col-sm-2">
+                            <label for="niveau">Niveau</label>
+                            {{ form.niveau(class_='form-control form-control-user',placeholder="Niveau",value="")}}
+                          </div>
+  
+                          <div class="col-sm-2">
+                            <label for="annee">Année scolaire</label>
+                            {{ form.annee(class_='form-control form-control-user',placeholder="Année scolaire",value="")}}
+                          </div>
+                          <div class="col-sm-2">
+                            <br>
+                            {{ form.submit(class=" btn btn-primary") }}
+                          </div>
+                          <div class="col-sm-1"></div>
+                          
+                        </div>
+                    </div>
+                    
+                </form>
+
+            </div>
+          </div>
+        </div>
+
+    </div>
     <div class="card shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Liste des presences</h6>
@@ -37,29 +94,17 @@
           {% for presence in presences %}
               
               <tr>
-                <td>{{ presence.id}}</td>
-                <td>{{ presence.id }}</td>
-                <td>{{ presence.id }} Fcfa</td>
-                <td>{{ presence.id }}</td>
-                <td>{{ presence.id }}</td>
-                <td>{{ presence.id }}</td>
-                <td>{{ presence.id }} 
-                  {% if current_user.is_entreprise_administrator() and payement.etat == 'En cours'%}
-
-                  | <a href="#" class="btn btn-danger btn-icon-split btn-sm cancel_item" data-toggle="modal" data-target="#cancelModal" data-id="{{ payement.id }}">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-times"></i>
-                    </span>
-                    
-                  </a>
-                  {% endif %}
-                  {% if current_user.is_super_administrator() and payement.etat == 'En cours'%}
-                  | <a href="#" class="btn btn-success btn-icon-split btn-sm valid_item" data-toggle="modal" data-target="#validModal" data-id="{{ payement.id }}">
-                      <span class="icon text-white-50">
-                        <i class="fas fa-check"></i>
-                      </span>
-                  {% endif %}
-              </td>
+                <td>{{ presence[0] }}</td>
+                <td>{{ presence[1] }}</td>
+                <td>{{ presence[2] }}</td>
+                <td>{{ presence[3] }}</td>
+                {% if presence[4] %}
+                <td>{{ presence[4] }}</td>
+                <td class="pst"> PRESENT(E)</td>
+                {% else %}
+                <td ></td>
+                <td class="abs">ABSENT(E)</td>
+                {% endif %}
               </tr>
               {% endfor %}
             </tbody>

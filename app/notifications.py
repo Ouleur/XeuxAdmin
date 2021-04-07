@@ -35,7 +35,7 @@ header = {
 secret= "OmarksMerconSysteme"
 
 # use decode("utf-8") for convert b'' value in string value
-DEMO_JWT = jwt.encode(payload, secret, algorithm='HS256',headers=header).decode("utf-8")
+DEMO_JWT = jwt.encode(payload, secret, algorithm='HS256',headers=header)
 
 #Mercure instance url
 

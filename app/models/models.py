@@ -187,6 +187,9 @@ class AnonymousUser(AnonymousUserMixin):
 
 class Etudiant(baseModel,db.Model):
     __tablename__ = "etudiants"
+    __table_args__ = (
+        db.UniqueConstraint('matricule', 'date_naissance', name='etudiant_unique'),
+    )
     nom = db.Column(db.String(255))
     prenoms = db.Column(db.String(255))
     matricule = db.Column(db.String(255))
@@ -220,7 +223,7 @@ class Etudiant(baseModel,db.Model):
         return etudiant_json
 
     def __repr__(self):
-        return "<Etudiant %r>" % self.denomination
+        return "<Etudiant {} {}>".format(self.prenoms,self.nom)
     
 class Filiere(baseModel,db.Model):
     """Filiere()"""
@@ -247,12 +250,19 @@ class Filiere(baseModel,db.Model):
 
 class Presence(baseModel,db.Model):
     __tablename__ = "presences"
+    __table_args__ = (
+        db.UniqueConstraint('etudiant_id', 'date_badge', name='presence_unique'),
+    )
     etudiant_id = db.Column(db.Integer, db.ForeignKey('etudiants.id'))
+    etd_nom = db.Column(db.String(255))
+    etd_prenoms = db.Column(db.String(255))
+    etd_mtle = db.Column(db.String(255))
     filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
-    matiere_id = db.Column(db.Integer, db.ForeignKey('matieres.id'))
     device_id = db.Column(db.Integer, db.ForeignKey('devices.id'))
     niveau = db.Column(db.String(255))
     annee_academic_id = db.Column(db.Integer, db.ForeignKey('anneeAcademics.id'))
+    date_badge = db.Column(db.DateTime(), default=datetime.utcnow)
+
 
     # entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
     # agence_id = db.Column(db.Integer, db.ForeignKey('agences.id'))
@@ -262,7 +272,6 @@ class Presence(baseModel,db.Model):
 
         etudiant = etudiant.query.filter_by(id=etudiant_id).first()
         filiere = filiere.query.filter_by(id=filiere_id).first()
-        matiere = matiere.query.filter_by(id=matiere_id).first()
         device = device.query.filter_by(id=device_id).first()
         annee_academic = annee_academic.query.filter_by(id=annee_academic_id).first()
 
@@ -276,7 +285,8 @@ class Presence(baseModel,db.Model):
             'device_id': self.device_id,
             'device': device,
             'annee_academic_id': self.annee_academic_id,
-            'annee_academic':annee_academic
+            'annee_academic':annee_academic,
+            'date_badge':date_badge
         }
         return json_presence
 
@@ -288,7 +298,6 @@ class Matiere(baseModel,db.Model):
     __tablename__ = "matieres"
     denomination = db.Column(db.String(64))
 
-    presences = db.relationship('Presence', backref='matieres')
 
     def to_json(self):
         json_matiere = {

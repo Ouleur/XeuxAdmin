@@ -47,9 +47,32 @@ def home():
 ### CRUD Off presence ###
 @main.route('/presence', methods=['POST','GET'])
 def presence():
-   presence = Presence.query.all()
+   filieres = Filiere.query.all()
+   annee_academics = AnneeAcademic.query.all()
+   form = RechercheForm()
+   form.filiere.choices = [(item.id, item.denomination) for item in filieres]
+   form.annee.choices = [(item.id, item.denomination) for item in annee_academics]
+   presences =[]
+   print(form.validate_on_submit())
+   if form.validate_on_submit():
 
-   return render_template('presence.html',presence=presence)
+      sql = """SELECT etd.nom,etd.prenoms,etd.denomination,etd.niveau,pr_etd.date_badge FROM 
+      (SELECT et.*,fi.denomination
+      FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id) as etd
+      LEFT JOIN (SELECT pr.* FROM presences AS pr
+      WHERE 
+      pr.filiere_id={fi} AND 
+      pr.niveau='{ni}' AND 
+      pr.date_badge='{d_b}' ) AS pr_etd 
+      ON pr_etd.etudiant_id=etd.id
+      WHERE 
+      etd.niveau='{ni}' 
+      
+      """.format(ni="{}".format(form.niveau.data),d_b="{} 00:00:00".format(form.date.data),aa=form.annee.data,fi=form.filiere.data)
+      print(sql)
+      presences = db.engine.execute(sql)
+
+   return render_template('presence.html',presences=[item for item in presences],form=form)
 
 @main.route('/create_presence', methods=['POST','GET'])
 def create_presence():
@@ -71,11 +94,16 @@ def delete_presence():
 ### CRUD Off etudiant ###
 @main.route('/etudiant', methods=['POST','GET'])
 def etudiant():
-   etudiants = Etudiant.query.all()
+   etudiants = db.engine.execute("select etudiants.*,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
+   
+   # etudiants = Etudiant.query.all()
+   filieres = Filiere.query.all()
+
    form = EtudiantForm(request.form)
-
-
-   return render_template('etudiant.html',etudiants=[etudiant.to_json() for etudiant in etudiants],form=form)
+   form.filiere.choices = [(item.id, item.denomination) for item in filieres]
+   # etudiants = [item for item in etudiants]
+   # print(etudiants)
+   return render_template('etudiant.html',etudiants=etudiants,form=form)
 
 
 @main.route('/create_etudiant', methods=['POST','GET'])
@@ -666,7 +694,6 @@ def profil():
    user = User.query.filter_by(id=current_user.id).first()
    profil = ProfileForm(request.form)
    securiteForm = SecuriteForm(request.form)
-   etablissement = EtablissementForm(request.form)
 
    #print(profil.validate_on_submit(),profil.data)
    if profil.validate_on_submit():
@@ -695,7 +722,7 @@ def profil():
    #    db.session.commit()
 
 
-   return render_template('profil.html',formP=profil,formE=etablissement,user=user,securiteForm=securiteForm)
+   return render_template('profil.html',formP=profil,user=user,securiteForm=securiteForm)
 
 # @main.route('/change_service/<aid>', methods=['POST','GET'])
 # @login_required

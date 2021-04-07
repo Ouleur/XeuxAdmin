@@ -11,79 +11,71 @@
           <div class="card-header py-3" id="headingImportEtudiant">
             
             <h5 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseImportEtudiant" aria-expanded="false" aria-controls="collapseImportEtudiant">
-              Import des étudiants
+              Ajouter des étudiants
             </h5>
           </div>
           <div id="collapseImportEtudiant" class="collapse" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
             <div class="card-body">
-
-              <h1>Upload your CSV file</h1>
-                <form method="POST" action="{{ url_for('main.create_etudiant') }}" enctype="multipart/form-data">
-                  <p><input type="file" name="file"></p>
-                  <p><input type="submit" value="Submit"></p>
-                </form>
-
+              <div class="row">
+                <div class="col-sm-4">
+                  <h3>Upload your CSV file</h3>
+                  <form method="POST" action="{{ url_for('main.create_etudiant') }}" enctype="multipart/form-data">
+                    <p><input type="file" name="file"></p>
+                    <p><input type="submit" value="Submit"></p>
+                  </form>
+                </div>
+                  <div class="col-sm-8">
+                    <form class="" method="POST" action="{{ url_for('main.create_device') }}" enctype="multipart/form-data">
+                      {{ form.csrf_token }}
+                        <div class="modal-body">
+                            <div class="form-group row">
+      
+                              <div class="col-sm-6">
+                                <label for="denomination">Matricule</label>
+                                {{ form.matricule(class_='form-control form-control-user',placeholder="Matricule",type="text",value="")}}
+                              </div>
+      
+                              <div class="col-sm-6">
+                                <label for="denomination">ID Carte</label>
+                                {{ form.id_carte(class_='form-control form-control-user',placeholder="ID Carte",type="text",value="")}}
+                              </div>
+      
+                              <div class="col-sm-6">
+                                <label for="denomination">Nom</label>
+                                {{ form.nom(class_='form-control form-control-user',placeholder="Nom",type="text",value="")}}
+                              </div>
+              
+                              <div class="col-sm-6">
+                                <label for="localisation">Prénoms</label>
+                                {{ form.prenoms(class_='form-control form-control-user',placeholder="Prénoms",type="text",value="")}}
+                              </div>
+              
+                              <div class="col-sm-6">
+                                <label for="numero">Filiere</label>
+                                {{ form.filiere(class_='form-control form-control-user',placeholder="Filiere",value="")}}
+                              </div>
+      
+                              <div class="col-sm-6">
+                                <label for="ouverture">Niveau</label>
+                                {{ form.niveau(class_='form-control form-control-user',placeholder="Niveau",value="")}}
+                              </div>
+                              
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="padding: 0 !important;"> 
+      
+                            <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
+                            {{ form.submit(class=" btn btn-primary text-xs") }}
+      
+                        </div>
+                    </form>
+                  </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="card shadow mb-4 ">
-          <div class="card-header py-3" id="headingAjoutEtudiant">
-            
-            <h5 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseAjoutEtudiant" aria-expanded="false" aria-controls="collapseAjoutEtudiant">
-              Ajout d'un étudiant
-            </h5>
-          </div>
-          <div id="collapseAjoutEtudiant" class="collapse" aria-labelledby="headingAjoutEtudiant" data-parent="#accordion">
-            <div class="card-body">
-              <form class="" method="POST" action="{{ url_for('main.create_device') }}" enctype="multipart/form-data">
-                {{ form.csrf_token }}
-                  <div class="modal-body">
-                      <div class="form-group row">
-
-                        <div class="col-sm-6">
-                          <label for="denomination">Matricule</label>
-                          {{ form.matricule(class_='form-control form-control-user',placeholder="Matricule",type="text",value="")}}
-                        </div>
-
-                        <div class="col-sm-6">
-                          <label for="denomination">ID Carte</label>
-                          {{ form.id_carte(class_='form-control form-control-user',placeholder="ID Carte",type="text",value="")}}
-                        </div>
-
-                        <div class="col-sm-6">
-                          <label for="denomination">Nom</label>
-                          {{ form.nom(class_='form-control form-control-user',placeholder="Nom",type="text",value="")}}
-                        </div>
         
-                        <div class="col-sm-6">
-                          <label for="localisation">Prénoms</label>
-                          {{ form.prenoms(class_='form-control form-control-user',placeholder="Prénoms",type="text",value="")}}
-                        </div>
-        
-                        <div class="col-sm-6">
-                          <label for="numero">Filiere</label>
-                          {{ form.filiere(class_='form-control form-control-user',placeholder="Filiere",value="")}}
-                        </div>
-
-                        <div class="col-sm-6">
-                          <label for="ouverture">Niveau</label>
-                          {{ form.niveau(class_='form-control form-control-user',placeholder="Niveau",value="")}}
-                        </div>
-                        
-                      </div>
-                  </div>
-                  <div class="modal-footer" style="padding: 0 !important;"> 
-
-                      <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
-                      {{ form.submit(class=" btn btn-primary text-xs") }}
-
-                  </div>
-              </form>
-            </div>
-          </div>
-        <!-- </div> -->
-      </div>
     </div>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -103,7 +95,7 @@
                 <th>Niveau</th>
                 <th>Date de naissance</th>
                 <th>ID Carte</th>
-                <!-- <th>Etat</th> -->
+                <th>Actions</th>
               </tr>
             </thead>
             <tfoot>
@@ -115,21 +107,20 @@
                 <th>Niveau</th>
                 <th>Date de naissance</th>
                 <th>ID Carte</th>
+                <th>Actions</th>
               </tr>
             </tfoot>
             <tbody>
           {% for etudiant in etudiants %}
-              
               <tr>
                 <td>{{ etudiant.matricule }}</td>
-                <td>{{ etudiant.nom}}</td>
+                <td>{{ etudiant.nom }}</td>
                 <td>{{ etudiant.prenoms }}</td>
                 <td>{{ etudiant.filiere }}</td>
                 <td>{{ etudiant.niveau }}</td>
                 <td>{{ etudiant.date_naissance }}</td>
-                <td>{{ etudiant.card_id }}
-                  
-              </td>
+                <td>{{ etudiant.card_id }}</td>
+                <td></td>
               </tr>
               {% endfor %}
             </tbody>
