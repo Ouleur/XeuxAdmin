@@ -87,18 +87,26 @@ def add_file_presence():
         url = url_for('static', filename='uploads/' + image)
     else:
         url = ""
-    # if uploaded_file.filename != '':
-    # #   fieldnames = ['Matricule','Nom','Prenoms','Date de naissance','Filiere','Antenne','Niveau','ID Carte']
-    # #   csv.delimiter = ';'
-    #   print(request.files['file'])
+    arr = os.listdir('app/static/uploads')
+    print(arr)
+    for fi in arr:
+        with open('app/static/uploads/'+fi, newline='') as csvfile:
+            csv.delimiter = ';'
+            # stream = io.StringIO(csvfile.stream.read().decode("UTF8"), newline=None)
+            reader = csv.DictReader(csvfile)
+            
+            for row in reader:
+                etudiant = Etudiant.query.filter((Etudiant.matricule==row['Matricule'] )| (Etudiant.card_id==row['ID card'])).first()
+                print(etudiant)
+                if etudiant:
+                    presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"])
+                    try:
+                        db.session.add(presence)
+                        db.session.commit()
+                    except IntegrityError as error:
+                        print('')
+                        db.session.rollback()
+                        # pass
+        # os.remove('app/static/uploads/'+fi)
 
-    #   stream = io.StringIO(uploaded_file.stream.read().decode("UTF8"), newline=None)
-    #   reader = csv.DictReader(stream)
-    #   print(len(reader))
-    #   for row in reader:
-    #      print("row")
-        #  filiere = Filiere.query.filter_by(denomination=row['Filiere']).first()
-        #  etudiant = Etudiant(matricule=row['Matricule'],nom=row['Nom'],prenoms=row['Prenoms'],filiere_id=filiere.id,niveau=row['Niveau'],date_naissance=row['Date de naissance'],card_id=row['ID Carte'],antenne=row['antenne'])
-        #  db.session.add(etudiant)
-        #  db.session.commit()
     return jsonify({"Message":"Vous êtes présent !!"})

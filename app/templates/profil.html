@@ -72,6 +72,23 @@
       </div>
     </div>
   </div>
+
+  <div class="container-fluid col-6">
+    <div class="card shadow mb-4 ">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Autres Actions</h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <button class="col-2 btn btn-primary" style="padding: 0;" onclick="init()">
+            <img src="{{ url_for('static', filename='img/refresh.png') }}" width="70" height="70">
+            <p style="text-align: center;">Initialisation</p>
+          </button>
+        </div>
+         
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

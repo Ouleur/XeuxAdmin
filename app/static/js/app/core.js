@@ -1,4 +1,7 @@
-
+if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+  }
+  
 $(".agence").on("change",function(){
     fetch("/change_service/"+$(this).val()).then(function(response){
         response.json().then(function(data){
@@ -172,4 +175,163 @@ function generateQRCode(qrtext) {
         size: 200,
         value: qrtext
     });
+}
+
+// Modifier un etudiant
+function ShowEtudiant(id){
+    fetch("/read_etudiant/"+id).then(function(response){
+        response.json().then(function(data){
+            console.log(data); 
+            $("#matricule").val(data.matricule);
+            $("#nom").val(data.nom);
+            $("#prenoms").val(data.prenoms);
+            $("#id_carte").val(data.card_id);
+            $("#filiere").val(data.filiere_id);
+            $("#niveau").val(data.niveau);
+            $("#id").val(data.id);
+            
+        });
+    });
+}
+function deleteEtudiant(id){
+    
+
+      Swal.fire({
+        title: 'Etes vous sûre ?',
+        text: "Vous ne pourriez plus revenir en arrière  !",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Oui, effectuer la suppression!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            fetch("/delete_etudiant/"+id).then(function(response){
+                Swal.fire(
+                    'Supprimé !',
+                    'L\'enregistrement a bien été  Supprimé .',
+                    'success'
+                  )
+            });
+          
+        }
+      })
+    
+}
+
+
+function deleteFiliere(id){
+    Swal.fire({
+      title: 'Etes vous sûre ?',
+      text: "Vous ne pourriez plus revenir en arrière  !",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, effectuer la suppression!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+          fetch("/delete_filiere/"+id).then(function(response){
+              Swal.fire(
+                  'Supprimé !',
+                  'L\'enregistrement a bien été  Supprimé .',
+                  'success'
+                )
+          });
+        
+      }
+    })
+  
+}
+
+
+function deleteMatiere(id){
+    Swal.fire({
+      title: 'Etes vous sûre ?',
+      text: "Vous ne pourriez plus revenir en arrière  !",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, effectuer la suppression!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+          fetch("/delete_matiere/"+id).then(function(response){
+              Swal.fire(
+                  'Supprimé !',
+                  'L\'enregistrement a bien été  Supprimé .',
+                  'success'
+                )
+          });
+        
+      }
+    })
+  
+}
+
+// Modifier un equipement
+function ShowEquipements(id){
+    fetch("/read_device/"+id).then(function(response){
+        response.json().then(function(data){
+            console.log(data); 
+            $("#denomination").val(data.denomination);
+            $("#position").val(data.position);
+            $("#emei").val(data.emei);
+            $("#status").val(data.status);
+            $("#id").val(data.id);
+            
+        });
+    });
+}
+function deleteEquipement(id){
+    
+
+      Swal.fire({
+        title: 'Etes vous sûre ?',
+        text: "Vous ne pourriez plus revenir en arrière  !",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Oui, effectuer la suppression!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            fetch("/delete_device/"+id).then(function(response){
+                Swal.fire(
+                    'Supprimé !',
+                    'L\'enregistrement a bien été  Supprimé .',
+                    'Success'
+                  )
+            });
+          
+        }
+      })
+    
+}
+
+
+function init(){
+    
+
+    Swal.fire({
+      title: 'Etes vous sûre ?',
+      text: "Vous ne pourriez plus revenir en arrière  !",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, effectuer la suppression!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+          fetch("/init").then(function(response){
+              Swal.fire(
+                  'Supprimé !',
+                  'L\'enregistrement a bien été  Supprimé .',
+                  'Success'
+                )
+          });
+        
+      }
+    })
+  
 }

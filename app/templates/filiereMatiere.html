@@ -15,11 +15,37 @@
           </div>
           <div id="collapseImportFiliere" class="collapse" aria-labelledby="headingImportFiliere" data-parent="#accordion">
             <div class="card-body">
-              <h5>Upload your CSV file</h5>
+              <div class="row">
+                <div class="col-sm-4">
+              <h5>Chargez votre fichier CSV</h5>
               <form method="POST" action="{{ url_for('main.create_filiere') }}" enctype="multipart/form-data">
                 <p><input type="file" name="file"></p>
-                <p><input class="btn btn-primary" type="submit" value="Submit"></p>
+                <p><input class="btn btn-primary" type="submit" value="Soumettre"></p>
               </form>
+              </div>
+              <div class="col-sm-8">
+                <form class="" method="POST" action="{{ url_for('main.create_filiere') }}" >
+                  {{ fil_form.csrf_token }}
+                    <div class="modal-body">
+                      <div class="form-group row">
+                          {{ fil_form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
+                        <div class="col-sm-6">
+                          <label for="denomination">Denomination</label>
+                          {{ fil_form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value="")}}
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer" style="padding: 0 !important;"> 
+      
+                      <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
+                      {{ fil_form.submit(class=" btn btn-primary text-xs") }}
+
+                  </div>
+                </form>
+                </div>
+                    
+              </div>
 
             </div>
           </div>
@@ -41,23 +67,23 @@
                 <tr>
                   <th>#</th>
                   <th>Libelle</th>
-                  <!-- <th>Etat</th> -->
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <th>#</th>
                   <th>Libelle</th>
+                  <th>Actions</th>
                 </tr>
               </tfoot>
               <tbody>
-            {% for filiere in filieres %}
-                
-                <tr>
-                  <td>{{ filiere.id}}</td>
-                  <td>{{ filiere.denomination }}</td>
-                  
-                </tr>
+                {% for filiere in filieres %}
+                  <tr>
+                    <td>{{ filiere.id}}</td>
+                    <td>{{ filiere.denomination }}</td>
+                    <td><i class="fa fa-trash" onClick="deleteFiliere({{filiere.id}})"></i></td>
+                  </tr>
                 {% endfor %}
               </tbody>
             </table>
@@ -78,18 +104,35 @@
           </div>
           <div id="collapseImportMatiere" class="collapse" aria-labelledby="headingImportMatiere" data-parent="#accordion">
             <div class="card-body">
-              <h5>Upload your CSV file</h5>
-              <form method="POST" action="{{ url_for('main.create_matiere') }}" enctype="multipart/form-data">
-                <p><input type="file" name="file"></p>
-                <p><input class="btn btn-primary" type="submit" value="Submit"></p>
-              </form>
-              <form class="" method="POST" action="" >
-                
-                <div class="modal-body">
-                  <div class="form-group row">
-                  </div>
+              <div class="row">
+                <div class="col-sm-4"> 
+                  <h5>Chargez votre fichier CSV</h5>
+                  <form method="POST" action="{{ url_for('main.create_matiere') }}" enctype="multipart/form-data">
+                    <p><input type="file" name="file"></p>
+                    <p><input class="btn btn-primary" type="submit" value="Soumettre"></p>
+                  </form>
                 </div>
-            </form>
+              <div class="col-sm-8">
+                <form class="" method="POST" action="{{ url_for('main.create_filiere') }}" >
+                  {{ fil_form.csrf_token }}
+                    <div class="modal-body">
+                      <div class="form-group row">
+                          {{ fil_form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
+                        <div class="col-sm-6">
+                          <label for="denomination">Denomination</label>
+                          {{ fil_form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value="")}}
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer" style="padding: 0 !important;"> 
+      
+                      <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
+                      {{ fil_form.submit(class=" btn btn-primary text-xs") }}
+
+                  </div>
+                </form>
+                </div>
             </div>
           </div>
         </div>
@@ -109,13 +152,15 @@
                 <tr>
                   <th>#</th>
                   <th>Libelle</th>
-                  <!-- <th>Etat</th> -->
+                  <th>Actions</th>
+                  
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <th>#</th>
                   <th>Libelle</th>
+                  <th>Actions</th>
                 </tr>
               </tfoot>
               <tbody>
@@ -124,6 +169,7 @@
                 <tr>
                   <td>{{ matiere.id}}</td>
                   <td>{{ matiere.denomination }}</td>
+                  <td><i class="fa fa-trash" onClick="deleteMatiere({{matiere.id}})"></i></td>
                   
                 </tr>
                 {% endfor %}

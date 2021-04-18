@@ -14,10 +14,11 @@
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <form class="" method="POST" action="{{ url_for('main.create_device') }}" enctype="multipart/form-data">
+              <form class="" method="POST" action="{{ url_for('main.create_device') }}">
                 {{ form.csrf_token }}
                   <div class="modal-body">
                       <div class="form-group row">
+                        {{ form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
 
                         <div class="col-sm-12">
                           <label for="denomination">Denomination</label>
@@ -68,6 +69,7 @@
                   <th>position</th>
                   <th>emei</th>
                   <th>status</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tfoot>
@@ -76,6 +78,7 @@
                   <th>position</th>
                   <th>emei</th>
                   <th>status</th>
+                  <th>Actions</th>
                 </tr>
               </tfoot>
               <tbody>
@@ -86,6 +89,7 @@
                   <td>{{ device.position }}</td>
                   <td>{{ device.emei }}</td>
                   <td>{{ device.status }}</td>
+                <td> <i class="modif fa fa-pen" onClick="ShowEquipements({{device.id}})"></i> | <i class="fa fa-trash" onClick="deleteEquipement({{device.id}})"></i></td>
                   
                 </tr>
                 {% endfor %}

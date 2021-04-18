@@ -18,8 +18,19 @@ class ProfileForm(FlaskForm):
     mail = StringField('Email',[DataRequired(message="Saisissez une adresse mail SVP.")])
     submit = SubmitField('Enregistrer')  
 
+class FiliereForm(FlaskForm):
+    id = StringField('id')
+    denomination = StringField('Denomination',[DataRequired(message="Saisissez la Denomination SVP.")])
+    submit = SubmitField('Enregistrer') 
+
+class MatiereForm(FlaskForm):
+    id = StringField('id')
+    denomination = StringField('Denomination',[DataRequired(message="Saisissez la Denomination SVP.")])
+    submit = SubmitField('Enregistrer') 
+
 
 class EquipementForm(FlaskForm):
+    id = StringField('Id')
     denomination = StringField('Dénomination',[DataRequired(message="Saisissez une dénomination SVP.")])
     position = StringField('Position',[DataRequired(message="Saisissez une position SVP.")])
     emei = StringField('Emei',[DataRequired(message="Saisissez un emei SVP.")])
@@ -29,6 +40,7 @@ class EquipementForm(FlaskForm):
 
 class EtudiantForm(FlaskForm):
     matricule = StringField('Matricule',[DataRequired(message="Saisissez une matricule SVP.")])
+    id = StringField('Id')
     nom = StringField('Nom',[DataRequired(message="Saisissez une nom SVP.")])
     prenoms = StringField('Prenoms',[DataRequired(message="Saisissez un Prenoms SVP.")])
     filiere = SelectField("Filiere",choices=[],coerce=str)
@@ -42,7 +54,7 @@ class RechercheForm(FlaskForm):
     date = DateField('Titre')
     filiere = SelectField('Filiere',choices=[])
     niveau = SelectField("Niveau",choices=['LICENCE 1','LICENCE 2','LICENCE 3'],coerce=str)
-    annee = SelectField('Annee',choices=[])
+    # annee = SelectField('Annee',choices=[])
     
     submit = SubmitField('Chercher')  
 

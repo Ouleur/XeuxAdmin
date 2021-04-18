@@ -2261,8 +2261,8 @@ fieldset:disabled a.btn {
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #2e59d9;
-  border-color: #2653d4;
+  background-color: #1f0116;
+  border-color: #1f0116;
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -11177,4 +11177,13 @@ button{
 .abs{
   background-color: red;
   color: white;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+  background: none;
+  border: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+  padding: 0px;
 }
