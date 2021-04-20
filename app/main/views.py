@@ -95,7 +95,7 @@ def create_etudiant():
       if uploaded_file.filename != '':
          fieldnames = ['Matricule','Nom','Prenoms','Date de naissance','Filiere','Antenne','Niveau','ID Carte']
          csv.delimiter = ';'
-         stream = io.StringIO(uploaded_file.stream.read().decode("UTF8"), newline=None)
+         stream = io.StringIO(uploaded_file.stream.read().decode("ISO-8859-1"), newline=None)
          reader = csv.DictReader(stream)
          erreur = "Des erreurs sont survenues !\n"
          msg = ""
@@ -107,10 +107,10 @@ def create_etudiant():
                db.session.add(etudiant)
                db.session.commit()
             except IntegrityError as error:
-               erreur.append(row)
                msg="{},{},{},{},{},{},{},{}\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Filiere'],row['Niveau'],row['Date de naissance'],row['ID Carte'],row['antenne'])
          
-         flash("{} {}".format(erreur,msg))
+         if msg!="":   
+            flash("{} {}".format(erreur,msg))
 
    else:
       print(form.data,form.id.data,form.validate_on_submit())
@@ -162,7 +162,7 @@ def update_etudiant():
          stream = io.StringIO(uploaded_file.stream.read().decode("UTF8"), newline=None)
          reader = csv.DictReader(stream)
          erreur = "Des erreurs sont survenues !\n"
-         
+         msg=""
          for row in reader:
             print(row)
             try:
@@ -173,10 +173,9 @@ def update_etudiant():
                db.session.commit()
 
             except IntegrityError as error:
-                  erreur.append(row)
                   msg="{},{}\n".format(row['Matricule'],row['Niveau'])
-            
-         flash("{} {}".format(erreur,msg))
+         if msg!="":   
+            flash("{} {}".format(erreur,msg))
 
    etudiants = db.engine.execute("select etudiants.*,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
    
