@@ -108,6 +108,7 @@ def create_etudiant():
                db.session.add(etudiant)
                db.session.commit()
             except IntegrityError as error:
+               db.session.rollback()
                msg="{},{},{},{},{},{},{},{}\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Filiere'],row['Niveau'],row['Date de naissance'],row['ID Carte'],row['antenne'])
          
          if msg!="":   
