@@ -11,6 +11,7 @@ import json
 from ..decorators import *
 import csv
 import io
+from sqlalchemy.exc import IntegrityError
 
 @main.route('/', methods=['POST','GET'])
 @login_required
@@ -159,7 +160,7 @@ def update_etudiant():
       if uploaded_file.filename != '':
          fieldnames = ['Matricule','Niveau']
          csv.delimiter = ';'
-         stream = io.StringIO(uploaded_file.stream.read().decode("UTF8"), newline=None)
+         stream = io.StringIO(uploaded_file.stream.read().decode("ISO-8859-1"), newline=None)
          reader = csv.DictReader(stream)
          erreur = "Des erreurs sont survenues !\n"
          msg=""
@@ -216,7 +217,7 @@ def create_filiere():
       if uploaded_file.filename != '':
          fieldnames = ['Denomination']
          csv.delimiter = ','
-         stream = io.StringIO(uploaded_file.stream.read().decode("UTF8"), newline=None)
+         stream = io.StringIO(uploaded_file.stream.read().decode("ISO-8859-1"), newline=None)
          reader = csv.DictReader(stream)
          erreur = "Des erreurs sont survenues !\n"
          
@@ -279,7 +280,7 @@ def create_matiere():
       if uploaded_file.filename != '':
          fieldnames = ['Denomination']
          csv.delimiter = ','
-         stream = io.StringIO(uploaded_file.stream.read().decode("UTF8"), newline=None)
+         stream = io.StringIO(uploaded_file.stream.read().decode("ISO-8859-1"), newline=None)
          reader = csv.DictReader(stream)
          erreur = "Des erreurs sont survenues !\n"
          
