@@ -90,7 +90,7 @@ def etudiant():
 def create_etudiant():
    form = EtudiantForm(request.form)
    
-   if hasattr(request.files,'file'):
+   if len(request.files):
       uploaded_file = request.files['file']
       if uploaded_file.filename != '':
          fieldnames = ['Matricule','Nom','Prenoms','Date de naissance','Filiere','Antenne','Niveau','ID Carte']
@@ -153,7 +153,7 @@ def read_etudiant(eid):
 
 @main.route('/update_etudiant', methods=['POST','GET'])
 def update_etudiant():
-   if hasattr(request.files,'file'):
+   if len(request.files):
 
       uploaded_file = request.files['file']
       if uploaded_file.filename != '':
@@ -210,9 +210,10 @@ def filiereMatiere():
 def create_filiere():
    fil_form = FiliereForm(request.form)
    mat_form = MatiereForm(request.form)
-
-   if hasattr(request.files,'file'):
+   msg=""
+   if len(request.files):
       uploaded_file = request.files['file']
+      print("f")
       if uploaded_file.filename != '':
          fieldnames = ['Denomination']
          csv.delimiter = ','
@@ -226,9 +227,9 @@ def create_filiere():
                db.session.add(filiere)
                db.session.commit()
             except IntegrityError as error:
-               erreur.append(row)
                msg="{}\n".format(row['Denomination'])
-         flash("{} {}".format(erreur,msg))
+         if msg!="":
+            flash("{} {}".format(erreur,msg))
          
          
    else: 
@@ -273,7 +274,8 @@ def create_matiere():
    fil_form = FiliereForm(request.form)
    mat_form = MatiereForm(request.form)
 
-   if hasattr(request.files,'file'):
+  # print(request.files)
+   if len(request.files):
       uploaded_file = request.files['file']
       if uploaded_file.filename != '':
          fieldnames = ['Denomination']
