@@ -104,12 +104,12 @@ def create_etudiant():
             print(row)
             try:
                filiere = Filiere.query.filter_by(denomination=row['Filiere']).first()
-               etudiant = Etudiant(matricule=row['Matricule'],nom=row['Nom'],prenoms=row['Prenoms'],filiere_id=filiere.id,niveau=row['Niveau'],date_naissance=row['Date de naissance'],card_id=row['ID Carte'],antenne=row['antenne'])
+               etudiant = Etudiant(matricule=row['Matricule'],nom=row['Nom'],prenoms=row['Prenoms'],filiere_id=filiere.id,niveau=row['Niveau'],date_naissance=row['Date de naissance'],card_id=row['ID Carte'],antenne=row['Antenne'],groupe=row['Groupe'])
                db.session.add(etudiant)
                db.session.commit()
             except IntegrityError as error:
                db.session.rollback()
-               msg="{},{},{},{},{},{},{},{}\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Filiere'],row['Niveau'],row['Date de naissance'],row['ID Carte'],row['antenne'])
+               msg="{},{},{},{},{},{},{},{}\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Filiere'],row['Niveau'],row['Date de naissance'],row['ID Carte'],row['Antenne'],row['Groupe'])
          
          if msg!="":   
             flash("{} {}".format(erreur,msg))
@@ -124,17 +124,24 @@ def create_etudiant():
 
             filiere = Filiere.query.filter_by(id=form.filiere.data).first()
             etudiant = Etudiant.query.filter_by(id=form.id.data).first()
-            etudiant.matricule=form.matricule.data,
-            etudiant.nom=form.nom.data,
-            etudiant.prenoms=form.prenoms.data
-            etudiant.filiere_id=filiere.id
-            etudiant.niveau=form.niveau.data,
-            etudiant.card_id=form.id_carte.data
+            etudiant.matricule = form.matricule.data
+            etudiant.nom = form.nom.data
+            etudiant.prenoms = form.prenoms.data
+            etudiant.filiere_id = filiere.id
+            etudiant.niveau = form.niveau.data
+            etudiant.card_id = form.id_carte.data
+            etudiant.antenne = form.antenne.data
+            etudiant.groupe = form.groupe.data
 
             db.session.add(etudiant)
             db.session.commit()
+         else:
+            filiere = Filiere.query.filter_by(id=form.filiere.data).first()
+            etudiant = Etudiant(matricule=form.matricule.data,nom=form.nom.data,prenoms=form.prenoms.data,filiere_id=filiere.id,niveau=form.niveau.data,date_naissance=form.date_naissance.data,card_id=form.id_carte.data,antenne=form.antenne.data,groupe=form.groupe.data)
+            db.session.add(etudiant)
+            db.session.commit()
 
-   etudiants = db.engine.execute("select etudiants.*,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
+   etudiants = db.engine.execute("select etudiants.*,filieres.id,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
    
    # etudiants = Etudiant.query.all()
    filieres = Filiere.query.all()
@@ -171,6 +178,8 @@ def update_etudiant():
                etudiant = Etudiant.query.filter_by(matricule=row['Matricule']).first()
                etudiant.matricule=row['Matricule']
                etudiant.niveau=row['Niveau']
+               etudiant.antenne=row['Antenne']
+               etudiant.groupe=row['Groupe']
                db.session.add(etudiant)
                db.session.commit()
 
@@ -239,6 +248,10 @@ def create_filiere():
          filiere.denomination = fil_form.denomination.data
          db.session.add(filiere)
          db.session.commit()
+      elif fil_form.denomination.data:
+         filiere = Filiere(denomination=fil_form.denomination.data) 
+         db.session.add(filiere)
+         db.session.commit()
 
 
    filieres = Filiere.query.all()
@@ -301,7 +314,11 @@ def create_matiere():
          matiere = Matiere.query.filter_by(id=mat_form.id.data).first()
          matiere.denomination = mat_form.denomination.data
          db.session.add(matiere)
-         db.commit()
+         db.session.commit()
+      elif mat_form.denomination.data:
+         matiere = Matiere(denomination=mat_form.denomination.data)
+         db.session.add(matiere)
+         db.session.commit()
 
 
    filieres = Filiere.query.all()

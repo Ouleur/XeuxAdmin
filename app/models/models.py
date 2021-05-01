@@ -197,6 +197,7 @@ class Etudiant(baseModel,db.Model):
     niveau = db.Column(db.String(255))
     date_naissance = db.Column(db.String(255))
     antenne = db.Column(db.String(255))
+    groupe = db.Column(db.String(255))
 
     filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
     
@@ -217,6 +218,7 @@ class Etudiant(baseModel,db.Model):
             "filiere_id":filiere.id,
             "filiere":filiere.denomination,
             "antenne":self.antenne,
+            "groupe":self.groupe,
             "date_naissance":self.date_naissance,
         } 
 

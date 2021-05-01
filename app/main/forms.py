@@ -39,13 +39,16 @@ class EquipementForm(FlaskForm):
     
 
 class EtudiantForm(FlaskForm):
-    matricule = StringField('Matricule',[DataRequired(message="Saisissez une matricule SVP.")])
     id = StringField('Id')
+    matricule = StringField('Matricule',[DataRequired(message="Saisissez une matricule SVP.")])
     nom = StringField('Nom',[DataRequired(message="Saisissez une nom SVP.")])
     prenoms = StringField('Prenoms',[DataRequired(message="Saisissez un Prenoms SVP.")])
-    filiere = SelectField("Filiere",choices=[],coerce=str)
+    date_naissance = DateField('Date de naissance',[DataRequired(message="Saisissez une Date de naissance SVP.")])
+    filiere = SelectField("Filiere",choices=[])
     niveau = SelectField("Niveau",choices=['LICENCE 1','LICENCE 2','LICENCE 3'],coerce=str)
-    id_carte = StringField('Id Carte',[DataRequired(message="Saisissez un Id Carte SVP.")])
+    antenne = SelectField("Antenne",choices=['ABIDJAN','BOUAKE','ABOISSO','KORHOGO',"ABENGOUROU"],coerce=str)
+    groupe = SelectField("Groupe",choices=['Groupe 1','Groupe 2','Groupe 3','Groupe 4',"Groupe 5"],coerce=str)
+    id_carte = StringField('Id Carte')
     submit = SubmitField('Enregistrer')   
     
     

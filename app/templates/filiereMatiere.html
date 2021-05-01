@@ -21,14 +21,16 @@
           <div id="collapseImportFiliere" class="collapse" aria-labelledby="headingImportFiliere" data-parent="#accordion">
             <div class="card-body">
               <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-6">
               <h5>Chargez votre fichier CSV</h5>
               <form method="POST" action="{{ url_for('main.create_filiere') }}" enctype="multipart/form-data">
                 <p><input type="file" name="file"></p>
-                <p><input class="btn btn-primary" type="submit" value="Soumettre"></p>
+                <p><input class="btn btn-primary" type="submit" value="Soumettre">
+                  <a href="{{ url_for('static', filename='doc/filiere.csv') }}" download>Téléchargez le fichier exemple</a>
+                </p>
               </form>
               </div>
-              <div class="col-sm-8">
+              <div class="col-sm-6">
                 <form class="" method="POST" action="{{ url_for('main.create_filiere') }}" >
                   {{ fil_form.csrf_token }}
                     <div class="modal-body">
@@ -110,22 +112,24 @@
           <div id="collapseImportMatiere" class="collapse" aria-labelledby="headingImportMatiere" data-parent="#accordion">
             <div class="card-body">
               <div class="row">
-                <div class="col-sm-4"> 
+                <div class="col-sm-6"> 
                   <h5>Chargez votre fichier CSV</h5>
                   <form method="POST" action="{{ url_for('main.create_matiere') }}" enctype="multipart/form-data">
                     <p><input type="file" name="file"></p>
-                    <p><input class="btn btn-primary" type="submit" value="Soumettre"></p>
+                    <p><input class="btn btn-primary" type="submit" value="Soumettre">
+                      <a href="{{ url_for('static', filename='doc/matiere.csv') }}" download>Téléchargez le fichier exemple</a>
+                    </p>
                   </form>
                 </div>
-              <div class="col-sm-8">
-                <form class="" method="POST" action="{{ url_for('main.create_filiere') }}" >
+              <div class="col-sm-6">
+                <form class="" method="POST" action="{{ url_for('main.create_matiere') }}" >
                   {{ fil_form.csrf_token }}
                     <div class="modal-body">
                       <div class="form-group row">
-                          {{ fil_form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
+                          {{ mat_form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
                         <div class="col-sm-6">
                           <label for="denomination">Denomination</label>
-                          {{ fil_form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value="")}}
+                          {{ mat_form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value="")}}
 
                         </div>
                       </div>
@@ -133,7 +137,7 @@
                     <div class="modal-footer" style="padding: 0 !important;"> 
       
                       <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
-                      {{ fil_form.submit(class=" btn btn-primary text-xs") }}
+                      {{ mat_form.submit(class=" btn btn-primary text-xs") }}
 
                   </div>
                 </form>
