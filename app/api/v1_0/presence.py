@@ -19,10 +19,10 @@ auth = HTTPBasicAuth()
 #Create presence
 @api.route('/insertFiles',methods=['POST','GET'])
 def add_card_presence():
-    arr = os.listdir('app/static/uploads')
+    arr = os.listdir(current_app.config['UPLOADS_DIR'])
     print(arr)
     for fi in arr:
-        with open('app/static/uploads/'+fi, newline='') as csvfile:
+        with open(current_app.config['UPLOADS_DIR']+fi, newline='') as csvfile:
             csv.delimiter = ';'
             # stream = io.StringIO(csvfile.stream.read().decode("UTF8"), newline=None)
             reader = csv.DictReader(csvfile)
@@ -39,7 +39,7 @@ def add_card_presence():
                         print('')
                         db.session.rollback()
                         # pass
-        # os.remove('app/static/uploads/'+fi)
+        # os.remove(current_app.config['UPLOADS_DIR']+fi)
 
     #recherche du matricule 
     ###### OU ######
@@ -90,7 +90,7 @@ def add_file_presence():
     arr = os.listdir('app/static/uploads')
     print(arr)
     for fi in arr:
-        with open('app/static/uploads/'+fi, newline='') as csvfile:
+        with open(current_app.config['UPLOADS_DIR']+fi, newline='') as csvfile:
             csv.delimiter = ';'
             # stream = io.StringIO(csvfile.stream.read().decode("UTF8"), newline=None)
             reader = csv.DictReader(csvfile)
@@ -107,6 +107,6 @@ def add_file_presence():
                         print('')
                         db.session.rollback()
                         # pass
-        # os.remove('app/static/uploads/'+fi)
+        # os.remove(current_app.config['UPLOADS_DIR']+fi)
 
     return jsonify({"Message":"Vous êtes présent !!"})
