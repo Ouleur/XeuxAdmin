@@ -45,7 +45,7 @@ class EtudiantForm(FlaskForm):
     prenoms = StringField('Prenoms',[DataRequired(message="Saisissez un Prenoms SVP.")])
     date_naissance = DateField('Date de naissance',[DataRequired(message="Saisissez une Date de naissance SVP.")])
     filiere = SelectField("Filiere",choices=[])
-    niveau = SelectField("Niveau",choices=['LICENCE 1','LICENCE 2','LICENCE 3'],coerce=str)
+    niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)
     antenne = SelectField("Antenne",choices=['ABIDJAN','BOUAKE','ABOISSO','KORHOGO',"ABENGOUROU"],coerce=str)
     groupe = SelectField("Groupe",choices=['Groupe 1','Groupe 2','Groupe 3','Groupe 4',"Groupe 5"],coerce=str)
     id_carte = StringField('Id Carte')
