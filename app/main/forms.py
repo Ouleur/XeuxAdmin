@@ -56,7 +56,7 @@ class EtudiantForm(FlaskForm):
 class RechercheForm(FlaskForm):
     date = DateField('Titre')
     filiere = SelectField('Filiere',choices=[])
-    niveau = SelectField("Niveau",choices=['LICENCE 1','LICENCE 2','LICENCE 3'],coerce=str)
+    niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)
     # annee = SelectField('Annee',choices=[])
     
     submit = SubmitField('Chercher')  
