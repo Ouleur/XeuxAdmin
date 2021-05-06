@@ -87,7 +87,7 @@ def add_file_presence():
         url = url_for('static', filename='uploads/' + image)
     else:
         url = ""
-    arr = os.listdir('app/static/uploads')
+    arr = os.listdir(current_app.config['UPLOADS_DIR'])
     print(arr)
     for fi in arr:
         with open(current_app.config['UPLOADS_DIR']+fi, newline='') as csvfile:
