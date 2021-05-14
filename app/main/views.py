@@ -184,7 +184,8 @@ def update_etudiant():
                db.session.commit()
 
             except IntegrityError as error:
-                  msg="{},{}\n".format(row['Matricule'],row['Niveau'])
+               db.session.rollback()
+               msg="{},{}\n".format(row['Matricule'],row['Niveau'])
          if msg!="":   
             flash("{} {}".format(erreur,msg))
 
