@@ -176,16 +176,19 @@ def update_etudiant():
             print(row)
             try:
                etudiant = Etudiant.query.filter_by(matricule=row['Matricule']).first()
-               etudiant.matricule=row['Matricule']
-               etudiant.niveau=row['Niveau']
-               etudiant.antenne=row['Antenne']
-               etudiant.groupe=row['Groupe']
-               db.session.add(etudiant)
-               db.session.commit()
+               if etudiant:
+                  etudiant.matricule=row['Matricule']
+                  etudiant.niveau=row['Niveau']
+                  etudiant.antenne=row['Antenne']
+                  etudiant.groupe=row['Groupe']
+                  db.session.add(etudiant)
+                  db.session.commit()
+               else:
+                  msg+="{},{}\n".format(row['Matricule'],row['Niveau'])
 
             except IntegrityError as error:
                db.session.rollback()
-               msg="{},{}\n".format(row['Matricule'],row['Niveau'])
+               msg+="{},{}\n".format(row['Matricule'],row['Niveau'])
          if msg!="":   
             flash("{} {}".format(erreur,msg))
 
