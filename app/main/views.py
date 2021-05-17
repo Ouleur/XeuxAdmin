@@ -37,19 +37,19 @@ def presence():
    print(form.validate_on_submit())
    if form.validate_on_submit():
 
-      sql = """SELECT etd.nom,etd.prenoms,etd.denomination,etd.niveau,pr_etd.date_badge FROM 
+      sql = """SELECT etd.nom,etd.prenoms,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
       (SELECT et.*,fi.denomination
-      FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id) as etd
+      FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id AND et.groupe='{gp}') as etd
       LEFT JOIN (SELECT pr.* FROM presences AS pr
       WHERE 
       pr.filiere_id={fi} AND 
       pr.niveau='{ni}' AND 
-      pr.date_badge='{d_b}' ) AS pr_etd 
+      pr.date_badge >='{d_b} 00:00:00' and pr.date_badge<='{d_b} 23:59:00'  ) AS pr_etd 
       ON pr_etd.etudiant_id=etd.id
       WHERE 
       etd.niveau='{ni}' 
       
-      """.format(ni="{}".format(form.niveau.data),d_b="{} 00:00:00".format(form.date.data),fi=form.filiere.data)
+      """.format(ni="{}".format(form.niveau.data),d_b="{}".format(form.date.data),fi=form.filiere.data,gp=form.groupe.data)
       print(sql)
       presences = db.engine.execute(sql)
 
@@ -175,7 +175,7 @@ def update_etudiant():
          for row in reader:
             print(row)
             try:
-               etudiant = Etudiant.query.filter_by(matricule=row['Matricule']).first()
+               etudiant = Etudiant.query.filter_by(matricule=row['Matricule'].strip()).first()
                if etudiant:
                   etudiant.matricule=row['Matricule']
                   etudiant.niveau=row['Niveau']

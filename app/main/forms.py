@@ -47,7 +47,7 @@ class EtudiantForm(FlaskForm):
     filiere = SelectField("Filiere",choices=[])
     niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)
     antenne = SelectField("Antenne",choices=['ABIDJAN','BOUAKE','ABOISSO','KORHOGO',"ABENGOUROU"],coerce=str)
-    groupe = SelectField("Groupe",choices=['Groupe 1','Groupe 2','Groupe 3','Groupe 4',"Groupe 5"],coerce=str)
+    groupe = SelectField("Groupe",choices=['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"],coerce=str)
     id_carte = StringField('Id Carte')
     submit = SubmitField('Enregistrer')   
     
@@ -56,6 +56,7 @@ class EtudiantForm(FlaskForm):
 class RechercheForm(FlaskForm):
     date = DateField('Titre')
     filiere = SelectField('Filiere',choices=[])
+    groupe = SelectField("Groupe",choices=['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"],coerce=str)
     niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)
     # annee = SelectField('Annee',choices=[])
     

@@ -262,6 +262,7 @@ class Presence(baseModel,db.Model):
     filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
     device_id = db.Column(db.Integer, db.ForeignKey('devices.id'))
     niveau = db.Column(db.String(255))
+    groupe = db.Column(db.String(255))
     annee_academic_id = db.Column(db.Integer, db.ForeignKey('anneeAcademics.id'))
     date_badge = db.Column(db.DateTime(), default=datetime.utcnow)
 
@@ -284,6 +285,7 @@ class Presence(baseModel,db.Model):
             'filiere_id': self.filiere_id,
             'filiere': filiere,
             'niveau': self.niveau,
+            'groupe': self.groupe,
             'device_id': self.device_id,
             'device': device,
             'annee_academic_id': self.annee_academic_id,
