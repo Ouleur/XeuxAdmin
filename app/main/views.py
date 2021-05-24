@@ -112,7 +112,7 @@ def create_etudiant():
                msg="{},{},{},{},{},{},{},{}\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Filiere'],row['Niveau'],row['Date de naissance'],row['ID Carte'],row['Antenne'],row['Groupe'])
          
          if msg!="":   
-            flash("{} {}".format(erreur,msg))
+            flash("{} <br>{}".format(erreur,msg))
 
    else:
       print(form.data,form.id.data,form.validate_on_submit())
