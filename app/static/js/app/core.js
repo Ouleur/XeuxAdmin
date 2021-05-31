@@ -3,7 +3,7 @@ if ( window.history.replaceState ) {
   }
   
 $(".agence").on("change",function(){
-    fetch("/change_service/"+$(this).val()).then(function(response){
+    fetch("/xeux/change_service/"+$(this).val()).then(function(response){
         response.json().then(function(data){
             options = '';
             for(service of data.services ){
@@ -35,7 +35,7 @@ $(".delete_item").on('click',function(){
 });
 
 $(".delete_valide").on("click", function(){
-    fetch("/del_offre/"+offre_id).then(function(response){
+    fetch("/xeux/del_offre/"+offre_id).then(function(response){
         location.reload(); 
     });
 });
@@ -53,7 +53,7 @@ $(".offre").on("click", function(){
 })
 
 $(".achat").on("click", function(){
-    fetch("/achat_offre/"+payement).then(function(response){
+    fetch("/xeux/achat_offre/"+payement).then(function(response){
         payement = 0 ;
         location.reload(); 
     });
@@ -68,7 +68,7 @@ $(".cancel_item").on('click',function(){
 });
 
 $(".cancel_valide").on("click", function(){
-    fetch("/annuler_offre/"+achat_id).then(function(response){
+    fetch("/xeux/annuler_offre/"+achat_id).then(function(response){
         location.reload(); 
     });
 });
@@ -82,7 +82,7 @@ $(".valid_item").on('click',function(){
 });
 
 $(".valid_valide").on("click", function(){
-    fetch("/valider_offre/"+achat_id).then(function(response){
+    fetch("/xeux/valider_offre/"+achat_id).then(function(response){
         location.reload(); 
     });
 });
@@ -179,7 +179,7 @@ function generateQRCode(qrtext) {
 
 // Modifier un etudiant
 function ShowEtudiant(id){
-    fetch("/read_etudiant/"+id).then(function(response){
+    fetch("/xeux/read_etudiant/"+id).then(function(response){
         response.json().then(function(data){
             console.log(data); 
             $("#matricule").val(data.matricule);
@@ -206,7 +206,7 @@ function deleteEtudiant(id){
         confirmButtonText: 'Oui, effectuer la suppression!'
       }).then((result) => {
         if (result.isConfirmed) {
-            fetch("/delete_etudiant/"+id).then(function(response){
+            fetch("/xeux/delete_etudiant/"+id).then(function(response){
                 Swal.fire(
                     'Supprimé !',
                     'L\'enregistrement a bien été  Supprimé .',
@@ -231,7 +231,7 @@ function deleteFiliere(id){
       confirmButtonText: 'Oui, effectuer la suppression!'
     }).then((result) => {
       if (result.isConfirmed) {
-          fetch("/delete_filiere/"+id).then(function(response){
+          fetch("/xeux/delete_filiere/"+id).then(function(response){
               Swal.fire(
                   'Supprimé !',
                   'L\'enregistrement a bien été  Supprimé .',
@@ -256,7 +256,7 @@ function deleteMatiere(id){
       confirmButtonText: 'Oui, effectuer la suppression!'
     }).then((result) => {
       if (result.isConfirmed) {
-          fetch("/delete_matiere/"+id).then(function(response){
+          fetch("/xeux/delete_matiere/"+id).then(function(response){
               Swal.fire(
                   'Supprimé !',
                   'L\'enregistrement a bien été  Supprimé .',
@@ -271,7 +271,7 @@ function deleteMatiere(id){
 
 // Modifier un equipement
 function ShowEquipements(id){
-    fetch("/read_device/"+id).then(function(response){
+    fetch("/xeux/read_device/"+id).then(function(response){
         response.json().then(function(data){
             console.log(data); 
             $("#denomination").val(data.denomination);
@@ -296,7 +296,7 @@ function deleteEquipement(id){
         confirmButtonText: 'Oui, effectuer la suppression!'
       }).then((result) => {
         if (result.isConfirmed) {
-            fetch("/delete_device/"+id).then(function(response){
+            fetch("/xeux/delete_device/"+id).then(function(response){
                 Swal.fire(
                     'Supprimé !',
                     'L\'enregistrement a bien été  Supprimé .',
@@ -323,7 +323,7 @@ function init(){
       confirmButtonText: 'Oui, effectuer la suppression!'
     }).then((result) => {
       if (result.isConfirmed) {
-          fetch("/init").then(function(response){
+          fetch("/xeux/init").then(function(response){
               Swal.fire(
                   'Supprimé !',
                   'L\'enregistrement a bien été  Supprimé .',
