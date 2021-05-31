@@ -28,7 +28,7 @@ def add_card_presence():
             reader = csv.DictReader(csvfile)
             
             for row in reader:
-                etudiant = Etudiant.query.filter((Etudiant.matricule=="{}".format(row['Matricule']) )| (Etudiant.card_id=="{}".format(row['ID card']))).first()
+                etudiant = Etudiant.query.filter((Etudiant.matricule=="{}".format(row['Matricule']) )| (Etudiant.card_id=="{}".format(row['ID_card']))).first()
                 print(row)
                 print(etudiant)
                 if etudiant:
