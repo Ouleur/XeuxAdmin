@@ -100,7 +100,7 @@ def add_file_presence():
                 if row['Matricule']:
                     etudiant = Etudiant.query.filter(Etudiant.matricule==row['Matricule']).first()
                 else:
-                    etudiant = Etudiant.query.filter(Etudiant.matricule==row['ID card']).first()
+                    etudiant = Etudiant.query.filter(Etudiant.matricule==row['ID_card']).first()
                     
                 print(etudiant)
                 if etudiant:
