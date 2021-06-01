@@ -253,7 +253,7 @@ class Filiere(baseModel,db.Model):
 class Presence(baseModel,db.Model):
     __tablename__ = "presences"
     __table_args__ = (
-        db.UniqueConstraint('etudiant_id', 'date_badge', name='presence_unique'),
+        db.UniqueConstraint('etudiant_id', 'date', name='presence_unique'),
     )
     etudiant_id = db.Column(db.Integer, db.ForeignKey('etudiants.id'))
     etd_nom = db.Column(db.String(255))
@@ -264,6 +264,7 @@ class Presence(baseModel,db.Model):
     niveau = db.Column(db.String(255))
     groupe = db.Column(db.String(255))
     annee_academic_id = db.Column(db.Integer, db.ForeignKey('anneeAcademics.id'))
+    date = db.Column(db.DateTime(), default=datetime.utcnow)
     date_badge = db.Column(db.DateTime(), default=datetime.utcnow)
 
 

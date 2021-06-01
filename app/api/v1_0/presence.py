@@ -104,7 +104,7 @@ def add_file_presence():
                     
                 print(etudiant)
                 if etudiant:
-                    presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"])
+                    presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"],data=role["Date"].split(" ")[0])
                     try:
                         db.session.add(presence)
                         db.session.commit()
