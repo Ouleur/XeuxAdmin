@@ -85,13 +85,7 @@ def add_file_presence():
     uploaded_file = request.files['file']
     image=file_upload('POST',request,'file','one')
     if image:
-        url = url_for('static', filename='uploads/' + image)
-    else:
-        url = ""
-    arr = os.listdir(current_app.config['UPLOADS_DIR'])
-    print(arr)
-    for fi in arr:
-        with open(current_app.config['UPLOADS_DIR']+fi, newline='') as csvfile:
+        with open(current_app.config['UPLOADS_DIR']+image, newline='') as csvfile:
             csv.delimiter = ';'
             # stream = io.StringIO(csvfile.stream.read().decode("UTF8"), newline=None)
             reader = csv.DictReader(csvfile)
@@ -111,7 +105,9 @@ def add_file_presence():
                     except IntegrityError as error:
                         print('')
                         db.session.rollback()
-                        # pass
-        # os.remove(current_app.config['UPLOADS_DIR']+fi)
+                            # pass
+            # os.remove(current_app.config['UPLOADS_DIR']+fi)
+        else:
+            url = ""
 
     return jsonify({"Message":"Vous êtes présent !!"})
