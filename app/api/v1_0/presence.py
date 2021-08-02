@@ -107,7 +107,7 @@ def add_file_presence():
                         db.session.rollback()
                             # pass
             # os.remove(current_app.config['UPLOADS_DIR']+fi)
-        else:
-            url = ""
+    else:
+        url = ""
 
     return jsonify({"Message":"Vous êtes présent !!"})
