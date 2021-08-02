@@ -44,9 +44,6 @@ def add_card_presence():
 
     #recherche du matricule 
     ###### OU ######
-    #recherche de la Card ID
-
-    
     # if etudiant:
     #     #Etudiant trouver 
     #     #Creation de la presence
