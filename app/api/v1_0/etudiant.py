@@ -34,15 +34,15 @@ def enroll_etudiant(mtle,card_id):
 
     #recherche du etudiant 
     etudiant = Etudiant.query.filter_by(matricule=mtle).first()
-    if etudiant:
-        etudiant.card_id = card_id
+    # if etudiant:
+    etudiant.card_id = card_id
 
-        #Mise à jour de l'etudiant
-        db.session.add(etudiant)
-        db.session.commit()
-        #Creation de la presence
+    #Mise à jour de l'etudiant
+    db.session.add(etudiant)
+    db.session.commit()
+    #Creation de la presence
 
-        return jsonify({ 'statut': "Succes" ,'etudiant':etudiant.to_json()})
+    return jsonify({ 'statut': "Succes" ,'etudiant':etudiant.to_json()})
     
-    return jsonify({ 'statut': "Echec" })
+    # return jsonify({ 'statut': "Echec" })
     

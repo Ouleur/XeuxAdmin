@@ -85,7 +85,7 @@ class BetaConfig(Config):
     MAIL_USERNAME = "addre@gmail.com"
     MAIL_PASSWORD = "password"
 
-    POSTGRES_DB = "db_name"
+    POSTGRES_DB = "db_xeux"
     POSTGRES_URL="127.0.0.1:5432"
     POSTGRES_USER="odoo"
     POSTGRES_PW="odoo"
