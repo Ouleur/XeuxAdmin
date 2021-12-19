@@ -25,12 +25,19 @@
                   {{ form.csrf_token }}
                     <div class="modal-body">
                         <div class="form-group row">
-  
+                          {% if current_user.is_antenne_administrator() %}
                           <div class="col-sm-2"></div>
+                          {% endif %}
                             <div class="col-sm-2">
                             <label for="date">Date</label>
                             {{ form.date(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
                           </div>
+                          {% if current_user.is_super_administrator() %}
+                          <div class="col-sm-2">
+                            <label for="antenne">Antenne</label>
+                            {{ form.antenne(class_='form-control form-control-user',placeholder="Antenne",value="")}}
+                          </div>
+                          {% endif %}
           
                           <div class="col-sm-2">
                             <label for="filiere">Filiere</label>
@@ -66,8 +73,11 @@
     </div>
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Liste des presences</h6>
-      </div>
+        <h6 class="m-0 font-weight-bold text-primary">Liste des presences 
+          {% if fm %}
+          [ {{ form.antenne.data }} | {{ form.filiere.data }} | {{ form.niveau.data }} | {{ form.groupe.data }} | {{ form.date.data.strftime('%d-%m-%Y') }}]</h6>
+          {% endif %}
+        </div>
       
       <div class="card-body">
         <div class="table-responsive">
@@ -76,6 +86,7 @@
               <tr>
                 <th>Nom</th>
                 <th>Prenoms</th>
+                <th>Antenne</th>
                 <th>Filière</th>
                 <th>Niveau</th>
                 <th>Groupe</th>
@@ -87,6 +98,7 @@
               <tr>
                 <th>Nom</th>
                 <th>Prenoms</th>
+                <th>Antenne</th>
                 <th>Filière</th>
                 <th>Niveau</th>
                 <th>Groupe</th>
@@ -103,8 +115,9 @@
                 <td>{{ presence[2] }}</td>
                 <td>{{ presence[3] }}</td>
                 <td>{{ presence[4] }}</td>
-                {% if presence[5] %}
                 <td>{{ presence[5] }}</td>
+                {% if presence[6] %}
+                <td>{{ presence[7] }}</td>
                 <td class="pst"> PRESENT(E)</td>
                 {% else %}
                 <td ></td>

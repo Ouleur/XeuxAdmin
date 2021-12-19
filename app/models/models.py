@@ -64,6 +64,7 @@ class User(baseModel,db.Model,UserMixin):
 
     email = db.Column(db.String(64), unique=True, index=True)
     name = db.Column(db.String(64))
+    antenne = db.Column(db.String(64))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
     avatar_hash = db.Column(db.String(32))
@@ -158,7 +159,7 @@ class User(baseModel,db.Model,UserMixin):
     def is_super_administrator(self):
         return self.can(Permission.SUP_ADMINISTER)
     
-    def is_entreprise_administrator(self):
+    def is_antenne_administrator(self):
         return self.can(Permission.ADMINISTER)
 
 

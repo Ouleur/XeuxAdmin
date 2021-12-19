@@ -78,7 +78,6 @@
       </div> -->
 
       <!-- Nav Item - Pages Collapse Menu -->
-      {% if current_user.is_super_administrator() %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#presence" aria-expanded="true" aria-controls="presence">
           <i class="fas fa-fw fa-building"></i>
@@ -91,11 +90,9 @@
           </div>
         </div>
       </li>
-      {% endif %}
       <!-- Nav Item - Pages Collapse Menu -->
 
       <!-- Nav Item - Pages Collapse Menu -->
-      {% if current_user.is_super_administrator() %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#entreprise" aria-expanded="true" aria-controls="entreprise">
           <i class="fas fa-fw fa-building"></i>
@@ -108,11 +105,9 @@
           </div>
         </div>
       </li>
-      {% endif %}
       <!-- Nav Item - Pages Collapse Menu -->
 
       <!-- Nav Item - Pages Collapse Menu -->
-      {% if current_user.is_super_administrator() %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#offre" aria-expanded="true" aria-controls="entreprise">
           <i class="fas fa-fw fa-building"></i>
@@ -125,7 +120,6 @@
           </div>
         </div>
       </li>
-      {% endif %}
       <!--  -->
 
       <!-- <li class="nav-item">
@@ -149,23 +143,9 @@
         </a>
       </li> -->
 
-      {% if current_user.is_entreprise_administrator() %}
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#payements" aria-expanded="true" aria-controls="entreprise">
-          <i class="fas fa-fw fa-building"></i>
-          <span>Mes Payements</span>
-        </a>
-        <div id="payements" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">La liste de mes Payements:</h6>
-            <a class="collapse-item" href="">Payements</a>
-          </div>
-        </div>
-      </li>
-      {% endif %}
+      
 
-      {% if current_user.is_super_administrator() %}
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#equipement" aria-expanded="true" aria-controls="equipement">
           <i class="fas fa-fw fa-building"></i>
           <span>Mes Equipements</span>
@@ -176,11 +156,9 @@
             <a class="collapse-item" href="{{ url_for('main.device') }}">Equipements</a>
           </div>
         </div>
-      </li>
-      {% endif %}
+      </li> -->
       <!-- Nav Item - Pages Collapse Menu -->
       
-      {% if current_user.is_super_administrator() %}
       
       <!-- Nav Item - Compte Collapse Menu -->
       <li class="nav-item">
@@ -196,7 +174,6 @@
         </div>
       </li>
 
-      {% endif %}
       
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
@@ -470,7 +447,7 @@
   <script src="{{ url_for('static', filename='vendor/chart.js/Chart.min.js') }}"></script>
 
   <!-- Page level custom scripts -->
-  {% if current_user.is_entreprise_administrator() %}
+  {% if current_user.is_antenne_administrator() %}
   <script src="{{ url_for('static', filename='js/demo/chart-area-demo.js') }}"></script>
   <script src="{{ url_for('static', filename='js/demo/chart-pie-demo.js') }}"></script>
   {% endif %}

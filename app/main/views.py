@@ -35,9 +35,14 @@ def presence():
    # form.annee.choices = [(item.id, item.denomination) for item in annee_academics]
    presences =[]
    print(form.validate_on_submit())
+
+   fm = None
    if form.validate_on_submit():
 
-      sql = """SELECT etd.nom,etd.prenoms,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
+      if not form.antenne.data:
+         form.antenne.data = current_user.antenne
+
+      sql = """SELECT etd.nom,etd.prenoms,etd.antenne,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
       (SELECT et.*,fi.denomination
       FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id AND et.groupe='{gp}') as etd
       LEFT JOIN (SELECT pr.* FROM presences AS pr
@@ -48,12 +53,17 @@ def presence():
       ON pr_etd.etudiant_id=etd.id
       WHERE 
       etd.niveau='{ni}' 
+      AND
+      etd.antenne='{ant}'
       
-      """.format(ni="{}".format(form.niveau.data),d_b="{}".format(form.date.data),fi=form.filiere.data,gp=form.groupe.data)
+      """.format(ni="{}".format(form.niveau.data),d_b="{}".format(form.date.data),fi=form.filiere.data,gp=form.groupe.data,ant=form.antenne.data)
       print(sql)
       presences = db.engine.execute(sql)
+      fi = Filiere.query.get(form.filiere.data)
+      fm = form
+      fm.filiere.data = fi.denomination
 
-   return render_template('presence.html',presences=[item for item in presences],form=form)
+   return render_template('presence.html',presences=[item for item in presences],form=form, fm=fm)
 
 @main.route('/create_presence', methods=['POST','GET'])
 def create_presence():

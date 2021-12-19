@@ -6,3 +6,4 @@ uwsgi.ini
 start.sh
 Dockerfile
 .env
+config.py
