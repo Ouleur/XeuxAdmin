@@ -56,7 +56,7 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    POSTGRES_DB = "db_name"
+    POSTGRES_DB = "db_xeux"
     POSTGRES_URL="127.0.0.1:5432"
     POSTGRES_USER="odoo"
     POSTGRES_PW="odoo"
@@ -102,7 +102,7 @@ class BetaConfig(Config):
 
 
 class ProdcutionConfig(Config):
-    POSTGRES_DB = "db_name"
+    POSTGRES_DB = "db_xeux"
     POSTGRES_URL="127.0.0.1:5432"
     POSTGRES_USER="odoo"
     POSTGRES_PW="odoo"

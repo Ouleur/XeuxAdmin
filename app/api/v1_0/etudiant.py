@@ -41,8 +41,6 @@ def enroll_etudiant(mtle,card_id):
         db.session.add(etudiant)
         db.session.commit()
         #Creation de la presence
-
-        return jsonify({ 'statut': "Succes" ,'etudiant':etudiant.to_json()})
-    
+        return jsonify({ 'statut': "Succes" ,'etudiant':etudiant.to_json()})    
     return jsonify({ 'statut': "Echec" })
     

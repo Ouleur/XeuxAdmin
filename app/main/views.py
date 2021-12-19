@@ -168,8 +168,6 @@ def read_etudiant(eid):
 
    return jsonify(etudiant.to_json())
 
-
-
 @main.route('/update_etudiant', methods=['POST','GET'])
 def update_etudiant():
    if len(request.files):

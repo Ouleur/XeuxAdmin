@@ -41,7 +41,6 @@ def add_card_presence():
                         db.session.rollback()
                         # pass
         # os.remove(current_app.config['UPLOADS_DIR']+fi)
-
     #recherche du matricule 
     ###### OU ######
     # if etudiant:
