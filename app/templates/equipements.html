@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+  <div class="row">
+    <div class="container-fluid col-4">
+
+        <div class="card shadow mb-4">
+          <div class="card-header py-3" >
+            
+            <h5 class="m-0 font-weight-bold text-primary " >
+              Ajout d'un Equiement
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <form class="" method="POST" action="{{ url_for('main.create_device') }}">
+                {{ form.csrf_token }}
+                  <div class="modal-body">
+                      <div class="form-group row">
+                        {{ form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
+
+                        <div class="col-sm-12">
+                          <label for="denomination">Denomination</label>
+                          {{ form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value="")}}
+                        </div>
+        
+                        <div class="col-sm-12">
+                          <label for="localisation">Position</label>
+                          {{ form.position(class_='form-control form-control-user',placeholder="Position",type="text",value="")}}
+                        </div>
+        
+                        <div class="col-sm-12">
+                          <label for="numero">Emei</label>
+                          {{ form.emei(class_='form-control form-control-user',placeholder="Emei",type="text",value="")}}
+                        </div>
+
+                        <div class="col-sm-12">
+                          <label for="ouverture">Satut</label>
+                          {{ form.status(class_='form-control form-control-user',placeholder="Statut",type="text",step="2",value="")}}
+                        </div>
+                        
+                      </div>
+                  </div>
+                  <div class="modal-footer" style="padding: 0 !important;"> 
+
+                      <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
+                      {{ form.submit(class=" btn btn-primary text-xs") }}
+
+                  </div>
+              </form>
+            </div>
+          </div>
+      </div>
+</div>
+    <div class="container-fluid col-8">
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Liste des Matières</h6>
+        </div>
+        
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataMatiereTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Denomination</th>
+                  <th>position</th>
+                  <th>emei</th>
+                  <th>status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Denomination</th>
+                  <th>position</th>
+                  <th>emei</th>
+                  <th>status</th>
+                  <th>Actions</th>
+                </tr>
+              </tfoot>
+              <tbody>
+            {% for device in devices %}
+                
+                <tr>
+                  <td>{{ device.denomination}}</td>
+                  <td>{{ device.position }}</td>
+                  <td>{{ device.emei }}</td>
+                  <td>{{ device.status }}</td>
+                <td> <i class="modif fa fa-pen" onClick="ShowEquipements({{device.id}})"></i> | <i class="fa fa-trash" onClick="deleteEquipement({{device.id}})"></i></td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}

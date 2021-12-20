@@ -1,0 +1,21 @@
+
+#accordionSidebar{
+    width: 0 !important;
+    overflow: hidden;
+  }
+  
+  @media (min-width: 768px) {
+    #accordionSidebar{
+      width: 20rem !important;
+    }
+  }
+  
+  .navbar{
+    z-index: 1001;
+  }
+  
+  #accordionSidebar.toggled {
+    width: 23.4rem !important;
+    z-index: 1000;
+    position: absolute;
+  }

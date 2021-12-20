@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Ajout et Modifications</h6>
+    </div>
+    <div class="card-body">
+      <form class="" method="POST" action="{{ url_for('main.collaborateurs') }}" >
+        {{ form.csrf_token }}
+          <div class="modal-body">
+              <div class="form-group row">
+
+                <div class="col-sm-6">
+                  <label for="date">Nom et prenoms</label>
+                  {{ form.name(class_='form-control form-control-user',placeholder="Nom et prenoms",type="text",value=user.name)}}
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="date">Email</label>
+                  {{ form.mail(class_='form-control form-control-user',placeholder="Email",type="text",value=user.email)}}
+                </div>
+
+                <div class="col-sm-4">
+                  <label for="date">Agence</label>
+                  {{ form.agence(class_='form-control form-control-user agence',placeholder="Agence")}}
+                </div>
+                
+                <div class="col-sm-4">
+                  <label for="date">Service</label>
+                  {{ form.service(class_='form-control form-control-user service',placeholder="Service")}}
+                </div>
+
+                <div class="col-sm-4">
+                  <label for="date">Guichet</label>
+                  {{ form.guichet(class_='form-control form-control-user guichet',placeholder="Guichet")}}
+                </div>
+                 
+              </div>
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+          {{ form.submit(class="btn btn-primary") }}
+
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Mes colaborateurs</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">         
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-bordered dataTable" id="dataTable" role="grid" aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+                <thead>
+                  <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 228px;" aria-sort="ascending" aria-label="Name: activate to sort column descending">Nom et Prenoms</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 341px;" aria-label="Position: activate to sort column ascending">Agence</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 166px;" aria-label="Office: activate to sort column ascending">Service</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 166px;" aria-label="Office: activate to sort column ascending">Guichet</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 80px;" aria-label="Mail: activate to sort column ascending">Mail</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 155px;" aria-label="Start date: activate to sort column ascending">Etat</th>
+                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 155px;" aria-label="Start date: activate to sort column ascending">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in users %}
+                <tr role="row" class="odd">
+                    <td class="sorting_1">{{user.name}}</td>
+                    <td>{{ user.agence   }}</td>
+                    <td>{{user.service}}</td>
+                    <td>{{user.guichet}}</td>
+                    <td>{{user.email}}</td>
+                    <td>Connecté(e)</td>
+                    <td><a href="/update_collaborateurs/{{user.id}}"><button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fas fa-pen fa-fw"></i></button></a>
+                      | <a href="/del_collaborateurs/{{user.id}}"><button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-trash fa-fw"></i></button></a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th rowspan="1" colspan="1">Nom et Prenoms</th>
+                    <th rowspan="1" colspan="1">Agence</th>
+                    <th rowspan="1" colspan="1">Service</th>
+                    <th rowspan="1" colspan="1">Guichet</th>
+                    <th rowspan="1" colspan="1">Mail</th>
+                    <th rowspan="1" colspan="1">Etat</th>
+                    <th rowspan="1" colspan="1">Actions</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

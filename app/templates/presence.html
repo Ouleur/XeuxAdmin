@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+
+  <div class="container-fluid">
+    <!-- DataTales Example -->
+    <div id="accordion" class="">  
+      <!-- <div class="row"> -->
+        <div class="card shadow mb-4 ">
+          <div class="card-header py-3" id="headingImportEtudiant">
+            
+            <h6 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseImportEtudiant" aria-expanded="false" aria-controls="collapseImportEtudiant">
+              Recherche
+            </h6>
+          </div>
+          <div id="collapseImportEtudiant" class="collapse" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
+            <div class="card-body">
+
+                <!-- <form method="POST" action="{{ url_for('main.create_etudiant') }}" enctype="multipart/form-data">
+                  <p><input type="file" name="file"></p>
+                  <p><input class="btn btn-primary" type="submit" value="Soumettre"></p>
+                </form> -->
+                <form class="" method="POST" action="{{ url_for('main.presence') }}" >
+                  {{ form.csrf_token }}
+                    <div class="modal-body">
+                        <div class="form-group row">
+                          {% if current_user.is_antenne_administrator() %}
+                          <div class="col-sm-2"></div>
+                          {% endif %}
+                            <div class="col-sm-2">
+                            <label for="date">Date</label>
+                            {{ form.date(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
+                          </div>
+                          {% if current_user.is_super_administrator() %}
+                          <div class="col-sm-2">
+                            <label for="antenne">Antenne</label>
+                            {{ form.antenne(class_='form-control form-control-user',placeholder="Antenne",value="")}}
+                          </div>
+                          {% endif %}
+          
+                          <div class="col-sm-2">
+                            <label for="filiere">Filiere</label>
+                            {{ form.filiere(class_='form-control form-control-user',placeholder="Filiere",value="")}}
+                          </div>
+          
+                          <div class="col-sm-2">
+                            <label for="niveau">Niveau</label>
+                            {{ form.niveau(class_='form-control form-control-user',placeholder="Niveau",value="")}}
+                          </div>
+
+                          <div class="col-sm-2">
+                            <label for="groupe">Groupe</label>
+                            {{ form.groupe(class_='form-control form-control-user',placeholder="Groupe",value="")}}
+                          </div>
+  
+                          
+                          <div class="col-sm-2">
+                            <br>
+                            {{ form.submit(class=" btn btn-primary") }}
+                          </div>
+                          <div class="col-sm-2"></div>
+                          
+                        </div>
+                    </div>
+                    
+                </form>
+
+            </div>
+          </div>
+        </div>
+
+    </div>
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Liste des presences 
+          {% if fm %}
+          [ {{ form.antenne.data }} | {{ form.filiere.data }} | {{ form.niveau.data }} | {{ form.groupe.data }} | {{ form.date.data.strftime('%d-%m-%Y') }}]</h6>
+          {% endif %}
+        </div>
+      
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Prenoms</th>
+                <th>Antenne</th>
+                <th>Filière</th>
+                <th>Niveau</th>
+                <th>Groupe</th>
+                <th>Date opérations</th>
+                <th>Etat</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Nom</th>
+                <th>Prenoms</th>
+                <th>Antenne</th>
+                <th>Filière</th>
+                <th>Niveau</th>
+                <th>Groupe</th>
+                <th>Date opérations</th>
+                <th>Etat</th>
+              </tr>
+            </tfoot>
+            <tbody>
+          {% for presence in presences %}
+              
+              <tr>
+                <td>{{ presence[0] }}</td>
+                <td>{{ presence[1] }}</td>
+                <td>{{ presence[2] }}</td>
+                <td>{{ presence[3] }}</td>
+                <td>{{ presence[4] }}</td>
+                <td>{{ presence[5] }}</td>
+                {% if presence[6] %}
+                <td>{{ presence[7] }}</td>
+                <td class="pst"> PRESENT(E)</td>
+                {% else %}
+                <td ></td>
+                <td class="abs">ABSENT(E)</td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+{% endblock %}

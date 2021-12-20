@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+  <div class="row">
+    <div class="container-fluid col-6">
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-danger">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ message }}
+      </div>
+      {% endfor %}
+      <div id="accordion">  
+        <div class="card shadow mb-4">
+          <div class="card-header py-3" id="headingImportFiliere">
+            
+            <h5 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseImportFiliere" aria-expanded="false" aria-controls="collapseImportFiliere">
+              Ajout d'une filière
+            </h5>
+          </div>
+          <div id="collapseImportFiliere" class="collapse" aria-labelledby="headingImportFiliere" data-parent="#accordion">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+              <h5>Chargez votre fichier CSV</h5>
+              <form method="POST" action="{{ url_for('main.create_filiere') }}" enctype="multipart/form-data">
+                <p><input type="file" name="file"></p>
+                <p><input class="btn btn-primary" type="submit" value="Soumettre">
+                  <a href="{{ url_for('static', filename='doc/filiere.csv') }}" download>Téléchargez le fichier exemple</a>
+                </p>
+              </form>
+              </div>
+              <div class="col-sm-6">
+                <form class="" method="POST" action="{{ url_for('main.create_filiere') }}" >
+                  {{ fil_form.csrf_token }}
+                    <div class="modal-body">
+                      <div class="form-group row">
+                          {{ fil_form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
+                        <div class="col-sm-6">
+                          <label for="denomination">Denomination</label>
+                          {{ fil_form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value="")}}
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer" style="padding: 0 !important;"> 
+      
+                      <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
+                      {{ fil_form.submit(class=" btn btn-primary text-xs") }}
+
+                  </div>
+                </form>
+                </div>
+                    
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Liste des filières</h6>
+        </div>
+        
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Libelle</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>#</th>
+                  <th>Libelle</th>
+                  <th>Actions</th>
+                </tr>
+              </tfoot>
+              <tbody>
+                {% for filiere in filieres %}
+                  <tr>
+                    <td>{{ filiere.id}}</td>
+                    <td>{{ filiere.denomination }}</td>
+                    <td><i class="fa fa-trash" onClick="deleteFiliere({{filiere.id}})"></i></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="container-fluid col-6">
+
+      <div id="accordion">  
+        <div class="card shadow mb-4">
+          <div class="card-header py-3" id="headingImportMatiere">
+            
+            <h5 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseImportMatiere" aria-expanded="false" aria-controls="collapseImportMatiere">
+              Ajouter des Matières
+            </h5>
+          </div>
+          <div id="collapseImportMatiere" class="collapse" aria-labelledby="headingImportMatiere" data-parent="#accordion">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6"> 
+                  <h5>Chargez votre fichier CSV</h5>
+                  <form method="POST" action="{{ url_for('main.create_matiere') }}" enctype="multipart/form-data">
+                    <p><input type="file" name="file"></p>
+                    <p><input class="btn btn-primary" type="submit" value="Soumettre">
+                      <a href="{{ url_for('static', filename='doc/matiere.csv') }}" download>Téléchargez le fichier exemple</a>
+                    </p>
+                  </form>
+                </div>
+              <div class="col-sm-6">
+                <form class="" method="POST" action="{{ url_for('main.create_matiere') }}" >
+                  {{ fil_form.csrf_token }}
+                    <div class="modal-body">
+                      <div class="form-group row">
+                          {{ mat_form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
+                        <div class="col-sm-6">
+                          <label for="denomination">Denomination</label>
+                          {{ mat_form.denomination(class_='form-control form-control-user',placeholder="Denomination",type="text",value="")}}
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer" style="padding: 0 !important;"> 
+      
+                      <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
+                      {{ mat_form.submit(class=" btn btn-primary text-xs") }}
+
+                  </div>
+                </form>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Liste des Matières</h6>
+        </div>
+        
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataMatiereTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Libelle</th>
+                  <th>Actions</th>
+                  
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>#</th>
+                  <th>Libelle</th>
+                  <th>Actions</th>
+                </tr>
+              </tfoot>
+              <tbody>
+            {% for matiere in matieres %}
+                
+                <tr>
+                  <td>{{ matiere.id}}</td>
+                  <td>{{ matiere.denomination }}</td>
+                  <td><i class="fa fa-trash" onClick="deleteMatiere({{matiere.id}})"></i></td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+{% endblock %}
