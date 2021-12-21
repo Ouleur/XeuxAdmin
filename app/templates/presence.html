@@ -25,19 +25,14 @@
                   {{ form.csrf_token }}
                     <div class="modal-body">
                         <div class="form-group row">
-                          {% if current_user.is_antenne_administrator() %}
-                          <div class="col-sm-2"></div>
-                          {% endif %}
                             <div class="col-sm-2">
                             <label for="date">Date</label>
                             {{ form.date(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
                           </div>
-                          {% if current_user.is_super_administrator() %}
                           <div class="col-sm-2">
                             <label for="antenne">Antenne</label>
                             {{ form.antenne(class_='form-control form-control-user',placeholder="Antenne",value="")}}
                           </div>
-                          {% endif %}
           
                           <div class="col-sm-2">
                             <label for="filiere">Filiere</label>

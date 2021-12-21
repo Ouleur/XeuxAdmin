@@ -39,8 +39,7 @@ def presence():
    fm = None
    if form.validate_on_submit():
 
-      if not form.antenne.data:
-         form.antenne.data = current_user.antenne
+      
 
       sql = """SELECT etd.nom,etd.prenoms,etd.antenne,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
       (SELECT et.*,fi.denomination
