@@ -59,7 +59,7 @@ class RechercheForm(FlaskForm):
     groupe = SelectField("Groupe",choices=['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"],coerce=str)
     niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)
     # annee = SelectField('Annee',choices=[])
-    antenne = SelectField('Antenne',choices=['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO'])
+    antenne = SelectField('Antenne',choices=[])
     
     submit = SubmitField('Chercher')  
 
