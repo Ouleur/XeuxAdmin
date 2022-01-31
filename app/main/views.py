@@ -32,7 +32,11 @@ def presence():
    annee_academics = AnneeAcademic.query.all()
    form = RechercheForm()
    form.filiere.choices = [(item.id, item.denomination) for item in filieres]
-   # form.annee.choices = [(item.id, item.denomination) for item in annee_academics]
+   if current_user.is_antenne_administrator():
+      form.antenne.choices = [current_user.antenne]
+   else:
+      form.antenne.choices = ['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO']
+
    presences =[]
    print(form.validate_on_submit())
 
