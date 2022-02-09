@@ -154,7 +154,8 @@ class User(baseModel,db.Model,UserMixin):
     
 
     def can(self, permissions):
-        return self.role is not None and (self.role.permissions & permissions) == permissions
+        # print(self.role.permissions, permissions)
+        return self.role is not None and self.role.permissions == permissions
 
     def is_super_administrator(self):
         return self.can(Permission.SUP_ADMINISTER)

@@ -25,19 +25,17 @@
                   {{ form.csrf_token }}
                     <div class="modal-body">
                         <div class="form-group row">
-                          {% if current_user.is_antenne_administrator() %}
-                          <div class="col-sm-2"></div>
-                          {% endif %}
                             <div class="col-sm-2">
-                            <label for="date">Date</label>
-                            {{ form.date(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
+                            <label for="date">Date de début</label>
+                            {{ form.date_debut(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
+                            <label for="date">Date de fin</label>
+                            {{ form.date_fin(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
                           </div>
-                          {% if current_user.is_super_administrator() %}
                           <div class="col-sm-2">
                             <label for="antenne">Antenne</label>
-                            {{ form.antenne(class_='form-control form-control-user',placeholder="Antenne",value="")}}
+                            {{ form.antenne(class_='form-control form-control-user',placeholder="Antenne",value="" ,options=['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO'])}}
+                            
                           </div>
-                          {% endif %}
           
                           <div class="col-sm-2">
                             <label for="filiere">Filiere</label>
@@ -75,7 +73,7 @@
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Liste des presences 
           {% if fm %}
-          [ {{ form.antenne.data }} | {{ form.filiere.data }} | {{ form.niveau.data }} | {{ form.groupe.data }} | {{ form.date.data.strftime('%d-%m-%Y') }}]</h6>
+          [ {{ form.antenne.data }} | {{ form.filiere.data }} | {{ form.niveau.data }} | {{ form.groupe.data }} | {{ form.date_debut.data.strftime('%d-%m-%Y') }} au {{ form.date_fin.data.strftime('%d-%m-%Y') }}]</h6>
           {% endif %}
         </div>
       
@@ -117,8 +115,8 @@
                 <td>{{ presence[4] }}</td>
                 <td>{{ presence[5] }}</td>
                 {% if presence[6] %}
-                <td>{{ presence[7] }}</td>
-                <td class="pst"> PRESENT(E)</td>
+                <td>{{ presence[6].strftime('%d-%m-%Y %H:%M:%S') }}</td>
+                <td class="pst">PRESENT(E)</td>
                 {% else %}
                 <td ></td>
                 <td class="abs">ABSENT(E)</td>

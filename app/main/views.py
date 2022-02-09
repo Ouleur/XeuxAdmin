@@ -32,36 +32,47 @@ def presence():
    annee_academics = AnneeAcademic.query.all()
    form = RechercheForm()
    form.filiere.choices = [(item.id, item.denomination) for item in filieres]
-   # form.annee.choices = [(item.id, item.denomination) for item in annee_academics]
+   print(form.antenne.choices)
+
+   if current_user.is_antenne_administrator():
+      form.antenne.choices = [current_user.antenne]
+      print(form.antenne.choices)
+   else:
+      form.antenne.choices = ['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO']
+
    presences =[]
    print(form.validate_on_submit())
 
    fm = None
    if form.validate_on_submit():
 
-      if not form.antenne.data:
-         form.antenne.data = current_user.antenne
+      
 
       sql = """SELECT etd.nom,etd.prenoms,etd.antenne,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
       (SELECT et.*,fi.denomination
       FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id AND et.groupe='{gp}') as etd
-      LEFT JOIN (SELECT pr.* FROM presences AS pr
-      WHERE 
-      pr.filiere_id={fi} AND 
-      pr.niveau='{ni}' AND 
-      pr.date_badge >='{d_b} 00:00:00' and pr.date_badge<='{d_b} 23:59:00'  ) AS pr_etd 
-      ON pr_etd.etudiant_id=etd.id
+      LEFT JOIN 
+      (
+         SELECT * FROM presences AS pr
+         WHERE 
+         pr.filiere_id={fi} AND 
+         pr.niveau='{ni}' AND 
+         pr.date_badge >='{d_b} 00:00:00' and pr.date_badge<='{d_f} 23:59:00'
+      ) AS pr_etd
+      ON 
+      pr_etd.etudiant_id=etd.id
       WHERE 
       etd.niveau='{ni}' 
       AND
       etd.antenne='{ant}'
       
-      """.format(ni="{}".format(form.niveau.data),d_b="{}".format(form.date.data),fi=form.filiere.data,gp=form.groupe.data,ant=form.antenne.data)
+      """.format(ni="{}".format(form.niveau.data),d_b="{}".format(form.date_debut.data),d_f="{}".format(form.date_fin.data),fi=form.filiere.data,gp=form.groupe.data,ant=form.antenne.data)
       print(sql)
       presences = db.engine.execute(sql)
       fi = Filiere.query.get(form.filiere.data)
       fm = form
       fm.filiere.data = fi.denomination
+      print(presence)
 
    return render_template('presence.html',presences=[item for item in presences],form=form, fm=fm)
 

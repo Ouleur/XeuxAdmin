@@ -93,6 +93,7 @@
       <!-- Nav Item - Pages Collapse Menu -->
 
       <!-- Nav Item - Pages Collapse Menu -->
+      {% if current_user.is_super_administrator() %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#entreprise" aria-expanded="true" aria-controls="entreprise">
           <i class="fas fa-fw fa-building"></i>
@@ -105,9 +106,12 @@
           </div>
         </div>
       </li>
+      {% endif %}
       <!-- Nav Item - Pages Collapse Menu -->
 
       <!-- Nav Item - Pages Collapse Menu -->
+      {% if current_user.is_super_administrator() %}
+      
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#offre" aria-expanded="true" aria-controls="entreprise">
           <i class="fas fa-fw fa-building"></i>
@@ -120,6 +124,7 @@
           </div>
         </div>
       </li>
+      {% endif %}
       <!--  -->
 
       <!-- <li class="nav-item">
@@ -452,7 +457,7 @@
   <script src="{{ url_for('static', filename='js/demo/chart-pie-demo.js') }}"></script>
   {% endif %}
 
-  {% if current_user.is_super_administrator %}
+  {% if current_user.is_super_administrator() %}
   <script src="{{ url_for('static', filename='js/admin/chart-area-demo.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/chart-pie-demo.js') }}"></script>
   {% endif %}
