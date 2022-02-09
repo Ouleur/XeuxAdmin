@@ -54,7 +54,8 @@ class EtudiantForm(FlaskForm):
     
 
 class RechercheForm(FlaskForm):
-    date = DateField('Titre')
+    date_debut = DateField('Date de début')
+    date_fin = DateField('Date de fin')
     filiere = SelectField('Filiere',choices=[])
     groupe = SelectField("Groupe",choices=['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"],coerce=str)
     niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)

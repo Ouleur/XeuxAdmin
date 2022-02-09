@@ -33,6 +33,7 @@ def add_card_presence():
                 print(etudiant)
                 if etudiant:
                     presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"])
+                    
                     try:
                         db.session.add(presence)
                         db.session.commit()
@@ -54,7 +55,7 @@ def add_card_presence():
     #     return jsonify({"Message":"Vous êtes présent !!"})
     return jsonify({"Message":"Une erreur s'est produite!!"})
 
-#Create presence
+#Ajout de la présence d'un étudiant par son matricule
 @api.route('/add_mtle_presence/<mtle>',methods=['POST','GET'])
 def add_mtle_presence(mtle):
 
