@@ -40,14 +40,27 @@ class EquipementForm(FlaskForm):
 
 class EtudiantForm(FlaskForm):
     id = StringField('Id')
-    matricule = StringField('Matricule',[DataRequired(message="Saisissez une matricule SVP.")])
+    matricule = StringField('Matricule',[DataRequired(message="Saisissez un matricule SVP.")])
     nom = StringField('Nom',[DataRequired(message="Saisissez une nom SVP.")])
     prenoms = StringField('Prenoms',[DataRequired(message="Saisissez un Prenoms SVP.")])
-    date_naissance = DateField('Date de naissance',[DataRequired(message="Saisissez une Date de naissance SVP.")])
+    date_naissance = DateField('Date de naissance')
     filiere = SelectField("Filiere",choices=[])
     niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)
     antenne = SelectField("Antenne",choices=['ABIDJAN','BOUAKE','ABOISSO','KORHOGO',"ABENGOUROU"],coerce=str)
     groupe = SelectField("Groupe",choices=['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"],coerce=str)
+    id_carte = StringField('Id Carte')
+    submit = SubmitField('Enregistrer')   
+
+class PersonnelForm(FlaskForm):
+    id = StringField('Id')
+    matricule = StringField('Matricule',[DataRequired(message="Saisissez une matricule SVP.")])
+    nom = StringField('Nom',[DataRequired(message="Saisissez une nom SVP.")])
+    prenoms = StringField('Prenoms',[DataRequired(message="Saisissez un Prenoms SVP.")])
+    date_naissance = DateField('Date de naissance',[DataRequired(message="Saisissez une Date de naissance SVP.")])
+    filiere = SelectField("Personnel",choices=["PERSONNEL"])
+    niveau = SelectField("Corps",choices=["FONCTIONNAIRE","CONTRACTUEL"],coerce=str)
+    antenne = SelectField("Antenne",choices=['ABIDJAN','BOUAKE','ABOISSO','KORHOGO',"ABENGOUROU"],coerce=str)
+    groupe = SelectField("Fonction",choices=["ENSEIGNANT","AMINISTRATIF","INFORMATICIEN"],coerce=str)
     id_carte = StringField('Id Carte')
     submit = SubmitField('Enregistrer')   
     
@@ -59,6 +72,17 @@ class RechercheForm(FlaskForm):
     filiere = SelectField('Filiere',choices=[])
     groupe = SelectField("Groupe",choices=['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"],coerce=str)
     niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)
+    # annee = SelectField('Annee',choices=[])
+    antenne = SelectField('Antenne',choices=[])
+    
+    submit = SubmitField('Chercher')  
+
+class RecherchePersonneForm(FlaskForm):
+    date_debut = DateField('Date de début')
+    date_fin = DateField('Date de fin')
+    filiere = SelectField('Personnel',choices=["PERSONNEL"])
+    groupe = SelectField("Corps",choices=["FONCTIONNAIRE","CONTRACTUEL"],coerce=str)
+    niveau = SelectField("Fonction",choices=["ENSEIGNANT","AMINISTRATIF","INFORMATICIEN"],coerce=str)
     # annee = SelectField('Annee',choices=[])
     antenne = SelectField('Antenne',choices=[])
     

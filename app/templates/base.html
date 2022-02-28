@@ -86,9 +86,13 @@
         <div id="presence" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">La liste des Presences:</h6>
-            <a class="collapse-item" href="{{ url_for('main.presence') }}">Presences</a>
+            <a class="collapse-item" href="{{ url_for('main.presence') }}">Presences Etudiant</a>
+            <a class="collapse-item" href="{{ url_for('main.presence_personnel') }}">Presences du Personnel </a>
+
           </div>
+          
         </div>
+        
       </li>
       <!-- Nav Item - Pages Collapse Menu -->
 
@@ -103,6 +107,21 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">La liste des Etudiants:</h6>
             <a class="collapse-item" href="{{ url_for('main.etudiant') }}">Etudiants</a>
+          </div>
+        </div>
+      </li>
+      {% endif %}
+
+      {% if current_user.is_super_administrator() %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#personnel" aria-expanded="true" aria-controls="personnel">
+          <i class="fas fa-fw fa-building"></i>
+          <span>Le Personnel</span>
+        </a>
+        <div id="personnel" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">La liste du Personnel:</h6>
+            <a class="collapse-item" href="{{ url_for('main.personnel') }}">Personnel</a>
           </div>
         </div>
       </li>
