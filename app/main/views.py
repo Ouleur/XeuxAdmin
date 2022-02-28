@@ -156,7 +156,7 @@ def delete_presence():
 ### CRUD Off personnel ###
 @main.route('/personnel', methods=['POST','GET'])
 def personnel():
-   etudiants = db.engine.execute("select etudiants.*,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
+   etudiants = db.engine.execute("select etudiants.*,filieres.id,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id and filieres.denomination='PERSONNEL'")
    
    # etudiants = Etudiant.query.all()
    filieres = Filiere.query.filter_by(denomination="PERSONNEL")
@@ -222,7 +222,7 @@ def create_personnel():
             db.session.add(etudiant)
             db.session.commit()
 
-   etudiants = db.engine.execute("select etudiants.*,filieres.id,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
+   etudiants = db.engine.execute("select etudiants.*,filieres.id,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id and filieres.denomination='PERSONNEL' ")
    
    # etudiants = Etudiant.query.all()
    filieres = Filiere.query.all()
@@ -271,7 +271,7 @@ def update_personnel():
          if msg!="":   
             flash("{} {}".format(erreur,msg))
 
-   etudiants = db.engine.execute("select etudiants.*,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
+   etudiants = db.engine.execute("select etudiants.*,filieres.id,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id and filieres.denomination='PERSONNEL'")
    
    # etudiants = Etudiant.query.all()
    filieres = Filiere.query.all()
