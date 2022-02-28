@@ -76,6 +76,65 @@ def presence():
 
    return render_template('presence.html',presences=[item for item in presences],form=form, fm=fm)
 
+
+###
+#date debut
+#date fin
+#Antenne
+#Personnel ===> Filiere 
+#Focntion ===> Niveau
+#Corps ===> Groupe
+
+@main.route('/presence_personnel', methods=['POST','GET'])
+def presence_personnel():
+   filieres = Filiere.query.filter_by(denomination="PERSONNEL").all()
+   annee_academics = AnneeAcademic.query.all()
+   form = RecherchePersonneForm()
+   form.filiere.choices = [(item.id, item.denomination) for item in filieres]
+   print(form.antenne.choices)
+
+   if current_user.is_antenne_administrator():
+      form.antenne.choices = [current_user.antenne]
+      print(form.antenne.choices)
+   else:
+      form.antenne.choices = ['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO']
+
+   presences =[]
+   print(form.validate_on_submit())
+
+   fm = None
+   if form.validate_on_submit():
+
+      
+
+      sql = """SELECT etd.nom,etd.prenoms,etd.antenne,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
+      (SELECT et.*,fi.denomination
+      FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id AND et.groupe='{gp}') as etd
+      LEFT JOIN 
+      (
+         SELECT * FROM presences AS pr
+         WHERE 
+         pr.filiere_id={fi} AND 
+         pr.niveau='{ni}' AND 
+         pr.date_badge >='{d_b} 00:00:00' and pr.date_badge<='{d_f} 23:59:00'
+      ) AS pr_etd
+      ON 
+      pr_etd.etudiant_id=etd.id
+      WHERE 
+      etd.niveau='{ni}' 
+      AND
+      etd.antenne='{ant}'
+      
+      """.format(ni="{}".format(form.niveau.data),d_b="{}".format(form.date_debut.data),d_f="{}".format(form.date_fin.data),fi=form.filiere.data,gp=form.groupe.data,ant=form.antenne.data)
+      print(sql)
+      presences = db.engine.execute(sql)
+      fi = Filiere.query.get(form.filiere.data)
+      fm = form
+      
+      print(presence)
+
+   return render_template('presence_personnel.html',presences=[item for item in presences],form=form, fm=fm)
+
 @main.route('/create_presence', methods=['POST','GET'])
 def create_presence():
    return render_template('admin_index.html',data=data,val=json.dumps(val))
@@ -92,6 +151,143 @@ def update_presence():
 def delete_presence():
    return render_template('admin_index.html',data=data,val=json.dumps(val))
 ### CRUD Off presence ###
+
+
+### CRUD Off personnel ###
+@main.route('/personnel', methods=['POST','GET'])
+def personnel():
+   etudiants = db.engine.execute("select etudiants.*,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
+   
+   # etudiants = Etudiant.query.all()
+   filieres = Filiere.query.filter_by(denomination="PERSONNEL")
+
+   form =PersonnelForm(request.form)
+   form.filiere.choices = [(item.id, item.denomination) for item in filieres]
+   # etudiants = [item for item in etudiants]
+   # print(etudiants)
+   return render_template('personnel.html',etudiants=etudiants,form=form)
+
+
+@main.route('/create_personnel', methods=['POST','GET'])
+def create_personnel():
+   form = PersonnelForm(request.form)
+   
+   if len(request.files):
+      uploaded_file = request.files['file']
+      if uploaded_file.filename != '':
+         fieldnames = ['Matricule','Nom','Prenoms','Date de naissance','Filiere','Antenne','Niveau','ID Carte']
+         csv.delimiter = ';'
+         stream = io.StringIO(uploaded_file.stream.read().decode("ISO-8859-1"), newline=None)
+         reader = csv.DictReader(stream)
+         erreur = "Des erreurs sont survenues !\n"
+         msg = ""
+         for row in reader:
+            print(row)
+            try:
+               filiere = Filiere.query.filter_by(denomination=row['Filiere']).first()
+               etudiant = Etudiant(matricule=row['Matricule'],nom=row['Nom'],prenoms=row['Prenoms'],filiere_id=filiere.id,niveau=row['Niveau'],date_naissance=row['Date de naissance'],card_id=row['ID Carte'],antenne=row['Antenne'],groupe=row['Groupe'])
+               db.session.add(etudiant)
+               db.session.commit()
+            except IntegrityError as error:
+               db.session.rollback()
+               msg="{},{},{},{},{},{},{},{}\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Filiere'],row['Niveau'],row['Date de naissance'],row['ID Carte'],row['Antenne'],row['Groupe'])
+         
+         if msg!="":   
+            flash("{} <br>{}".format(erreur,msg))
+
+   else:
+      print(form.data,form.id.data,form.validate_on_submit())
+      if form.submit.data:
+         print(form.data)
+
+         if form.id.data:
+            print(form.data)
+
+            filiere = Filiere.query.filter_by(id=form.filiere.data).first()
+            etudiant = Etudiant.query.filter_by(id=form.id.data).first()
+            etudiant.matricule = form.matricule.data
+            etudiant.nom = form.nom.data
+            etudiant.prenoms = form.prenoms.data
+            etudiant.filiere_id = filiere.id
+            etudiant.niveau = form.niveau.data
+            etudiant.card_id = form.id_carte.data
+            etudiant.antenne = form.antenne.data
+            etudiant.groupe = form.groupe.data
+
+            db.session.add(etudiant)
+            db.session.commit()
+         else:
+            filiere = Filiere.query.filter_by(id=form.filiere.data).first()
+            etudiant = Etudiant(matricule=form.matricule.data,nom=form.nom.data,prenoms=form.prenoms.data,filiere_id=filiere.id,niveau=form.niveau.data,date_naissance=form.date_naissance.data,card_id=form.id_carte.data,antenne=form.antenne.data,groupe=form.groupe.data)
+            db.session.add(etudiant)
+            db.session.commit()
+
+   etudiants = db.engine.execute("select etudiants.*,filieres.id,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
+   
+   # etudiants = Etudiant.query.all()
+   filieres = Filiere.query.all()
+
+   form =PersonnelForm(request.form)
+   form.filiere.choices = [(item.id, item.denomination) for item in filieres]
+   
+   return render_template('personnel.html',etudiants=etudiants,form=form)
+
+
+@main.route('/read_personnel/<eid>', methods=['POST','GET'])
+def read_personnel(eid):
+   etudiant = Etudiant.query.filter_by(id=eid).first()
+
+   return jsonify(etudiant.to_json())
+
+@main.route('/update_personnel', methods=['POST','GET'])
+def update_personnel():
+   if len(request.files):
+
+      uploaded_file = request.files['file']
+      if uploaded_file.filename != '':
+         fieldnames = ['Matricule','Niveau']
+         csv.delimiter = ';'
+         stream = io.StringIO(uploaded_file.stream.read().decode("ISO-8859-1"), newline=None)
+         reader = csv.DictReader(stream)
+         erreur = "Des erreurs sont survenues !\n"
+         msg=""
+         for row in reader:
+            print(row)
+            try:
+               etudiant = Etudiant.query.filter_by(matricule=row['Matricule'].strip()).first()
+               if etudiant:
+                  etudiant.matricule=row['Matricule']
+                  etudiant.niveau=row['Niveau']
+                  etudiant.antenne=row['Antenne']
+                  etudiant.groupe=row['Groupe']
+                  db.session.add(etudiant)
+                  db.session.commit()
+               else:
+                  msg+="{},{}\n".format(row['Matricule'],row['Niveau'])
+
+            except IntegrityError as error:
+               db.session.rollback()
+               msg+="{},{}\n".format(row['Matricule'],row['Niveau'])
+         if msg!="":   
+            flash("{} {}".format(erreur,msg))
+
+   etudiants = db.engine.execute("select etudiants.*,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
+   
+   # etudiants = Etudiant.query.all()
+   filieres = Filiere.query.all()
+
+   form = EtudiantForm(request.form)
+   form.filiere.choices = [(item.id, item.denomination) for item in filieres]
+   
+   return render_template('personnel.html',etudiants=etudiants,form=form)
+
+@main.route('/delete_personnel/<eid>', methods=['POST','GET'])
+def delete_personnel(eid):
+   etudiant = Etudiant.query.filter_by(id=eid).first()
+   db.session.delete(etudiant)
+   return jsonify({'result':"etudiant supprimé !"})
+### CRUD Off personnel ###
+
 
 ### CRUD Off etudiant ###
 @main.route('/etudiant', methods=['POST','GET'])
