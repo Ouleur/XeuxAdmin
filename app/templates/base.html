@@ -87,8 +87,9 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">La liste des Presences:</h6>
             <a class="collapse-item" href="{{ url_for('main.presence') }}">Presences Etudiant</a>
+            {% if current_user.is_super_administrator() %}
             <a class="collapse-item" href="{{ url_for('main.presence_personnel') }}">Presences du Personnel </a>
-
+            {% endif %}
           </div>
           
         </div>
