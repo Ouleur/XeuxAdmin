@@ -8,9 +8,7 @@ import hashlib
 
 
 class baseModel():
-    
     id = db.Column(db.Integer, primary_key=True)
-    
     date_create = db.Column(db.DateTime(), default=datetime.utcnow)
     date_modify = db.Column(db.DateTime(), onupdate=datetime.utcnow)
     create_by = db.Column(db.Integer)
