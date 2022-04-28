@@ -5,12 +5,6 @@
 
   <div class="container-fluid">
     <!-- DataTales Example -->
-    <div class="alert alert-warning alert-dismissible fade show" role="alert" style="display: none; width: 350px;">
-      <strong>Erreur!</strong> <span id="error_data"></span>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
     <div id="accordion" class="">  
       <!-- <div class="row"> -->
         <div class="card shadow mb-4 ">
@@ -22,48 +16,45 @@
           </div>
           <div id="collapseImportEtudiant" class="collapse" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
             <div class="card-body">
+
                 <!-- <form method="POST" action="{{ url_for('main.create_etudiant') }}" enctype="multipart/form-data">
                   <p><input type="file" name="file"></p>
                   <p><input class="btn btn-primary" type="submit" value="Soumettre"></p>
                 </form> -->
-                <form class="" method="POST" id="formPresence">
+                <form class="" method="POST" action="{{ url_for('main.presence_personnel') }}" >
                   {{ form.csrf_token }}
                     <div class="modal-body">
                         <div class="form-group row">
+                          <div class="col-sm-2"></div>
                             <div class="col-sm-2">
-                            <label for="date">Date debut</label>
-                            {{ form.date_debut(class_='form-control form-control-user',placeholder="Date debut",type="date",value="")}}
-                          </div>
-                          <div class="col-sm-2">
-                            <label for="date">Date fin</label>
-                            {{ form.date_fin(class_='form-control form-control-user',placeholder="Date fin",type="date",value="")}}
+                            <label for="date">Date de début</label>
+                            {{ form.date_debut(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
+                            <label for="date">Date de fin</label>
+                            {{ form.date_fin(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
                           </div>
                           <div class="col-sm-2">
                             <label for="antenne">Antenne</label>
                             {{ form.antenne(class_='form-control form-control-user',placeholder="Antenne",value="" ,options=['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO'])}}
-                          </div>
-          
-                          <div class="col-sm-2">
-                            <label for="filiere">Filiere</label>
+                            <label for="filiere">Personnel</label>
                             {{ form.filiere(class_='form-control form-control-user',placeholder="Filiere",value="")}}
                           </div>
           
                           <div class="col-sm-2">
-                            <label for="niveau">Niveau</label>
+                            <label for="niveau">Fonction</label>
                             {{ form.niveau(class_='form-control form-control-user',placeholder="Niveau",value="")}}
-                          </div>
-
-                          <div class="col-sm-2">
-                            <label for="groupe">Groupe</label>
+                            <label for="groupe">Corps</label>
                             {{ form.groupe(class_='form-control form-control-user',placeholder="Groupe",value="")}}
                           </div>
+
   
                           
                           <div class="col-sm-2">
                             <br>
+                            <br>
+                            <br>
                             {{ form.submit(class=" btn btn-primary") }}
                           </div>
-                       
+                          <div class="col-sm-2"></div>
                           
                         </div>
                     </div>
@@ -79,38 +70,57 @@
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Liste des presences 
           {% if fm %}
-          [ {{ form.antenne.data }} | {{ form.filiere.data }} | {{ form.niveau.data }} | {{ form.groupe.data }} | {{ form.date.data.strftime('%d-%m-%Y') }}]</h6>
+          [ {{ form.antenne.data }} | {{ form.filiere.data }} | {{ form.niveau.data }} | {{ form.groupe.data }} | {{ form.date_debut.data.strftime('%d-%m-%Y') }} au {{ form.date_fin.data.strftime('%d-%m-%Y') }}]</h6>
           {% endif %}
         </div>
       
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTablePresence" width="100%" cellspacing="0">
-           <thead>
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
               <tr>
                 <th>Nom</th>
-                <th>Prénoms</th>
+                <th>Prenoms</th>
                 <th>Antenne</th>
                 <th>Filière</th>
                 <th>Niveau</th>
                 <th>Groupe</th>
+                <th>Date opérations</th>
                 <th>Etat</th>
               </tr>
-           </thead>
-           <tbody>
-            
-           </tbody>
-           <tfoot>
+            </thead>
+            <tfoot>
               <tr>
                 <th>Nom</th>
-            <th>Prénoms</th>
-            <th>Antenne</th>
-            <th>Filière</th>
-            <th>Niveau</th>
-            <th>Groupe</th>
-            <th>Etat</th>
+                <th>Prenoms</th>
+                <th>Antenne</th>
+                <th>Filière</th>
+                <th>Niveau</th>
+                <th>Groupe</th>
+                <th>Date opérations</th>
+                <th>Etat</th>
               </tr>
-           </tfoot>
+            </tfoot>
+            <tbody>
+          {% for presence in presences %}
+              
+              <tr>
+                <td>{{ presence[0] }}</td>
+                <td>{{ presence[1] }}</td>
+                <td>{{ presence[2] }}</td>
+                <td>{{ presence[3] }}</td>
+                <td>{{ presence[4] }}</td>
+                <td>{{ presence[5] }}</td>
+                {% if presence[6] %}
+                <td>{{ presence[6].strftime('%d-%m-%Y %H:%M:%S') }}</td>
+                <td class="pst">PRESENT(E)</td>
+                {% else %}
+                <td ></td>
+                <td class="abs">ABSENT(E)</td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
           </table>
         </div>
       </div>

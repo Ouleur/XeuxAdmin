@@ -1,12 +1,13 @@
-from datetime import datetime
+
 from flask import render_template,session, redirect, url_for,flash,make_response,request, g, jsonify
+from sqlalchemy import false
 from . import main
 from ..utilities import *
 from .forms import *
 from flask_login import login_user,login_required,logout_user,current_user
 from ..models.models import *
 from ..notifications import *
-import datetime
+from datetime import date
 import json
 from ..decorators import *
 import csv
@@ -30,6 +31,7 @@ def home():
 def presence():
    filieres = Filiere.query.all()
    annee_academics = AnneeAcademic.query.all()
+   month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Novembre", "Decembre"]
    form = RechercheForm()
    form.filiere.choices = [(item.id, item.denomination) for item in filieres]
    print(form.antenne.choices)
@@ -40,36 +42,132 @@ def presence():
    else:
       form.antenne.choices = ['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO']
 
+
    presences =[]
    print(form.validate_on_submit())
 
    fm = None
-   if form.validate_on_submit():
+   if request.method == 'POST':
+      
+      presences = {}
+      presences['columns'] = [
+            { 'title': "Nom" },
+            { 'title': "Prenoms" },
+            { 'title': "Antenne" },
+            { 'title': "Filière" },
+            { 'title': "Niveau" },
+            { 'title': "Groupe" }
+      ]
+      pres = []
+      presences['datas'] = []
+      data = request.form
+      if not data['date_debut']:
+         return jsonify({'message' : "Veuillez choisir une date svp"}), 404
+      date_debut = datetime.strptime(data['date_debut'], '%Y-%m-%d')
+      # y,m,d = str(data['date_debut']).split('-')
+      if data['date_fin']:
+
+         date_fin = datetime.strptime(data['date_fin'], '%Y-%m-%d')
+         count =  date_fin - date_debut
+
+         if count.days < 0:
+            return jsonify({'message' : "La date de fin doit être supperieur à la date de debut"}), 404
+
+         if count.days > 10:
+            return jsonify({'message' : "Veuillez choisir un interval de moins de 10 jours"}), 404
+         for item in range(int(count.days)):
+            date_sql = date_debut + timedelta(days= int(item)+1)
+               
+            presences['columns'].append({'title' : f'{date_sql.day}-{month[int(date_sql.month) -1]}'})
+            sql_two = """SELECT etd.nom,etd.prenoms,etd.antenne,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
+                     (SELECT et.*,fi.denomination
+                     FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id AND et.groupe='{gp}') as etd
+                     LEFT JOIN (SELECT pr.* FROM presences AS pr
+                     WHERE 
+                     pr.filiere_id={fi} AND 
+                     pr.niveau='{ni}' AND 
+                     pr.date_badge >='{d_b}' and pr.date_badge<='{d_b_fin}'   ) AS pr_etd 
+                     ON pr_etd.etudiant_id=etd.id
+                     WHERE 
+                     etd.niveau='{ni}' 
+                     AND
+                     etd.antenne='{ant}'
+                     ORDER BY etd.nom
+                     """.format(ni="{}".format(data['niveau']),d_b=f'{date_sql}',d_b_fin=f'{datetime.strftime(date_sql, "%Y-%m-%d 23:59:00")}',fi=data['filiere'],gp=data['groupe'],ant=data['antenne'])
+         
+            pres.append(db.engine.execute(sql_two)) 
+
+      presences['columns'].append({'title' : f'{date_debut.day}-{month[int(date_debut.month) -1]}'})
+
+    
+      
+        
 
       
 
+
+
+      
       sql = """SELECT etd.nom,etd.prenoms,etd.antenne,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
-      (SELECT et.*,fi.denomination
-      FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id AND et.groupe='{gp}') as etd
-      LEFT JOIN (SELECT pr.* FROM presences AS pr
-      WHERE 
-      pr.filiere_id={fi} AND 
-      pr.niveau='{ni}' AND 
-      pr.date_badge >='{d_b} 00:00:00' and pr.date_badge<='{d_b} 23:59:00'  ) AS pr_etd 
-      ON pr_etd.etudiant_id=etd.id
-      WHERE 
-      etd.niveau='{ni}' 
-      AND
-      etd.antenne='{ant}'
+         (SELECT et.*,fi.denomination
+         FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id AND et.groupe='{gp}') as etd
+         LEFT JOIN (SELECT pr.* FROM presences AS pr
+         WHERE 
+         pr.filiere_id={fi} AND 
+         pr.niveau='{ni}' AND 
+         pr.date_badge >='{d_b} 00:00:00' and pr.date_badge<='{d_b} 23:59:00'  ) AS pr_etd 
+         ON pr_etd.etudiant_id=etd.id
+         WHERE 
+         etd.niveau='{ni}' 
+         AND
+         etd.antenne='{ant}'
+         ORDER BY etd.nom
+       """.format(ni="{}".format(data['niveau']),d_b="{}".format(data['date_debut']),fi=data['filiere'],gp=data['groupe'],ant=data['antenne'])
+
       
-      """.format(ni="{}".format(form.niveau.data),d_b="{}".format(form.date.data),fi=form.filiere.data,gp=form.groupe.data,ant=form.antenne.data)
-      print(sql)
-      presences = db.engine.execute(sql)
-      fi = Filiere.query.get(form.filiere.data)
-      fm = form
-      fm.filiere.data = fi.denomination
+      
+      presences_one = db.engine.execute(sql)
+
+      # presences.extend(presences_one)
+
+      # presences.append(presences2)
+      # presences.append(presences3)
+      # fi = Filiere.query.get(form.filiere.data)
+      # fm = form
+      # fm.filiere.data = fi.denomination
+      
+   
+      
+  
+      for presence in presences_one:
+         
+         presences['datas'].append([
+                              presence[0],
+                              presence[1],
+                              presence[2],
+                              presence[3],
+                              presence[4],
+                              presence[5],
+                              '<td class="pst">PRESENT(E)</td>' if presence[6] else '<td class="abs">ABSENT(E)</td>',
+                              ])
+      i= 0
+      for item in pres:
+         i=0
+         for el in item:
+            presences['datas'][i].append("<td class='pst'>PRESENT(E)</td>" if el[6] else '<td class="abs">ABSENT(E)</td>')
+            i = i+1
+
+      return jsonify(presences)
+
+
+      
 
    return render_template('presence.html',presences=[item for item in presences],form=form, fm=fm)
+
+
+
+
+
 
 @main.route('/create_presence', methods=['POST','GET'])
 def create_presence():
@@ -86,6 +184,60 @@ def update_presence():
 @main.route('/delete_presence', methods=['POST','GET'])
 def delete_presence():
    return render_template('admin_index.html',data=data,val=json.dumps(val))
+
+
+@main.route('/rapport', methods=['POST','GET'])
+def rapport():
+   
+   form = RechercheForm()
+   
+   now = date.today()
+   sql = f"""SELECT   public.filieres.denomination, public.presences.niveau, public.etudiants.groupe, public.presences.date, count(public.presences.id), count(public.filieres.id)
+	FROM public.presences,public.filieres,public.etudiants
+	
+	where public.presences.date ='{now.strftime("%Y-%m-%d")}' and public.filieres.id= public.presences.filiere_id and public.etudiants.id=public.presences.etudiant_id
+	
+	group by  public.filieres.denomination, public.presences.niveau, public.etudiants.groupe, public.presences.date
+	
+	order by public.filieres.denomination, public.presences.niveau,  public.etudiants.groupe asc;
+   """
+
+   presences = db.engine.execute(sql)
+  
+   print(form.antenne.choices)
+
+   if current_user.is_antenne_administrator():
+      form.antenne.choices = [current_user.antenne]
+      print(form.antenne.choices)
+   else:
+      form.antenne.choices = ['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO']
+
+   presences =[]
+   print(form.validate_on_submit())
+
+   if request.method== 'POST':
+   
+      sql = f"""SELECT  public.filieres.denomination, public.presences.niveau,public.etudiants.groupe, public.presences.date, count(public.presences.id), nb_group.nombre
+	FROM public.presences,public.filieres,public.etudiants,   (SELECT count(public.etudiants.id) as nombre, public.etudiants.groupe,public.etudiants.filiere_id, public.etudiants.niveau  from public.etudiants, public.filieres where public.etudiants.filiere_id =public.filieres.id group by public.etudiants.groupe , public.etudiants.filiere_id, public.etudiants.niveau) as nb_group
+	
+	where public.presences.date ='{form.date_debut.data}' and public.filieres.id= public.presences.filiere_id and public.etudiants.id=public.presences.etudiant_id and public.etudiants.groupe = nb_group.groupe and public.etudiants.filiere_id = nb_group.filiere_id and public.etudiants.niveau = nb_group.niveau
+	
+	group by  public.filieres.denomination, public.presences.niveau, public.etudiants.groupe, public.presences.groupe, public.presences.date, public.filieres.id, nb_group.nombre
+	
+	order by public.filieres.denomination, public.presences.niveau,  public.etudiants.groupe asc;
+      
+      """
+      
+      
+      print(sql)
+      presences = db.engine.execute(sql)
+      
+      print(presences)
+
+   return render_template('rapport.html',presences=[item for item in presences],form=form)
+
+
+
 ### CRUD Off presence ###
 
 ### CRUD Off etudiant ###
@@ -101,6 +253,29 @@ def etudiant():
    # etudiants = [item for item in etudiants]
    # print(etudiants)
    return render_template('etudiant.html',etudiants=etudiants,form=form)
+
+
+@main.route('/etudiant/api')
+def etudiant_api():
+   data = {}
+   data['data'] = []
+   etudiants = db.engine.execute("select etudiants.*,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
+   
+   for etudiant in etudiants:
+      data['data'].append([
+          etudiant.matricule,
+          etudiant.nom,
+          etudiant.prenoms,
+          etudiant.date_naissance,
+          etudiant.antenne,
+          etudiant.filiere,
+          etudiant.niveau,
+          etudiant.groupe,
+          etudiant.card_id,
+          f'<i class="modif fa fa-pen" onClick="ShowEtudiant({etudiant.id})"></i> | <i class="fa fa-trash" onClick="deleteEtudiant({etudiant.id})"></i></td>'
+         ])
+   return jsonify(data)
+   
 
 
 @main.route('/create_etudiant', methods=['POST','GET'])
@@ -120,12 +295,14 @@ def create_etudiant():
             print(row)
             try:
                filiere = Filiere.query.filter_by(denomination=row['Filiere']).first()
+               
                etudiant = Etudiant(matricule=row['Matricule'],nom=row['Nom'],prenoms=row['Prenoms'],filiere_id=filiere.id,niveau=row['Niveau'],date_naissance=row['Date de naissance'],card_id=row['ID Carte'],antenne=row['Antenne'],groupe=row['Groupe'])
                db.session.add(etudiant)
                db.session.commit()
             except IntegrityError as error:
+               print(error)
                db.session.rollback()
-               msg="{},{},{},{},{},{},{},{}\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Filiere'],row['Niveau'],row['Date de naissance'],row['ID Carte'],row['Antenne'],row['Groupe'])
+               msg+="{},{},{},{},{},{},{},{}\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Filiere'],row['Niveau'],row['Date de naissance'],row['ID Carte'],row['Antenne'],row['Groupe'])
          
          if msg!="":   
             flash("{} <br>{}".format(erreur,msg))
@@ -186,6 +363,7 @@ def update_etudiant():
          reader = csv.DictReader(stream)
          erreur = "Des erreurs sont survenues !\n"
          msg=""
+        
          for row in reader:
             print(row)
             try:
@@ -198,13 +376,16 @@ def update_etudiant():
                   db.session.add(etudiant)
                   db.session.commit()
                else:
-                  msg+="{},{}\n".format(row['Matricule'],row['Niveau'])
+                  msg+="{},{},{},{},{},{},{},\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Niveau'],row['Antenne'],row['Groupe'], row['Filiere'])
+                  # msg += row
 
             except IntegrityError as error:
                db.session.rollback()
-               msg+="{},{}\n".format(row['Matricule'],row['Niveau'])
+               msg+="{},{},{},{},{},{},{},\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Niveau'],row['Antenne'],row['Groupe'], row['Filiere'])
+               # msg += row
          if msg!="":   
             flash("{} {}".format(erreur,msg))
+            return redirect(url_for('main.etudiant'))
 
    etudiants = db.engine.execute("select etudiants.*,filieres.denomination AS filiere  FROM etudiants,filieres WHERE filieres.id=etudiants.filiere_id")
    

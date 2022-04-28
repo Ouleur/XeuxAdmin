@@ -16,7 +16,7 @@
           <div class="card-header py-3" id="headingImportEtudiant">
             
             <h5 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseImportEtudiant" aria-expanded="false" aria-controls="collapseImportEtudiant">
-              Ajouter des étudiants
+              Ajouter du Personnel
             </h5>
           </div>
           <div id="collapseImportEtudiant" class="collapse" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
@@ -42,7 +42,7 @@
                   </form>
                 </div>
                   <div class="col-sm-8">
-                    <form class="" method="POST" action="{{ url_for('main.create_etudiant') }}" >
+                    <form class="" method="POST" action="{{ url_for('main.create_personnel') }}" >
                       {{ form.csrf_token }}
                         <div class="modal-body">
                             <div class="form-group row">
@@ -73,17 +73,17 @@
                               </div>
 
                               <div class="col-sm-6">
-                                <label for="filiere">Filiere</label>
-                                {{ form.filiere(class_='form-control form-control-user',placeholder="Filiere",value="")}}
+                                <label for="filiere">Personnel</label>
+                                {{ form.filiere(class_='form-control form-control-user',placeholder="Personnel",value="")}}
                               </div>
       
                               <div class="col-sm-6">
-                                <label for="niveau">Niveau</label>
-                                {{ form.niveau(class_='form-control form-control-user',placeholder="Niveau",value="")}}
+                                <label for="niveau">Corps</label>
+                                {{ form.niveau(class_='form-control form-control-user',placeholder="Corps",value="")}}
                               </div>
                               <div class="col-sm-6">
-                                <label for="groupe">Groupe</label>
-                                {{ form.groupe(class_='form-control form-control-user',placeholder="Groupe",value="")}}
+                                <label for="groupe">Fonction</label>
+                                {{ form.groupe(class_='form-control form-control-user',placeholder="Fonction",value="")}}
                               </div>
                               
                             </div>
@@ -91,7 +91,7 @@
                         <div class="modal-footer" style="padding: 0 !important;"> 
       
                             <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
-                            {{ form.submit(class_=" btn btn-primary text-xs ") }}
+                            {{ form.submit(class=" btn btn-primary text-xs") }}
       
                         </div>
                     </form>
@@ -106,12 +106,12 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Liste des étutdiants</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Liste du personnel</h6>
       </div>
       
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTableEtudiants" width="100%" cellspacing="0">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
                 <th>Maticule</th>
@@ -140,9 +140,8 @@
                 <th>Actions</th>
               </tr>
             </tfoot>
-            <tbody id="EtudiantsDatas">
-              
-          <!-- {% for etudiant in etudiants %}
+            <tbody>
+          {% for etudiant in etudiants %}
               <tr data-id="{{ etudiant.id}}">
                 <td>{{ etudiant.matricule }}</td>
                 <td>{{ etudiant.nom }}</td>
@@ -155,8 +154,7 @@
                 <td>{{ etudiant.card_id }}</td>
                 <td> <i class="modif fa fa-pen" onClick="ShowEtudiant({{etudiant.id}})"></i> | <i class="fa fa-trash" onClick="deleteEtudiant({{etudiant.id}})"></i></td>
               </tr>
-              {% endfor %} -->
-
+              {% endfor %}
             </tbody>
           </table>
         </div>
