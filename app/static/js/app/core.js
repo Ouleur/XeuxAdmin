@@ -344,7 +344,7 @@ $(document).ready(async function(){
         language : {
             "info": "page _PAGE_ sur _PAGES_",
         },
-        'ajax' : 'http://127.0.0.1:5000/etudiant/api'
+        'ajax' : '/etudiant/api'
     })
 
      $("#dataTablePresence").dataTable({
@@ -367,7 +367,7 @@ $("#formPresence").on('submit',async function(e){
 
     
 
-    let response = await fetch('http://127.0.0.1:5000/presence',{
+    let response = await fetch('/presence',{
         method : 'POST',
         body : data
     })
