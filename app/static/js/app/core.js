@@ -335,3 +335,76 @@ function init(){
     })
   
 }
+
+
+
+$(document).ready(async function(){
+
+    $("#dataTableEtudiants").dataTable({
+        language : {
+            "info": "page _PAGE_ sur _PAGES_",
+        },
+        'ajax' : '/etudiant/api'
+    })
+
+     $("#dataTablePresence").dataTable({
+        destroy : true,
+        responsive: true,
+     });
+})
+
+ 
+
+$("#formPresence").on('submit',async function(e){
+    e.preventDefault()
+    
+    
+   
+
+    
+    data = new FormData(this)
+    console.log(data.get('date_debut').split('-'))
+
+    
+
+    let response = await fetch('/presence',{
+        method : 'POST',
+        body : data
+    })
+    json = await response.json()
+
+    if(response.ok){
+        
+        $("#dataTablePresence").DataTable().destroy()
+        document.querySelector('#dataTablePresence').innerHTML = ''
+
+        $("#dataTablePresence").dataTable({
+           destroy : true,
+           data : json.datas,
+           columns: json.columns,
+       })
+
+       children = document.querySelectorAll("#dataTablePresence td");
+
+       [...children].forEach(el=>{
+           if(el.textContent === 'PRESENT(E)'){
+               el.classList.add('pst')
+           } else if(el.textContent === 'ABSENT(E)') {
+            el.classList.add('abs')
+           }
+       })
+       
+    } else {
+        document.querySelector('#error_data').textContent = json.message
+        document.querySelector('.alert-warning').style.display = 'block'
+        
+        setTimeout(()=>{
+            document.querySelector('.alert-warning').style.display = 'none'
+        }, 3000)
+    }
+   
+   
+    
+})
+
+

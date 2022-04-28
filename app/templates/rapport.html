@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+
+  <div class="container-fluid">
+    <!-- DataTales Example -->
+    <div id="accordion" class="">  
+      <!-- <div class="row"> -->
+        <div class="card shadow mb-4 ">
+          <div class="card-header py-3" id="headingImportEtudiant">
+            
+            <h6 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseImportEtudiant" aria-expanded="false" aria-controls="collapseImportEtudiant">
+              Recherche
+            </h6>
+          </div>
+          <div id="collapseImportEtudiant" class="collapse" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
+            <div class="card-body">
+                <!-- <form method="POST" action="{{ url_for('main.create_etudiant') }}" enctype="multipart/form-data">
+                  <p><input type="file" name="file"></p>
+                  <p><input class="btn btn-primary" type="submit" value="Soumettre"></p>
+                </form> -->
+                <form class="" method="POST" action="{{ url_for('main.rapport') }}" >
+                  {{ form.csrf_token }}
+                    <div class="modal-body">
+                        <div class="form-group row" style="align-items: center; align-items: center;">
+                            <div class="col-sm-6">
+                            <label for="date">Date</label>
+                            {{ form.date_debut(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
+                          </div>
+                          <div class="col-sm-6">
+                            <br>
+                            {{ form.submit(class_=" btn btn-primary") }}
+                          </div>
+                        </div>
+                    </div>
+                    
+                </form>
+
+            </div>
+          </div>
+        </div>
+
+    </div>
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Liste des presences globale</h6>
+        </div>
+      
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Filière</th>
+                <th>Niveau</th>
+                <th>Groupe</th>
+                <th>Date</th>
+                <th>Effectif</th>
+                <th>Presents</th>
+                <th>Absent</th>
+                
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Filière</th>
+                <th>Niveau</th>
+                <th>Groupe</th>
+                <th>Date</th>
+                <th>Effectif</th>
+                <th>Presents</th>
+                <th>Absent</th>
+                
+              </tr>
+            </tfoot>
+            <tbody>
+          {% for presence in presences %}
+              <tr>
+               
+                <td>{{ presence[0] }}</td>
+                <td>{{ presence[1] }}</td>
+                <td>{{ presence[2] }}</td>
+                <td>{{ presence[3] }}</td>
+                <td>{{ presence[5] }}</td>
+                <td class="pst">{{ presence[4] }}</td>
+                <td class="abs">{{ presence[5] - presence[4]}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}

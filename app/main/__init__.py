@@ -3,7 +3,7 @@ from ..models.models import Permission
 
 main = Blueprint('main', __name__)
 
-from . import views, errors, dashboard
+from . import views, dashboard
 
 
 
