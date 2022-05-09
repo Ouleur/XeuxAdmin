@@ -198,7 +198,7 @@ def presence_unique():
             { 'title': "Groupe" }
       ]
       pres = []
-      presences['datas'] = []
+      presences['data'] = []
       da = request.form
       
       etudiant  = Etudiant.query.filter_by(matricule=da["matricule"]).first()
@@ -214,6 +214,9 @@ def presence_unique():
       if not data['date_debut']:
          return jsonify({'message' : "Veuillez choisir une date svp"}), 404
       date_debut = datetime.strptime(data['date_debut'], '%Y-%m-%d')
+      presences['columns'].append({'title' : f'{date_debut.day}-{month[int(date_debut.month) -1]}'})
+      
+
       # y,m,d = str(data['date_debut']).split('-')
       if data['date_fin']:
 
@@ -247,7 +250,6 @@ def presence_unique():
          
             pres.append(db.engine.execute(sql_two)) 
 
-      presences['columns'].append({'title' : f'{date_debut.day}-{month[int(date_debut.month) -1]}'})
 
       
       sql = """SELECT etd.nom,etd.prenoms,etd.antenne,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
@@ -282,7 +284,7 @@ def presence_unique():
       
       for presence in presences_one.all():
          
-         presences['datas'].append([
+         presences['data'].append([
                               presence[0],
                               presence[1],
                               presence[2],
@@ -292,13 +294,13 @@ def presence_unique():
                               '<td class="pst">PRESENT(E)</td>' if presence[6] else '<td class="abs">ABSENT(E)</td>',
                               ])
       i= 0
-      print( presences['datas'])
+      print( presences['data'])
       for item in pres:
          i=0
          print(item)
          for el in item:
             try:
-               presences['datas'][i].append("<td class='pst'>PRESENT(E)</td>" if el[6] else '<td class="abs">ABSENT(E)</td>')
+               presences['data'][i].append("<td class='pst'>PRESENT(E)</td>" if el[6] else '<td class="abs">ABSENT(E)</td>')
             except : 
                print("erreur")
 
