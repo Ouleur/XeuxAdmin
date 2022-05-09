@@ -344,22 +344,30 @@ $(document).ready(async function(){
         language : {
             "info": "page _PAGE_ sur _PAGES_",
         },
-        'ajax' : '/etudiant/api'
+        'ajax' : 'http://127.0.0.1:5000/etudiant/api',
+        dom: 'Bfrtip',
+        buttons: [
+             'excel'
+        ]
     })
 
      $("#dataTablePresence").dataTable({
         destroy : true,
         responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+             'excel'
+        ]
      });
+
+        
+    
 })
 
  
 
 $("#formPresence").on('submit',async function(e){
     e.preventDefault()
-    
-    
-   
 
     
     data = new FormData(this)
@@ -377,22 +385,18 @@ $("#formPresence").on('submit',async function(e){
         
         $("#dataTablePresence").DataTable().destroy()
         document.querySelector('#dataTablePresence').innerHTML = ''
+        
 
         $("#dataTablePresence").dataTable({
+            dom: 'Bfrtip',
+        buttons: [
+             'excel'
+        ],
            destroy : true,
-           data : json.datas,
+           data : json.data,
            columns: json.columns,
        })
-
-       children = document.querySelectorAll("#dataTablePresence td");
-
-       [...children].forEach(el=>{
-           if(el.textContent === 'PRESENT(E)'){
-               el.classList.add('pst')
-           } else if(el.textContent === 'ABSENT(E)') {
-            el.classList.add('abs')
-           }
-       })
+       
        
     } else {
         document.querySelector('#error_data').textContent = json.message
@@ -406,5 +410,82 @@ $("#formPresence").on('submit',async function(e){
    
     
 })
+
+$("#formPresence_unique").on('submit',async function(e){
+    e.preventDefault()
+
+    
+    data = new FormData(this)
+    console.log(data.get('date_debut').split('-'))
+
+    
+
+    let response = await fetch('/presence_unique',{
+        method : 'POST',
+        body : data
+    })
+    json = await response.json()
+
+    if(response.ok){
+        
+        $("#dataTablePresence").DataTable().destroy()
+        document.querySelector('#dataTablePresence').innerHTML = ''
+        
+
+        $("#dataTablePresence").dataTable({
+            dom: 'Bfrtip',
+        buttons: [
+             'excel'
+        ],
+           destroy : true,
+           data : json.data,
+           columns: json.columns,
+       })
+       
+       
+    } else {
+        document.querySelector('#error_data').textContent = json.message
+        document.querySelector('.alert-warning').style.display = 'block'
+        
+        setTimeout(()=>{
+            document.querySelector('.alert-warning').style.display = 'none'
+        }, 3000)
+    }
+   
+   
+    
+})
+
+
+$('#dataTablePresence')
+    //    .on('preInit.dt',  function(){
+    //     console.log(this)
+    //     children = document.querySelectorAll("table td");
+
+    //     [...children].forEach(el=>{
+    //         if(el.textContent === 'PRESENT(E)'){
+                
+    //             el.classList.add('pst')
+    //         } else if(el.textContent === 'ABSENT(E)') {
+                
+    //          el.classList.add('abs')
+    //         }
+    //     })
+       
+    // })
+    .on('draw.dt', function(){
+        children = document.querySelectorAll("table td");
+
+    [...children].forEach(el=>{
+        if(el.textContent === 'PRESENT(E)'){
+            
+            el.classList.add('pst')
+        } else if(el.textContent === 'ABSENT(E)') {
+            
+         el.classList.add('abs')
+        }
+    })
+    }).DataTable()
+
 
 

@@ -58,12 +58,14 @@ def presence():
             { 'title': "Niveau" },
             { 'title': "Groupe" }
       ]
+      
       pres = []
-      presences['datas'] = []
+      presences['data'] = []
       data = request.form
       if not data['date_debut']:
          return jsonify({'message' : "Veuillez choisir une date svp"}), 404
       date_debut = datetime.strptime(data['date_debut'], '%Y-%m-%d')
+      presences['columns'].append({'title' : f'{date_debut.day}-{month[int(date_debut.month) -1]}'})
       # y,m,d = str(data['date_debut']).split('-')
       if data['date_fin']:
 
@@ -86,7 +88,7 @@ def presence():
                      WHERE 
                      pr.filiere_id={fi} AND 
                      pr.niveau='{ni}' AND 
-                     pr.date_badge >='{d_b}' and pr.date_badge<='{d_b_fin}'   ) AS pr_etd 
+                     pr.date_badge >='{d_b}' and pr.date_badge<='{d_b_fin}') AS pr_etd 
                      ON pr_etd.etudiant_id=etd.id
                      WHERE 
                      etd.niveau='{ni}' 
@@ -97,7 +99,7 @@ def presence():
          
             pres.append(db.engine.execute(sql_two)) 
 
-      presences['columns'].append({'title' : f'{date_debut.day}-{month[int(date_debut.month) -1]}'})
+      
 
     
       
@@ -139,7 +141,146 @@ def presence():
    
       
   
-      for presence in presences_one:
+      for presence in presences_one.all():
+         
+         presences['data'].append([
+                              presence[0],
+                              presence[1],
+                              presence[2],
+                              presence[3],
+                              presence[4],
+                              presence[5],
+                              '<td class="pst">PRESENT(E)</td>' if presence[6] else '<td class="abs">ABSENT(E)</td>',
+                              ])
+      
+      for item in pres:
+         i=0
+         for el in item:
+            print(i)
+            try:
+               presences['data'][i].append("<td class='pst'>PRESENT(E)</td>" if el[6] else '<td class="abs">ABSENT(E)</td>')
+            except : 
+               print("erreur")
+            i = i+1
+
+      return json.dumps(presences)
+
+
+      
+
+   return render_template('presence.html',presences=[item for item in presences],form=form, fm=fm)
+
+
+
+### CRUD Off presence ###
+@main.route('/presence_unique', methods=['POST','GET'])
+def presence_unique():
+   filieres = Filiere.query.all()
+   annee_academics = AnneeAcademic.query.all()
+   month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Novembre", "Decembre"]
+   form = RechercheMatriculeForm()
+   
+
+
+   presences =[]
+   print(form.validate_on_submit())
+
+   fm = None
+   if request.method == 'POST':
+      
+      presences = {}
+      presences['columns'] = [
+            { 'title': "Nom" },
+            { 'title': "Prenoms" },
+            { 'title': "Antenne" },
+            { 'title': "Filière" },
+            { 'title': "Niveau" },
+            { 'title': "Groupe" }
+      ]
+      pres = []
+      presences['datas'] = []
+      da = request.form
+      
+      etudiant  = Etudiant.query.filter_by(matricule=da["matricule"]).first()
+      print(etudiant.to_json())
+      data = {}
+      data['date_fin'] = da["date_fin"]
+      data['niveau'] = etudiant.niveau
+      data['date_debut']= da["date_debut"]
+      data['matricule']= da["matricule"]
+      data['filiere']= etudiant.filiere_id
+      data['groupe']= etudiant.groupe
+      data['antenne']= etudiant.antenne
+      if not data['date_debut']:
+         return jsonify({'message' : "Veuillez choisir une date svp"}), 404
+      date_debut = datetime.strptime(data['date_debut'], '%Y-%m-%d')
+      # y,m,d = str(data['date_debut']).split('-')
+      if data['date_fin']:
+
+         date_fin = datetime.strptime(data['date_fin'], '%Y-%m-%d')
+         count =  date_fin - date_debut
+
+         if count.days < 0:
+            return jsonify({'message' : "La date de fin doit être supperieur à la date de debut"}), 404
+
+         if count.days > 10:
+            return jsonify({'message' : "Veuillez choisir un interval de moins de 10 jours"}), 404
+         for item in range(int(count.days)):
+            date_sql = date_debut + timedelta(days= int(item)+1)
+               
+            presences['columns'].append({'title' : f'{date_sql.day}-{month[int(date_sql.month) -1]}'})
+            sql_two = """SELECT etd.nom,etd.prenoms,etd.antenne,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
+                     (SELECT et.*,fi.denomination
+                     FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id AND et.groupe='{gp}' AND et.matricule='{mtl}') as etd
+                     LEFT JOIN (SELECT pr.* FROM presences AS pr
+                     WHERE 
+                     pr.filiere_id={fi} AND 
+                     pr.niveau='{ni}' AND 
+                     pr.date_badge >='{d_b}' and pr.date_badge<='{d_b_fin}'   ) AS pr_etd 
+                     ON pr_etd.etudiant_id=etd.id
+                     WHERE 
+                     etd.niveau='{ni}' 
+                     AND
+                     etd.antenne='{ant}'
+                     ORDER BY etd.nom
+                     """.format(ni="{}".format(data['niveau']),mtl="{}".format(data['matricule']),d_b=f'{date_sql}',d_b_fin=f'{datetime.strftime(date_sql, "%Y-%m-%d 23:59:00")}',fi=data['filiere'],gp=data['groupe'],ant=data['antenne'])
+         
+            pres.append(db.engine.execute(sql_two)) 
+
+      presences['columns'].append({'title' : f'{date_debut.day}-{month[int(date_debut.month) -1]}'})
+
+      
+      sql = """SELECT etd.nom,etd.prenoms,etd.antenne,etd.denomination,etd.niveau,etd.groupe,pr_etd.date_badge FROM 
+         (SELECT et.*,fi.denomination
+         FROM etudiants AS et,filieres AS fi WHERE fi.id={fi} AND fi.id=et.filiere_id AND et.groupe='{gp}' AND et.matricule='{mtl}') as etd
+         LEFT JOIN (SELECT pr.* FROM presences AS pr
+         WHERE 
+         pr.filiere_id={fi} AND 
+         pr.niveau='{ni}' AND 
+         pr.date_badge >='{d_b} 00:00:00' and pr.date_badge<='{d_b} 23:59:00'  ) AS pr_etd 
+         ON pr_etd.etudiant_id=etd.id
+         WHERE 
+         etd.niveau='{ni}' 
+         AND
+         etd.antenne='{ant}'
+         ORDER BY etd.nom
+       """.format(ni="{}".format(data['niveau']),mtl="{}".format(data['matricule']),d_b="{}".format(data['date_debut']),fi=data['filiere'],gp=data['groupe'],ant=data['antenne'])
+
+      
+      
+      presences_one = db.engine.execute(sql)
+
+      # presences.extend(presences_one)
+
+      # presences.append(presences2)
+      # presences.append(presences3)
+      # fi = Filiere.query.get(form.filiere.data)
+      # fm = form
+      # fm.filiere.data = fi.denomination
+      
+   
+      
+      for presence in presences_one.all():
          
          presences['datas'].append([
                               presence[0],
@@ -151,10 +292,16 @@ def presence():
                               '<td class="pst">PRESENT(E)</td>' if presence[6] else '<td class="abs">ABSENT(E)</td>',
                               ])
       i= 0
+      print( presences['datas'])
       for item in pres:
          i=0
+         print(item)
          for el in item:
-            presences['datas'][i].append("<td class='pst'>PRESENT(E)</td>" if el[6] else '<td class="abs">ABSENT(E)</td>')
+            try:
+               presences['datas'][i].append("<td class='pst'>PRESENT(E)</td>" if el[6] else '<td class="abs">ABSENT(E)</td>')
+            except : 
+               print("erreur")
+
             i = i+1
 
       return jsonify(presences)
@@ -162,7 +309,7 @@ def presence():
 
       
 
-   return render_template('presence.html',presences=[item for item in presences],form=form, fm=fm)
+   return render_template('presence_unique.html',presences=[item for item in presences],form=form, fm=fm)
 
 
 
@@ -190,17 +337,22 @@ def delete_presence():
 def rapport():
    
    form = RechercheForm()
+   if current_user.is_antenne_administrator():
+      form.antenne.choices = [current_user.antenne]
+      print(form.antenne.choices)
+   else:
+      form.antenne.choices = ['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO']
    
    now = date.today()
-   sql = f"""SELECT   public.filieres.denomination, public.presences.niveau, public.etudiants.groupe, public.presences.date, count(public.presences.id), count(public.filieres.id)
-	FROM public.presences,public.filieres,public.etudiants
+   sql = f"""SELECT  public.filieres.denomination, public.presences.niveau,public.etudiants.groupe, public.presences.date, count(public.presences.id), nb_group.nombre, nb_group.antenne
+	FROM public.presences,public.filieres,public.etudiants,   (SELECT count(public.etudiants.id) as nombre, public.etudiants.groupe,public.etudiants.filiere_id, public.etudiants.niveau, public.etudiants.antenne  from public.etudiants, public.filieres where public.etudiants.filiere_id =public.filieres.id and public.etudiants.antenne  = 'ABIDJAN' group by public.etudiants.groupe , public.etudiants.filiere_id, public.etudiants.niveau, public.etudiants.antenne) as nb_group
 	
-	where public.presences.date ='{now.strftime("%Y-%m-%d")}' and public.filieres.id= public.presences.filiere_id and public.etudiants.id=public.presences.etudiant_id
+	where public.presences.date ='{now}' and public.filieres.id= public.presences.filiere_id and public.etudiants.id=public.presences.etudiant_id and public.etudiants.groupe = nb_group.groupe and public.etudiants.filiere_id = nb_group.filiere_id and public.etudiants.niveau = nb_group.niveau
 	
-	group by  public.filieres.denomination, public.presences.niveau, public.etudiants.groupe, public.presences.date
+	group by  public.filieres.denomination, public.presences.niveau, public.etudiants.groupe, public.presences.groupe, public.presences.date, public.filieres.id, nb_group.nombre, nb_group.antenne
 	
 	order by public.filieres.denomination, public.presences.niveau,  public.etudiants.groupe asc;
-   """
+      """
 
    presences = db.engine.execute(sql)
   
@@ -212,17 +364,20 @@ def rapport():
    else:
       form.antenne.choices = ['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO']
 
-   presences =[]
+ 
    print(form.validate_on_submit())
 
    if request.method== 'POST':
+      if not form.date_debut.data:
+         flash('Veuillez chosir une date svp')
+         return redirect(url_for('main.rapport'))
    
-      sql = f"""SELECT  public.filieres.denomination, public.presences.niveau,public.etudiants.groupe, public.presences.date, count(public.presences.id), nb_group.nombre
-	FROM public.presences,public.filieres,public.etudiants,   (SELECT count(public.etudiants.id) as nombre, public.etudiants.groupe,public.etudiants.filiere_id, public.etudiants.niveau  from public.etudiants, public.filieres where public.etudiants.filiere_id =public.filieres.id group by public.etudiants.groupe , public.etudiants.filiere_id, public.etudiants.niveau) as nb_group
+      sql = f"""SELECT  public.filieres.denomination, public.presences.niveau,public.etudiants.groupe, public.presences.date, count(public.presences.id), nb_group.nombre, nb_group.antenne
+	FROM public.presences,public.filieres,public.etudiants,   (SELECT count(public.etudiants.id) as nombre, public.etudiants.groupe,public.etudiants.filiere_id, public.etudiants.niveau, public.etudiants.antenne  from public.etudiants, public.filieres where public.etudiants.filiere_id =public.filieres.id and public.etudiants.antenne  = '{form.antenne.data}' group by public.etudiants.groupe , public.etudiants.filiere_id, public.etudiants.niveau, public.etudiants.antenne) as nb_group
 	
 	where public.presences.date ='{form.date_debut.data}' and public.filieres.id= public.presences.filiere_id and public.etudiants.id=public.presences.etudiant_id and public.etudiants.groupe = nb_group.groupe and public.etudiants.filiere_id = nb_group.filiere_id and public.etudiants.niveau = nb_group.niveau
 	
-	group by  public.filieres.denomination, public.presences.niveau, public.etudiants.groupe, public.presences.groupe, public.presences.date, public.filieres.id, nb_group.nombre
+	group by  public.filieres.denomination, public.presences.niveau, public.etudiants.groupe, public.presences.groupe, public.presences.date, public.filieres.id, nb_group.nombre, nb_group.antenne
 	
 	order by public.filieres.denomination, public.presences.niveau,  public.etudiants.groupe asc;
       
