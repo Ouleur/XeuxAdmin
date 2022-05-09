@@ -4,6 +4,12 @@
 {% block container %}
 
   <div class="container-fluid">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
     <!-- DataTales Example -->
     <div id="accordion" class="">  
       <!-- <div class="row"> -->
@@ -23,12 +29,16 @@
                 <form class="" method="POST" action="{{ url_for('main.rapport') }}" >
                   {{ form.csrf_token }}
                     <div class="modal-body">
-                        <div class="form-group row" style="align-items: center; align-items: center;">
-                            <div class="col-sm-6">
+                        <div class="form-group row" style="justify-content: center; align-items: center;">
+                            <div class="col-sm-3">
                             <label for="date">Date</label>
                             {{ form.date_debut(class_='form-control form-control-user',placeholder="Date",type="date",value="")}}
                           </div>
-                          <div class="col-sm-6">
+                          <div class="col-sm-2">
+                            <label for="antenne">Antenne</label>
+                            {{ form.antenne(class_='form-control form-control-user',placeholder="Antenne",value="" ,options=['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO'])}}
+                          </div>
+                          <div class="col-sm-3">
                             <br>
                             {{ form.submit(class_=" btn btn-primary") }}
                           </div>
@@ -56,10 +66,10 @@
                 <th>Niveau</th>
                 <th>Groupe</th>
                 <th>Date</th>
+                <th>Antenne</th>
                 <th>Effectif</th>
                 <th>Presents</th>
                 <th>Absent</th>
-                
               </tr>
             </thead>
             <tfoot>
@@ -68,10 +78,10 @@
                 <th>Niveau</th>
                 <th>Groupe</th>
                 <th>Date</th>
+                <th>Antenne</th>
                 <th>Effectif</th>
                 <th>Presents</th>
                 <th>Absent</th>
-                
               </tr>
             </tfoot>
             <tbody>
@@ -82,6 +92,7 @@
                 <td>{{ presence[1] }}</td>
                 <td>{{ presence[2] }}</td>
                 <td>{{ presence[3] }}</td>
+                <td>{{ presence[6] }}</td>
                 <td>{{ presence[5] }}</td>
                 <td class="pst">{{ presence[4] }}</td>
                 <td class="abs">{{ presence[5] - presence[4]}}</td>
@@ -92,6 +103,7 @@
         </div>
       </div>
     </div>
-
+    
   </div>
 {% endblock %}
+

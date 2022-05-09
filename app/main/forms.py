@@ -64,3 +64,12 @@ class RechercheForm(FlaskForm):
     
     submit = SubmitField('Chercher')  
 
+
+
+class RechercheMatriculeForm(FlaskForm):
+    matricule = StringField('Matricule')
+    date_debut = DateField('Date de début')
+    date_fin = DateField('Date de fin')
+    
+    
+    submit = SubmitField('Chercher')  
