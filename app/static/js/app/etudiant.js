@@ -51,7 +51,7 @@ if(infos_et){
     
         data = new FormData(this)
     
-        const response = await fetch('http://127.0.0.1:5000/etudiant/infos',{
+        const response = await fetch('/etudiant/infos',{
             method : 'POST',
             body : data
         })
@@ -84,13 +84,13 @@ $(".tr_controle").on('click', function(e){
 
 $("#Editer_controle").on('click',  function(e){
     let matricule = this.dataset.matricule
-    window.location.href = `http://127.0.0.1:5000/controle/${matricule}`    
+    window.location.href = `/controle/${matricule}`    
 })
 
 $("#present_controle").on('click', async function(e){
   let matricule = this.dataset.matricule
   let last = document.querySelector('.tr_controle.active').lastElementChild
-  let response = await fetch(`http://127.0.0.1:5000/controle/etat/${matricule}`)
+  let response = await fetch(`/controle/etat/${matricule}`)
   let json =   await response.json
   
   if(response.ok){
@@ -106,7 +106,7 @@ $("#present_controle").on('click', async function(e){
 
 $("#add_controle").on('click',  function(e){
   
-  window.location.href = `http://127.0.0.1:5000/controle/etudiant/new`    
+  window.location.href = `/controle/etudiant/new`    
 })
 
 
