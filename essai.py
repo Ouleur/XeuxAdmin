@@ -1,10 +1,4 @@
-from datetime import datetime, timedelta
+import os
+parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 
-date1 = datetime.strptime('2022-03-21', '%Y-%m-%d')
-
-date2 = datetime.strptime('2022-03-23', '%Y-%m-%d')
-
-count = date2 + timedelta(days=1)
-
-print(count)
-
+print(parent_path)

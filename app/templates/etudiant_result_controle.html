@@ -1,0 +1,150 @@
+{% extends "base_etudiant.html" %}
+
+{% block container %}
+
+<div class="container-fluid mt-5">
+  {% for message in get_flashed_messages() %}
+  <div class="alert alert-danger">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      {{ message }}
+  </div>
+  {% endfor %}
+  <!-- DataTales Example -->
+  <div id="accordion" class="">  
+    <!-- <div class="row"> -->
+      <div class="card shadow mb-4 ">
+          <div class="card-header py-3" id="headingImportEtudiant" style="background-color: #4f0238 !important;">
+            
+            <h5 class="m-0 font-weight-bold text-white collapsed" data-toggle="collapse" data-target="#collapseImportEtudiant" aria-expanded="false" aria-controls="collapseImportEtudiant">
+             <span>{{etudiant.nom}} </span> <span>{{etudiant.prenoms}} </span>
+            </h5>
+          </div>
+          <div id="collapseImportEtudiant" class="collapse show" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-2">
+                  <div class="row">
+                    {% if etudiant.photo == None %}
+                    <img src="{{url_for('static', filename='img/rev1.jpg')}}" id="avatar" alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
+                    {% else %}
+                    <img src="{{url_for('static', filename='uploads/' + etudiant.photo)}}" class="mb-2" id="avatar" alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
+                    {%endif%}
+                  </div>
+                  <div class="row">
+                    {% if etudiant.qrcode == None %}
+                    
+                    <form action="{{url_for('controle.qrcode_generate', matricule=etudiant.matricule)}}" method="post">
+                      <button type="submit" class="btn btn-primary text-xs">Génerer un qrcode</button>
+                    </form>
+                    {% else %}
+                    <img src="{{url_for('static', filename='qrcodes/' + etudiant.qrcode)}}" class="mb-2" id="avatar" alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
+                    {%endif%}
+                  </div>
+                </div>
+                  <div class="col-sm-10">
+                      <h3 class="text-center">Informations de l'etudiant</h3>
+                      <form class="" method="POST" action="" enctype="multipart/form-data">
+                        <input type="file" name="image" style="display: none;" id="image">
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <input type="hidden" name="id" value="{{etudiant.id}}">
+                                  <div class="col-sm-6">
+                                    <label for="matricule">Matricule</label>
+                                    <input type="text" class="form-control form-control-user" name="matricule" value="{{etudiant.matricule}}">
+                                  </div>
+          
+                                  <div class="col-sm-6">
+                                    <label for="id_carte">ID Carte</label>
+                                    <input type="text" name="card_id" class="form-control form-control-user" value="{{etudiant.card_id}}">
+                                  </div>
+          
+                                  <div class="col-sm-6">
+                                    <label for="nom">Nom</label>
+                                    <input type="text" class="form-control form-control-user" name="nom" value="{{etudiant.nom}}">
+          
+                                  </div>
+                  
+                                  <div class="col-sm-6">
+                                    <label for="prenoms">Prénoms</label>
+                                    <input type="text" class="form-control form-control-user" name="prenoms" value="{{etudiant.prenoms}}">
+                                    
+                                  </div>
+    
+                                  <div class="col-sm-6">
+                                    <label for="antenne">Antenne</label>
+                                    <select name="antenne" class="form-control form-control-user">
+                                      {%for antenne in antennes %}
+                                        {% if antenne == etudiant.antenne %}
+                                        <option value="{{antenne}}" selected>{{antenne}}</option>
+                                        {%else%}
+                                        <option value="{{antenne}}">{{antenne}}</option>
+                                        {%endif%}
+                                        
+                                      {% endfor%}
+                                    </select>
+                                  </div>
+    
+                                  <div class="col-sm-6">
+                                    <label for="filiere">Filiere</label>
+                                    <select name="filiere" class="form-control form-control-user">
+                                      {%for filiere in filieres%}
+                                        {% if filiere[1] == etudiant.filiere %}
+                                        <option value="{{filiere[0]}}" selected>{{filiere[1]}}</option>
+                                        {%else%}
+                                        <option value="{{filiere[0]}}">{{filiere[1]}}</option>
+                                        {%endif%}
+                                        
+                                      {% endfor%}
+                                    </select>
+                                    
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <label for="filiere">Date de naissance</label>
+                                      <input type="hidden" name="date_naissance_edit" value="{{etudiant.date_naissance}}">
+                                      <input class="form-control form-control-user" type="date" name="date_edit">
+                                    </div>
+          
+                                  <div class="col-sm-4">
+                                    <label for="niveau">Niveau</label>
+                                    <select name="niveau" class="form-control form-control-user">
+                                      {%for niveau in niveau %}
+                                        {% if niveau == etudiant.niveau %}
+                                        <option value="{{niveau}}" selected>{{niveau}}</option>
+                                        {%else%}
+                                        <option value="{{niveau}}">{{niveau}}</option>
+                                        {%endif%}
+                                        
+                                      {% endfor%}
+                                    </select>
+                                  </div>
+                                  <div class="col-sm-4">
+                                    <label for="groupe">Groupe</label>
+                                    <select name="groupe" class="form-control form-control-user">
+                                      {%for groupe in groupes %}
+                                        {% if groupe == etudiant.groupe %}
+                                        <option value="{{groupe}}" selected>{{groupe}}</option>
+                                        {%else%}
+                                        <option value="{{groupe}}">{{groupe}}</option>
+                                        {%endif%}
+                                        
+                                      {% endfor%}
+                                    </select>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="padding: 5px !important;"> 
+          
+                                <button type="submit" class=" btn btn-primary text-xs" >Modifier</button>
+      
+                            </div>
+                        </form>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+  </div>
+</div>
+
+{%endblock%}

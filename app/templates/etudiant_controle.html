@@ -1,0 +1,172 @@
+{% extends "base_etudiant.html" %}
+
+{% block style%}
+    <style>
+        .main{
+          margin-top: 3rem;
+        }
+    </style>
+{% endblock%}
+
+{% block container %}
+  <div class="container-fluid main">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <!-- DataTales Example -->
+      
+      <!-- <div class="row"> -->
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card mb-4">
+              <div class="card-header" style="background-color: #4f0238 !important;">
+                <div class="row align-items-center">
+                  <img src="{{url_for('static', filename='img/logo.png')}}" alt=""  width="50">
+                  <h6 style="margin-left: 15px; color:white; font-weight: 700;">INFAS CONTROLE</h6>
+                </div>
+              </div>
+              <div id="collapseImportEtudiant" class="collapse show" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
+                <div class="card-body">
+                 
+                    <form  method="post"  action="{{url_for('controle.etudiant_controle')}}">
+                        <div class="modal-body">
+                            <div class="form-group row" style="justify-content: center; align-items: center;">
+                              <div class="col-sm-4">
+                                <label for="antenne">Antenne</label>
+                                <select name="antenne" class="form-control form-control-user">
+                                  {%for antenne in antennes %}
+                                    <option value="{{antenne}}">{{antenne}}</option>
+                                  {% endfor%}
+                                </select>
+                              </div>
+  
+                              <div class="col-sm-4">
+                                <label for="filiere">Filiere</label>
+                                <select name="filiere" class="form-control form-control-user">
+                                  {%for filiere in filieres%}
+                                    <option value="{{filiere[0]}}">{{filiere[1]}}</option>
+                                  {% endfor%}
+                                </select>
+                                
+                              </div>
+  
+                              <div class="col-sm-4">
+                                <label for="groupe">Niveau</label>
+                                <select name="niveau" class="form-control form-control-user">
+                                  {%for niveau in niveau %}
+                                    <option value="{{niveau}}">{{niveau}}</option>
+                                  {% endfor%}
+                                </select>
+                              </div>
+                              
+                              <div class="col-sm-12 mt-2">
+                              
+                               <button  class="btn btn-primary text-xs">Envoyer</button>
+                                
+                              </div>
+                            </div>
+                        </div>
+                        
+                    </form>
+    
+                    <div class="row  justify-content-center">
+                      <div id="error_etudiant" style="display: none;">
+                        <a href="{{url_for('etudiant.etudiant_new')}}"><button type="submit" class=" btn btn-lg btn-block btn-danger" >Aucun Etudiant pour ce matricule. Cliquez-ici pour enregistrer un nouvel etudiant</button></a>
+                      </div>
+                    </div>
+    
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal  -->
+
+        <div class="modal fade" id="controleModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Action</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+               
+                <div class="row justify-content-center">
+                  <button  class="btn btn-success text-xs" id="present_controle">Present</button>
+                  <button  class="btn btn-secondary text-xs" id="add_controle">Ajouter</button>
+                  <button  class="btn btn-primary text-xs" id="Editer_controle">Editer</button>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+          
+        
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Liste des etudiants 
+             
+            </div>
+           
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTableControle" width="100%" cellspacing="0">
+               <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Prénoms</th>
+                    <th>Antenne</th>
+                    <th>Filière</th>
+                    <th>Niveau</th>
+                    <th>Groupe</th>
+                    <th>Matricule</th>
+                    <th>Etat</th>
+                  </tr>
+               </thead>
+               <tbody>
+                {% for etudiant in etudiants%}
+                <tr class="tr_controle" data-matricule="{{etudiant.matricule}}">
+                  <td>{{ etudiant.nom}}</td>
+                  <td>{{ etudiant.prenoms}}</td>
+                  <td>{{ etudiant.antenne}}</td>
+                  <td>{{ etudiant.filiere}}</td>
+                  <td>{{ etudiant.niveau}}</td>
+                  <td>{{ etudiant.groupe}}</td>
+                  <td>{{ etudiant.matricule}}</td>
+                  {% if etudiant.etat == true %}
+                  <td class="pst">PRESENT(E)</td>
+                  {%else%}
+                  <td class="abs">ABSENT(E)</td>
+                  {%endif%}
+                </tr>
+                {% endfor%}
+               </tbody>
+               <tfoot>
+                  <tr>
+                 
+                  <th>Nom</th>
+                  <th>Prénoms</th>
+                  <th>Antenne</th>
+                  <th>Filière</th>
+                  <th>Niveau</th>
+                  <th>Groupe</th>
+                  <th>Matricule</th>
+                  <th>Etat</th>
+                  </tr>
+               </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+   
+  </div>
+{% endblock %}
+
