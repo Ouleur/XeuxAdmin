@@ -72,4 +72,4 @@ class RechercheMatriculeForm(FlaskForm):
     date_fin = DateField('Date de fin')
     
     
-    submit = SubmitField('Chercher')  
+    submit = SubmitField('Chercher') 

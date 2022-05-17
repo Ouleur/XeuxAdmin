@@ -4,7 +4,9 @@ from  werkzeug.utils import secure_filename
 import random
 import string
 from datetime import timedelta
-
+import pyqrcode 
+import png 
+from pyqrcode import QRCode 
 #Vianney
 
 
@@ -83,3 +85,10 @@ def time_Average(tickets):
 def wait_time_Average(tickets,tickets_new):
     print(time_Average(tickets),tickets_new.count())
     return time_Average(tickets)*tickets_new.count()
+
+def generate_qr(datas):
+    qr_path = os.path.abspath(os.path.dirname(__file__)+ '/static/qrcodes')
+    url = pyqrcode.create(datas)
+    url.png('{}/{}.png'.format(qr_path,datas), scale = 6)
+    qr_code = f"{datas}.png"
+    return qr_code

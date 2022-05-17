@@ -1,4 +1,5 @@
 
+from genericpath import exists
 from flask import render_template,session, redirect, url_for,flash,make_response,request, g, jsonify
 from sqlalchemy import false
 from . import main
@@ -88,7 +89,7 @@ def presence():
                      WHERE 
                      pr.filiere_id={fi} AND 
                      pr.niveau='{ni}' AND 
-                     pr.date_badge >='{d_b}' and pr.date_badge<='{d_b_fin}') AS pr_etd 
+                     pr.date_badge >='{d_b}' and pr.date_badge<='{d_b_fin}'   ) AS pr_etd 
                      ON pr_etd.etudiant_id=etd.id
                      WHERE 
                      etd.niveau='{ni}' 
@@ -141,7 +142,7 @@ def presence():
    
       
   
-      for presence in presences_one.all():
+      for presence in presences_one:
          
          presences['data'].append([
                               presence[0],
@@ -152,15 +153,11 @@ def presence():
                               presence[5],
                               '<td class="pst">PRESENT(E)</td>' if presence[6] else '<td class="abs">ABSENT(E)</td>',
                               ])
-      
+      i= 0
       for item in pres:
          i=0
          for el in item:
-            print(i)
-            try:
-               presences['data'][i].append("<td class='pst'>PRESENT(E)</td>" if el[6] else '<td class="abs">ABSENT(E)</td>')
-            except : 
-               print("erreur")
+            presences['data'][i].append("<td class='pst'>PRESENT(E)</td>" if el[6] else '<td class="abs">ABSENT(E)</td>')
             i = i+1
 
       return json.dumps(presences)
@@ -316,8 +313,6 @@ def presence_unique():
 
 
 
-
-
 @main.route('/create_presence', methods=['POST','GET'])
 def create_presence():
    return render_template('admin_index.html',data=data,val=json.dumps(val))
@@ -410,6 +405,7 @@ def etudiant():
    # etudiants = [item for item in etudiants]
    # print(etudiants)
    return render_template('etudiant.html',etudiants=etudiants,form=form)
+
 
 
 @main.route('/etudiant/api')

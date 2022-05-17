@@ -1,0 +1,258 @@
+{% extends "base_s.html" %}
+
+
+{% block container %}
+
+  <div class="container-fluid">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <div id="accordion" class="">  
+      <!-- <div class="row"> -->
+        <div class="card shadow mb-4 ">
+          <div class="card-header py-3" id="headingImportEtudiant">
+            
+            <h5 class="m-0 font-weight-bold text-primary collapsed" data-toggle="collapse" data-target="#collapseImportEtudiant" aria-expanded="false" aria-controls="collapseImportEtudiant">
+              Ajouter des étudiants
+            </h5>
+          </div>
+          <div id="collapseImportEtudiant" class="collapse" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-4">
+                  <h3>Chargez le fichier d'ajout</h3>
+                  <form method="POST" action="{{ url_for('main.create_etudiant') }}" enctype="multipart/form-data">
+                    <p><input type="file" name="file"></p>
+                    <p><input class="btn btn-primary" type="submit" value="Soumettre">
+                    
+                      <a href="{{ url_for('static', filename='doc/students.csv') }}" download>Téléchargez le fichier exemple</a>
+                    </p>
+                  </form>
+
+                  <h3>Chargez le fichier de mise à jour</h3>
+                  <form method="POST" action="{{ url_for('main.update_etudiant') }}" enctype="multipart/form-data">
+                    <p><input type="file" name="file"></p>
+                    <p><input class="btn btn-primary" type="submit" value="Soumettre"> 
+                    
+                      <a href="{{ url_for('static', filename='doc/student_update.csv') }}" download>Téléchargez le fichier exemple</a>
+                    </p>
+                  </form>
+                </div>
+                  <div class="col-sm-8">
+                    <form class="" method="POST" action="{{ url_for('main.create_etudiant') }}" >
+                      {{ form.csrf_token }}
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                {{ form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
+                              <div class="col-sm-6">
+                                <label for="matricule">Matricule</label>
+                                {{ form.matricule(class_='form-control form-control-user',placeholder="Matricule",type="text",value="")}}
+                              </div>
+      
+                              <div class="col-sm-6">
+                                <label for="id_carte">ID Carte</label>
+                                {{ form.id_carte(class_='form-control form-control-user',placeholder="ID Carte",type="text",value="")}}
+                              </div>
+      
+                              <div class="col-sm-6">
+                                <label for="nom">Nom</label>
+                                {{ form.nom(class_='form-control form-control-user',placeholder="Nom",type="text",value="")}}
+                              </div>
+              
+                              <div class="col-sm-6">
+                                <label for="prenoms">Prénoms</label>
+                                {{ form.prenoms(class_='form-control form-control-user',placeholder="Prénoms",type="text",value="")}}
+                              </div>
+
+                              <div class="col-sm-6">
+                                <label for="antenne">Antenne</label>
+                                {{ form.antenne(class_='form-control form-control-user',placeholder="Antenne",value="")}}
+                              </div>
+
+                              <div class="col-sm-6">
+                                <label for="filiere">Filiere</label>
+                                {{ form.filiere(class_='form-control form-control-user',placeholder="Filiere",value="")}}
+                              </div>
+      
+                              <div class="col-sm-6">
+                                <label for="niveau">Niveau</label>
+                                {{ form.niveau(class_='form-control form-control-user',placeholder="Niveau",value="")}}
+                              </div>
+                              <div class="col-sm-6">
+                                <label for="groupe">Groupe</label>
+                                {{ form.groupe(class_='form-control form-control-user',placeholder="Groupe",value="")}}
+                              </div>
+                              
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="padding: 0 !important;"> 
+      
+                            <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
+                            {{ form.submit(class_=" btn btn-primary text-xs ") }}
+      
+                        </div>
+                    </form>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+    </div>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Liste des étutdiants</h6>
+      </div>
+      
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTableEtudiants" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Maticule</th>
+                <th>Nom</th>
+                <th>Prenoms</th>
+                <th>Date de naissance</th>
+                <th>Antenne</th>
+                <th>Filière</th>
+                <th>Niveau</th>
+                <th>Groupe</th>
+                <th>ID Carte</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Maticule</th>
+                <th>Nom</th>
+                <th>Prenoms</th>
+                <th>Date de naissance</th>
+                <th>Antenne</th>
+                <th>Filière</th>
+                <th>Niveau</th>
+                <th>Groupe</th>
+                <th>ID Carte</th>
+                <th>Actions</th>
+              </tr>
+            </tfoot>
+            <tbody id="EtudiantsDatas">
+              
+          <!-- {% for etudiant in etudiants %}
+              <tr data-id="{{ etudiant.id}}">
+                <td>{{ etudiant.matricule }}</td>
+                <td>{{ etudiant.nom }}</td>
+                <td>{{ etudiant.prenoms }}</td>
+                <td>{{ etudiant.date_naissance }}</td>
+                <td>{{ etudiant.antenne }}</td>
+                <td>{{ etudiant.filiere }}</td>
+                <td>{{ etudiant.niveau }}</td>
+                <td>{{ etudiant.groupe }}</td>
+                <td>{{ etudiant.card_id }}</td>
+                <td> <i class="modif fa fa-pen" onClick="ShowEtudiant({{etudiant.id}})"></i> | <i class="fa fa-trash" onClick="deleteEtudiant({{etudiant.id}})"></i></td>
+              </tr>
+              {% endfor %} -->
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+  <div class="modal fade" id="detailOffre" tabindex="-1" role="dialog" aria-labelledby="detailOffreLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailOffreLabel">Detail de l'Offre</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="card shadow mb-4">
+         
+          <!-- Card Body -->
+          <div class="card-body">
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Titre :</b> <span class="col-8 titre"> jours</span>
+              </div>
+            </div>
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Temps :</b> <span class="col-8 temps"> jours</span>
+              </div>
+            </div>
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Prix :</b> <span class="col-8 prix"> Fcfa</span>
+              </div>
+            </div>
+            <div class=" mb-2">
+              <div class="row">
+                <b class="col-4">Description :</b> <span class="col-8 description"></span>
+              </div>
+            </div>
+          
+            <button  data-dismiss="modal" class="btn btn-primary btn-icon-split achat">
+              <span class="icon text-white-50">
+                <i class="fas fa-flag"></i>
+              </span>
+              <span class="text">Acheter cette offre</span>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+<!-- Logout Modal-->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pret à annuler votre achat ?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Cliquez sur 'Valider' pour annuler votre achat.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+        <button class="btn btn-primary cancel_valide" data-dismiss="modal">Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% if current_user.is_super_administrator() %}
+<!-- Logout Modal-->
+<div class="modal fade" id="validModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pret à valider ce payement ?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Cliquez sur 'Valider' pour accepter ce payement.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+        <button class="btn btn-primary valid_valide" data-dismiss="modal">Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+{% endblock %}

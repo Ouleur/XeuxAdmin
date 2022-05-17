@@ -1,6 +1,9 @@
 if ( window.history.replaceState ) {
     window.history.replaceState( null, null, window.location.href );
   }
+
+
+  
   
 $(".agence").on("change",function(){
     fetch("/xeux/change_service/"+$(this).val()).then(function(response){
@@ -344,19 +347,14 @@ $(document).ready(async function(){
         language : {
             "info": "page _PAGE_ sur _PAGES_",
         },
-        'ajax' : 'http://127.0.0.1:5000/etudiant/api',
-        dom: 'Bfrtip',
-        buttons: [
-             'excel'
-        ]
+        'ajax' : 'http://127.0.0.1:5000/etudiant/api'
     })
 
      $("#dataTablePresence").dataTable({
         destroy : true,
         responsive: true,
-        dom: 'Bfrtip',
         buttons: [
-             'excel'
+            'excel', 'csv'
         ]
      });
 
@@ -375,7 +373,7 @@ $("#formPresence").on('submit',async function(e){
 
     
 
-    let response = await fetch('/presence',{
+    let response = await fetch('http://127.0.0.1:5000/presence',{
         method : 'POST',
         body : data
     })
@@ -388,55 +386,6 @@ $("#formPresence").on('submit',async function(e){
         
 
         $("#dataTablePresence").dataTable({
-            dom: 'Bfrtip',
-        buttons: [
-             'excel'
-        ],
-           destroy : true,
-           data : json.data,
-           columns: json.columns,
-       })
-       
-       
-    } else {
-        document.querySelector('#error_data').textContent = json.message
-        document.querySelector('.alert-warning').style.display = 'block'
-        
-        setTimeout(()=>{
-            document.querySelector('.alert-warning').style.display = 'none'
-        }, 3000)
-    }
-   
-   
-    
-})
-
-$("#formPresence_unique").on('submit',async function(e){
-    e.preventDefault()
-
-    
-    data = new FormData(this)
-    console.log(data.get('date_debut').split('-'))
-
-    
-
-    let response = await fetch('/presence_unique',{
-        method : 'POST',
-        body : data
-    })
-    json = await response.json()
-
-    if(response.ok){
-        
-        $("#dataTablePresence").DataTable().destroy()
-        document.querySelector('#dataTablePresence').innerHTML = ''
-        
-
-        $("#dataTablePresence").dataTable({
-            dom: 'Bfrtip',
-        buttons: [
-             'excel'
-        ],
            destroy : true,
            data : json.data,
            columns: json.columns,
@@ -458,21 +407,7 @@ $("#formPresence_unique").on('submit',async function(e){
 
 
 $('#dataTablePresence')
-    //    .on('preInit.dt',  function(){
-    //     console.log(this)
-    //     children = document.querySelectorAll("table td");
-
-    //     [...children].forEach(el=>{
-    //         if(el.textContent === 'PRESENT(E)'){
-                
-    //             el.classList.add('pst')
-    //         } else if(el.textContent === 'ABSENT(E)') {
-                
-    //          el.classList.add('abs')
-    //         }
-    //     })
-       
-    // })
+    
     .on('draw.dt', function(){
         children = document.querySelectorAll("table td");
 
@@ -486,6 +421,9 @@ $('#dataTablePresence')
         }
     })
     }).DataTable()
+
+
+
 
 
 
