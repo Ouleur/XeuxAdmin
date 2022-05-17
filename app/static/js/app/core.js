@@ -1,6 +1,9 @@
 if ( window.history.replaceState ) {
     window.history.replaceState( null, null, window.location.href );
   }
+
+
+  
   
 $(".agence").on("change",function(){
     fetch("/xeux/change_service/"+$(this).val()).then(function(response){
@@ -344,22 +347,25 @@ $(document).ready(async function(){
         language : {
             "info": "page _PAGE_ sur _PAGES_",
         },
-        'ajax' : '/etudiant/api'
+        'ajax' : 'http://127.0.0.1:5000/etudiant/api'
     })
 
      $("#dataTablePresence").dataTable({
         destroy : true,
         responsive: true,
+        buttons: [
+            'excel', 'csv'
+        ]
      });
+
+        
+    
 })
 
  
 
 $("#formPresence").on('submit',async function(e){
     e.preventDefault()
-    
-    
-   
 
     
     data = new FormData(this)
@@ -367,7 +373,7 @@ $("#formPresence").on('submit',async function(e){
 
     
 
-    let response = await fetch('/presence',{
+    let response = await fetch('http://127.0.0.1:5000/presence',{
         method : 'POST',
         body : data
     })
@@ -377,22 +383,14 @@ $("#formPresence").on('submit',async function(e){
         
         $("#dataTablePresence").DataTable().destroy()
         document.querySelector('#dataTablePresence').innerHTML = ''
+        
 
         $("#dataTablePresence").dataTable({
            destroy : true,
-           data : json.datas,
+           data : json.data,
            columns: json.columns,
        })
-
-       children = document.querySelectorAll("#dataTablePresence td");
-
-       [...children].forEach(el=>{
-           if(el.textContent === 'PRESENT(E)'){
-               el.classList.add('pst')
-           } else if(el.textContent === 'ABSENT(E)') {
-            el.classList.add('abs')
-           }
-       })
+       
        
     } else {
         document.querySelector('#error_data').textContent = json.message
@@ -406,5 +404,26 @@ $("#formPresence").on('submit',async function(e){
    
     
 })
+
+
+$('#dataTablePresence')
+    
+    .on('draw.dt', function(){
+        children = document.querySelectorAll("table td");
+
+    [...children].forEach(el=>{
+        if(el.textContent === 'PRESENT(E)'){
+            
+            el.classList.add('pst')
+        } else if(el.textContent === 'ABSENT(E)') {
+            
+         el.classList.add('abs')
+        }
+    })
+    }).DataTable()
+
+
+
+
 
 
