@@ -3,8 +3,9 @@ $(document).ready(function(e){
     destroy : true,
     responsive: true,
     dom: 'Bfrtip',
+    fixedHeader: true,
     buttons: [
-         'excel'
+        'excel'
     ],
     paging: false
  });
@@ -95,6 +96,8 @@ $("#present_controle").on('click', async function(e){
   
   if(response.ok){
   if(last.textContent == 'ABSENT(E)'){
+    $("#nombre_present").html(eval($("#nombre_present").html())+1)
+
     last.textContent = 'PRESENT(E)'
     last.classList.remove('abs')
     last.classList.add('pst')
@@ -119,12 +122,20 @@ $('#dataTableControle')
 
     [...children].forEach(el=>{
         if(el.textContent === 'PRESENT(E)'){
-            
             el.classList.add('pst')
         } else if(el.textContent === 'ABSENT(E)') {
             
          el.classList.add('abs')
         }
     })
-    }).DataTable()
+    }).DataTable({
+      destroy : true,
+      responsive: true,
+      dom: 'Bfrtip',
+      fixedHeader: true,
+      buttons: [
+          'excel'
+      ],
+    paging: false
+  });
 
