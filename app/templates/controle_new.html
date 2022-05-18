@@ -1,0 +1,95 @@
+{% extends "base_etudiant.html" %}
+
+
+{% block container %}
+
+  <div class="container-fluid mt-5">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <!-- DataTales Example -->
+    <div id="accordion" class="">  
+      <!-- <div class="row"> -->
+        <div class="card shadow mb-4 ">
+            <div class="card-header text-white text-center py-3" id="headingImportEtudiant" style="background-color: #4f0238 !important;">
+              
+              <h5 class="m-0 font-weight-bold  collapsed" data-toggle="collapse" data-target="#collapseImportEtudiant" aria-expanded="false" aria-controls="collapseImportEtudiant">
+               Enregistrer vous
+              </h5>
+            </div>
+            <div id="collapseImportEtudiant" class="collapse show" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-2">
+                    <img src="{{url_for('static', filename='img/rev1.jpg')}}" id="avatar" alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
+                  </div>
+                    <div class="col-sm-10">
+                      <form class="" method="POST" action="{{url_for('controle.controle_new')}}"  enctype="multipart/form-data">
+                        {{ form.csrf_token }}
+                          <div class="modal-body">
+                            <input type="file" name="image" style="display: none;" id="image">
+                              <div class="form-group row">
+                                  {{ form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
+                                <div class="col-sm-6">
+                                  <label for="matricule">Matricule</label>
+                                  {{ form.matricule(class_='form-control form-control-user',placeholder="Matricule",type="text",value="")}}
+                                </div>
+        
+                                <div class="col-sm-6">
+                                  <label for="id_carte">ID Carte</label>
+                                  {{ form.id_carte(class_='form-control form-control-user',placeholder="ID Carte",type="text",value="")}}
+                                </div>
+        
+                                <div class="col-sm-6">
+                                  <label for="nom">Nom</label>
+                                  {{ form.nom(class_='form-control form-control-user',placeholder="Nom",type="text",value="")}}
+                                </div>
+                
+                                <div class="col-sm-6">
+                                  <label for="prenoms">Prénoms</label>
+                                  {{ form.prenoms(class_='form-control form-control-user',placeholder="Prénoms",type="text",value="")}}
+                                </div>
+  
+                                <div class="col-sm-6">
+                                  <label for="antenne">Antenne</label>
+                                  {{ form.antenne(class_='form-control form-control-user',placeholder="Antenne",value="")}}
+                                </div>
+  
+                                <div class="col-sm-6">
+                                  <label for="filiere">Filiere</label>
+                                  {{ form.filiere(class_='form-control form-control-user',placeholder="Filiere",value="")}}
+                                </div>
+                                <div class="col-sm-4">
+                                  <label for="groupe">Date de naissance</label>
+                                  {{ form.date_naissance(class_='form-control form-control-user', type="date", placeholder="Groupe",value="")}}
+                                </div>
+                                <div class="col-sm-4">
+                                  <label for="niveau">Niveau</label>
+                                  {{ form.niveau(class_='form-control form-control-user',placeholder="Niveau",value="")}}
+                                </div>
+                                <div class="col-sm-4">
+                                  <label for="groupe">Groupe</label>
+                                  {{ form.groupe(class_='form-control form-control-user',placeholder="Groupe",value="")}}
+                                </div>
+                              </div>
+                          </div>
+                          <div class="modal-footer"> 
+        
+                              <button type="button" class=" btn btn-secondary text-xs" >Annuler</button>
+                              {{ form.submit(class_=" btn btn-primary text-xs ") }}
+        
+                          </div>
+                      </form>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+    </div>
+  </div>
+{% endblock %}
+
