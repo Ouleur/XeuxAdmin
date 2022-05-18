@@ -84,7 +84,7 @@ def etudiant_resultat_controle(matricule):
       
       return redirect(url_for('controle.etudiant_controle', matricule=matricule))
    
-   return render_template('etudiant_result_controle.html', etudiant=etudiant.to_json(), info=info,filieres=form_filieres, niveau=niveau, groupes=groupes,antennes=antennes)
+   return render_template('etudiant_result_controle.html', etudiant=etudiant.to_json(),filieres=form_filieres, niveau=niveau, groupes=groupes,antennes=antennes)
 
 
 @controle.route('/controle/etat/<matricule>', methods=['POST','GET'])
