@@ -26,7 +26,17 @@
                 <div class="row align-items-center">
                   <img src="{{url_for('static', filename='img/logo.png')}}" alt=""  width="50">
                   <h6 style="margin-left: 15px; color:white; font-weight: 700;">INFAS CONTROLE</h6>
+                  
                 </div>
+
+                <div class="row align-items-rigth">
+                  <button  data-dismiss="modal" class="btn btn-secondary text-xs" id="add_controle">Ajouter</button>
+                  
+                </div>
+
+                
+
+
               </div>
               <div id="collapseImportEtudiant" class="collapse show" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
                 <div class="card-body">
@@ -98,7 +108,6 @@
               <div class="modal-body">
                 <div class="row justify-content-center">
                   <button  data-dismiss="modal" class="btn btn-success text-xs" id="present_controle">Present</button>
-                  <button  data-dismiss="modal" class="btn btn-secondary text-xs" id="add_controle">Ajouter</button>
                   <button  data-dismiss="modal" class="btn btn-primary text-xs" id="Editer_controle">Editer</button>
                 </div>
               </div>
@@ -109,7 +118,7 @@
         
         <div class="card shadow mb-4">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Liste des etudiants 
+            <h6 class="m-0 font-weight-bold text-primary">Liste des etudiants </h6>
              
             </div>
            
@@ -132,12 +141,12 @@
                 {% for etudiant in etudiants%}
                 <tr class="tr_controle" data-matricule="{{etudiant.matricule}}">
                   <td>{{ etudiant.nom}}</td>
-                  <td>{{ etudiant.prenoms}}</td>
-                  <td>{{ etudiant.antenne}}</td>
-                  <td>{{ etudiant.filiere}}</td>
-                  <td>{{ etudiant.niveau}}</td>
-                  <td>{{ etudiant.groupe}}</td>
-                  <td>{{ etudiant.matricule}} </td>
+                  <td>{{ etudiant.prenoms }}</td>
+                  <td>{{ etudiant.antenne }}</td>
+                  <td>{{ etudiant.filiere }}</td>
+                  <td>{{ etudiant.niveau }}</td>
+                  <td>{{ etudiant.groupe }}</td>
+                  <td>{{ etudiant.matricule }}</td>
                   {% if etudiant.etat %}
                   <td class="pst">PRESENT(E)</td>
                   {%else%}
