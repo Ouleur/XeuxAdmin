@@ -347,7 +347,7 @@ $(document).ready(async function(){
         language : {
             "info": "page _PAGE_ sur _PAGES_",
         },
-        'ajax' : 'http://127.0.0.1:5000/etudiant/api'
+        'ajax' : '/etudiant/api'
     })
 
      $("#dataTablePresence").dataTable({

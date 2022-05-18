@@ -29,15 +29,12 @@ def add_card_presence():
             
             for row in reader:
                 etudiant = Etudiant.query.filter((Etudiant.matricule=="{}".format(row['Matricule']) )| (Etudiant.card_id=="{}".format(row['ID_card']))).first()
-                print(row)
-                print(etudiant)
                 if etudiant:
                     presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"])
                     try:
                         db.session.add(presence)
                         db.session.commit()
                     except IntegrityError as error:
-                        print('')
                         db.session.rollback()
                         # pass
         # os.remove(current_app.config['UPLOADS_DIR']+fi)
@@ -92,14 +89,12 @@ def add_file_presence():
                 else:
                     etudiant = Etudiant.query.filter(Etudiant.card_id==row['ID_card']).first()
                     
-                print(etudiant)
                 if etudiant:
                     presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"],date=row["Date"].split(" ")[0])
                     try:
                         db.session.add(presence)
                         db.session.commit()
                     except IntegrityError as error:
-                        print('')
                         db.session.rollback()
                             # pass
             # os.remove(current_app.config['UPLOADS_DIR']+fi)
