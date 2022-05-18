@@ -202,6 +202,8 @@ class Etudiant(baseModel,db.Model):
     photo = db.Column(db.String(255))
     qrcode = db.Column(db.String(255))
     groupe = db.Column(db.String(255))
+    etat = db.Column(db.Boolean, default=False, index=True)
+
 
     filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
     
@@ -225,7 +227,8 @@ class Etudiant(baseModel,db.Model):
             "groupe":self.groupe,
             "date_naissance":self.date_naissance,
             "photo" : self.photo,
-            "qrcode" : self.qrcode
+            "qrcode" : self.qrcode,
+            "etat": self.etat
         } 
 
         return etudiant_json
