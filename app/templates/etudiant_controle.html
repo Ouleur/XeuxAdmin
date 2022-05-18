@@ -139,8 +139,8 @@
                   <td>{{ etudiant.filiere}}</td>
                   <td>{{ etudiant.niveau}}</td>
                   <td>{{ etudiant.groupe}}</td>
-                  <td>{{ etudiant.matricule}}</td>
-                  {% if etudiant.etat == true %}
+                  <td>{{ etudiant.matricule}} </td>
+                  {% if etudiant.etat %}
                   <td class="pst">PRESENT(E)</td>
                   {%else%}
                   <td class="abs">ABSENT(E)</td>

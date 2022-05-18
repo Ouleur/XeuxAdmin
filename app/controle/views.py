@@ -41,6 +41,7 @@ def etudiant_controle():
       #       ]
       #    )
       # return jsonify(datas)
+      
    return render_template('etudiant_controle.html',filieres=form_filieres, antennes=antennes,niveau=niveau, etudiants=[item.to_json() for item in etudiants])
 
 @controle.route('/controle/<matricule>', methods=['POST','GET'])
@@ -85,7 +86,7 @@ def setEtat(matricule):
    etudiant = Etudiant.query.filter_by(matricule=matricule).first()
    
    if etudiant:
-      etudiant.etat = 1
+      etudiant.etat = True
       db.session.add(etudiant)
       db.session.commit()
       
