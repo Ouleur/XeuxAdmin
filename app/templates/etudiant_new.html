@@ -27,7 +27,7 @@
                     <img src="{{url_for('static', filename='img/rev1.jpg')}}" id="avatar" alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
                   </div>
                     <div class="col-sm-10">
-                      <form class="" method="POST" action="{{url_for('etudiant.etudiant_new')}}"  enctype="multipart/form-data">
+                      <form class="" method="POST" action="{{url_for('etudiant.etudiant_new')}}"  enctype="multipart/form-data" >
                         {{ form.csrf_token }}
                           <div class="modal-body">
                             <input type="file" name="image" style="display: none;" id="image">

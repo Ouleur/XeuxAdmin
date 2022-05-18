@@ -347,7 +347,10 @@ $(document).ready(async function(){
         language : {
             "info": "page _PAGE_ sur _PAGES_",
         },
-        'ajax' : '/etudiant/api'
+        'ajax' : '/etudiant/api',
+        buttons: [
+            'excel', 'csv'
+        ]
     })
 
      $("#dataTablePresence").dataTable({
@@ -388,6 +391,9 @@ $("#formPresence").on('submit',async function(e){
         $("#dataTablePresence").dataTable({
            destroy : true,
            data : json.data,
+           buttons: [
+            'excel', 'csv'
+            ],
            columns: json.columns,
        })
        

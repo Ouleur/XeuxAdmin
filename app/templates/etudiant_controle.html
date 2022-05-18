@@ -24,19 +24,20 @@
             <div class="card mb-4">
               <div class="card-header" style="background-color: #4f0238 !important;">
                 <div class="row align-items-center">
-                  <img src="{{url_for('static', filename='img/logo.png')}}" alt=""  width="50">
-                  <h6 style="margin-left: 15px; color:white; font-weight: 700;">INFAS CONTROLE</h6>
+                  <div class="col-4 align-items-center" style="display: inherit;">
+                    <img src="{{url_for('static', filename='img/logo.png')}}" alt=""  width="50">
+                    <h6 style="margin-left: 15px; color:white; font-weight: 700;">INFAS CONTROLE</h6>
+                  </div>
+                  <div class="col-6">
+                  </div>
+                  <div class="col-2" style="color:#fff;font-size: 1.5em;">
+                    <button  data-dismiss="modal" class="btn text-xs" style="color: #4f0238;
+                    background-color: #fff;
+                    border-color: #fff; " id="add_controle"><b><h3>Ajouter</h3></b></button>
+                    (<span id="nombre_present">{{ presents|length }} </span>/ {{ etudiants|length }})
+                  </div>
                   
                 </div>
-
-                <div class="row align-items-rigth">
-                  <button  data-dismiss="modal" class="btn btn-secondary text-xs" id="add_controle">Ajouter</button>
-                  
-                </div>
-
-                
-
-
               </div>
               <div id="collapseImportEtudiant" class="collapse show" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
                 <div class="card-body">
@@ -44,7 +45,9 @@
                     <form  method="post"  action="{{url_for('controle.etudiant_controle')}}">
                         <div class="modal-body">
                             <div class="form-group row" style="justify-content: center; align-items: center;">
-                              <div class="col-sm-4">
+                              <div class="col-sm-1 mt-2">
+                                </div>
+                              <div class="col-sm-3">
                                 <label for="antenne">Antenne</label>
                                 <select name="antenne" class="form-control form-control-user">
                                   {%for antenne in antennes %}
@@ -53,7 +56,7 @@
                                 </select>
                               </div>
   
-                              <div class="col-sm-4">
+                              <div class="col-sm-3">
                                 <label for="filiere">Filiere</label>
                                 <select name="filiere" class="form-control form-control-user">
                                   {%for filiere in filieres%}
@@ -63,7 +66,7 @@
                                 
                               </div>
   
-                              <div class="col-sm-4">
+                              <div class="col-sm-3">
                                 <label for="groupe">Niveau</label>
                                 <select name="niveau" class="form-control form-control-user">
                                   {%for niveau in niveau %}
@@ -72,9 +75,9 @@
                                 </select>
                               </div>
                               
-                              <div class="col-sm-12 mt-2">
+                              <div class="col-sm-2 mt-2">
                               
-                               <button  class="btn btn-primary text-xs">Envoyer</button>
+                               <button  class="btn btn-primary " style="font-size: 1.5em;">Envoyer</button>
                                 
                               </div>
                             </div>
@@ -116,14 +119,19 @@
         </div>
           
         
-        <div class="card shadow mb-4">
+        <div class="card shadow mb-4" >
           <div class="card-header py-3">
+            {%if info %}
+            <h6 class="m-0 font-weight-bold text-primary">Liste des etudiants [ {{ info[0] }} | {{ info[1] }} | {{ info[2] }} ]</h6>
+            {%else%}
             <h6 class="m-0 font-weight-bold text-primary">Liste des etudiants </h6>
+
+            {%endif%}
              
             </div>
            
-          <div class="card-body">
-            <div class="table-responsive">
+          <div class="card-body" style="overflow-y: auto; height: 700px;">
+            <div class="table-responsive" >
               <table class="table table-bordered" id="dataTableControle" width="100%" cellspacing="0">
                <thead>
                   <tr>
@@ -137,7 +145,7 @@
                     <th>Etat</th>
                   </tr>
                </thead>
-               <tbody>
+               <tbody >
                 {% for etudiant in etudiants%}
                 <tr class="tr_controle" data-matricule="{{etudiant.matricule}}">
                   <td>{{ etudiant.nom}}</td>
