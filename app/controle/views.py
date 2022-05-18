@@ -22,9 +22,14 @@ def etudiant_controle():
    # groupes = ['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"]
    niveau = ['Licence 1','Licence 2','Licence 3']
    etudiants = []
+   etudiants_present= []
+   info=[]
    if request.method == 'POST':
-   
+      filiere = Filiere.query.get(request.form['filiere'])
+      
+      info = [request.form['antenne'],filiere.denomination,request.form['niveau']]
       etudiants = Etudiant.query.filter_by(filiere_id=request.form['filiere']).filter_by(antenne=request.form['antenne']).filter_by(niveau=request.form['niveau']).all()
+      etudiants_present = Etudiant.query.filter_by(filiere_id=request.form['filiere']).filter_by(antenne=request.form['antenne'],etat=True).filter_by(niveau=request.form['niveau']).all()
       # etudiants_data = [item.to_json() for item in etudiants]
       # for etudiant in etudiants:
       #    filiere = Filiere.query.filter_by(id=etudiant.filiere_id).first()
@@ -42,7 +47,7 @@ def etudiant_controle():
       #    )
       # return jsonify(datas)
       
-   return render_template('etudiant_controle.html',filieres=form_filieres, antennes=antennes,niveau=niveau, etudiants=[item.to_json() for item in etudiants])
+   return render_template('etudiant_controle.html',filieres=form_filieres, antennes=antennes,niveau=niveau, info=info, presents=etudiants_present,etudiants=[item.to_json() for item in etudiants])
 
 @controle.route('/controle/<matricule>', methods=['POST','GET'])
 def etudiant_resultat_controle(matricule):
@@ -53,7 +58,8 @@ def etudiant_resultat_controle(matricule):
    groupes = ['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"]
    niveau = ['Licence 1','Licence 2','Licence 3']
    etudiant = Etudiant.query.filter_by(matricule=matricule).first()
-   
+
+
    if request.method == 'POST':
       et = Etudiant.query.filter_by(matricule=matricule).first()
       print(et.id)
@@ -64,6 +70,7 @@ def etudiant_resultat_controle(matricule):
                data.save(os.path.join(uploads_dir, filename))
             et.photo = filename
 
+      
       et.nom = request.form['nom']
       et.card_id = request.form['card_id']
       et.prenom = request.form['prenoms']
@@ -75,9 +82,9 @@ def etudiant_resultat_controle(matricule):
       db.session.add(et)
       db.session.commit()
       
-      return redirect(url_for('controle.etudiant_resultat_controle', matricule=matricule))
+      return redirect(url_for('controle.etudiant_controle', matricule=matricule))
    
-   return render_template('etudiant_result_controle.html', etudiant=etudiant.to_json(), filieres=form_filieres, niveau=niveau, groupes=groupes,antennes=antennes)
+   return render_template('etudiant_result_controle.html', etudiant=etudiant.to_json(), info=info,filieres=form_filieres, niveau=niveau, groupes=groupes,antennes=antennes)
 
 
 @controle.route('/controle/etat/<matricule>', methods=['POST','GET'])
@@ -133,3 +140,40 @@ def controle_new():
 
       
    return render_template('controle_new.html',form=form)
+
+
+@controle.route('/controle/rapport', methods=['POST','GET'])
+def rapport():
+   
+   form = RechercheForm()
+  
+   print(form.antenne.choices)
+
+   form.antenne.choices = ['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO']
+ 
+   print(form.validate_on_submit())
+
+   if request.method== 'POST':
+      if not form.date_debut.data:
+         flash('Veuillez chosir une date svp')
+         return redirect(url_for('controle.rapport'))
+   
+      sql = f"""SELECT public.filieres.denomination, public.etudiants.niveau,public.etudiants.groupe, public.etudiants.date, count(public.etudiants.id), nb_group.nombre, nb_group.antenne
+	FROM public.presences,public.filieres,public.etudiants,   (SELECT count(public.etudiants.id) as nombre, public.etudiants.groupe,public.etudiants.filiere_id, public.etudiants.niveau, public.etudiants.antenne  from public.etudiants, public.filieres where public.etudiants.filiere_id =public.filieres.id and public.etudiants.antenne  = '{form.antenne.data}' group by public.etudiants.groupe , public.etudiants.filiere_id, public.etudiants.niveau, public.etudiants.antenne) as nb_group
+	
+	where  public.filieres.id= public.presences.filiere_id and public.etudiants.groupe = nb_group.groupe and public.etudiants.filiere_id = nb_group.filiere_id and public.etudiants.niveau = nb_group.niveau
+	
+	group by  public.filieres.denomination, public.etudiants.niveau, public.etudiants.groupe, public.etudiants.groupe, public.etudiants.date, public.filieres.id, nb_group.nombre, nb_group.antenne
+	
+	order by public.filieres.denomination, public.presences.niveau,  public.etudiants.groupe asc;
+      
+      """
+      
+      
+      print(sql)
+      presences = db.engine.execute(sql)
+      
+      print(presences)
+
+   return render_template('rapport_controle.html',presences=[item for item in presences],form=form)
+

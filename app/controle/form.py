@@ -15,3 +15,13 @@ class EtudiantForm(FlaskForm):
     groupe = SelectField("Groupe",choices=['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"],coerce=str)
     id_carte = StringField('Id Carte')
     submit = SubmitField('Enregistrer')
+
+
+class RechercheForm(FlaskForm):
+    filiere = SelectField('Filiere',choices=[])
+    groupe = SelectField("Groupe",choices=['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"],coerce=str)
+    niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)
+    # annee = SelectField('Annee',choices=[])
+    antenne = SelectField('Antenne',choices=[])
+    
+    submit = SubmitField('Chercher') 
