@@ -99,6 +99,9 @@ $("#present_controle").on('click', async function(e){
     last.classList.remove('abs')
     last.classList.add('pst')
     document.querySelector('.tr_controle.active').classList.remove('active')
+    $("#controleModal").modal({
+      show : false
+    })
   }
    
   }
