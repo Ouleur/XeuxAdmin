@@ -373,7 +373,7 @@ $("#formPresence").on('submit',async function(e){
 
     
 
-    let response = await fetch('http://127.0.0.1:5000/presence',{
+    let response = await fetch('/presence',{
         method : 'POST',
         body : data
     })
