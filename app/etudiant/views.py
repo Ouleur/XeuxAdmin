@@ -108,3 +108,4 @@ def etudiant_new():
 
       
    return render_template('etudiant_new.html',form=form)
+
