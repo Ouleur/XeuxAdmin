@@ -26,10 +26,10 @@ def etudiant_controle():
    info=[]
    if request.method == 'POST':
       filiere = Filiere.query.get(request.form['filiere'])
-      
+      print(request.form)
       info = [request.form['antenne'],filiere.denomination,request.form['niveau']]
-      etudiants = Etudiant.query.filter_by(filiere_id=request.form['filiere']).filter_by(antenne=request.form['antenne']).filter_by(niveau=request.form['niveau']).all()
-      etudiants_present = Etudiant.query.filter_by(filiere_id=request.form['filiere']).filter_by(antenne=request.form['antenne'],etat=True).filter_by(niveau=request.form['niveau']).all()
+      etudiants = EtudiantControle.query.filter_by(filiere_id=request.form['filiere']).filter_by(antenne=request.form['antenne']).all()
+      etudiants_present = EtudiantControle.query.filter_by(filiere_id=request.form['filiere']).filter_by(antenne=request.form['antenne'],etat=True).filter_by(niveau=request.form['niveau']).all()
       # etudiants_data = [item.to_json() for item in etudiants]
       # for etudiant in etudiants:
       #    filiere = Filiere.query.filter_by(id=etudiant.filiere_id).first()
@@ -57,11 +57,11 @@ def etudiant_resultat_controle(matricule):
    antennes = ['ABIDJAN','BOUAKE','ABOISSO','KORHOGO',"ABENGOUROU"]
    groupes = ['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"]
    niveau = ['Licence 1','Licence 2','Licence 3']
-   etudiant = Etudiant.query.filter_by(matricule=matricule).first()
+   etudiant = EtudiantControle.query.filter_by(matricule=matricule).first()
 
 
    if request.method == 'POST':
-      et = Etudiant.query.filter_by(matricule=matricule).first()
+      et = EtudiantControle.query.filter_by(matricule=matricule).first()
       print(et.id)
       if request.files['image']:
             data = request.files['image']
@@ -84,13 +84,13 @@ def etudiant_resultat_controle(matricule):
       
       return redirect(url_for('controle.etudiant_controle', matricule=matricule))
    
-   return render_template('etudiant_result_controle.html', etudiant=etudiant.to_json(), info=info,filieres=form_filieres, niveau=niveau, groupes=groupes,antennes=antennes)
+   return render_template('etudiant_result_controle.html', etudiant=etudiant.to_json(),filieres=form_filieres, niveau=niveau, groupes=groupes,antennes=antennes)
 
 
 @controle.route('/controle/etat/<matricule>', methods=['POST','GET'])
 def setEtat(matricule):
    
-   etudiant = Etudiant.query.filter_by(matricule=matricule).first()
+   etudiant = EtudiantControle.query.filter_by(matricule=matricule).first()
    
    if etudiant:
       etudiant.etat = True
@@ -107,7 +107,7 @@ def setEtat(matricule):
 @controle.route('/control/generate/qrcode', methods=['POST'])
 def qrcode_generate():
   
-   etudiant = Etudiant.query.filter_by(matricule=request.args.get('matricule')).first()
+   etudiant = EtudiantControle.query.filter_by(matricule=request.args.get('matricule')).first()
 
    qrcode = generate_qr(etudiant.matricule)
    etudiant.qrcode = qrcode
@@ -132,7 +132,7 @@ def controle_new():
             data.save(os.path.join(uploads_dir, filename))
       
       qrcode = generate_qr(form.matricule.data)
-      etudiant = Etudiant(matricule=form.matricule.data,nom=form.nom.data,prenoms=form.prenoms.data,filiere_id=form.filiere.data,niveau=form.niveau.data,date_naissance=datetime.strftime(form.date_naissance.data, '%d/%m/%Y'),card_id=form.id_carte.data,antenne=form.antenne.data,groupe=form.groupe.data, photo=filename, qrcode=qrcode)
+      etudiant = EtudiantControle(matricule=form.matricule.data,nom=form.nom.data,prenoms=form.prenoms.data,filiere_id=form.filiere.data,niveau=form.niveau.data,date_naissance=datetime.strftime(form.date_naissance.data, '%d/%m/%Y'),card_id=form.id_carte.data,antenne=form.antenne.data,groupe=form.groupe.data, photo=filename, qrcode=qrcode)
       db.session.add(etudiant)
       db.session.commit()
 
@@ -177,3 +177,40 @@ def rapport():
 
    return render_template('rapport_controle.html',presences=[item for item in presences],form=form)
 
+
+
+
+@controle.route('/etudiant/add', methods=['POST','GET'])
+def etudiant_add():
+   form =request.get_json() or {}
+   print(form)
+   form = form["root"]
+   filiere = Filiere.query.filter_by(denomination=form['filiere']).first()
+
+   if filiere:
+      form['filiere'] =  filiere.id
+   else:
+      filiere = Filiere(denomination=form['filiere'])
+      db.session.add(filiere)
+      db.session.commit()
+      form['filiere'] =  filiere.id
+
+
+
+   # filename = None
+   # if request.files['image']:
+   #    data = request.files['image']
+   #    filename = secure_filename(data.filename)
+   #    if not exists(os.path.join(uploads_dir, filename)):
+   #       data.save(os.path.join(uploads_dir, filename))
+      
+   qrcode = generate_qr(form['matricule'])
+   try:
+      etudiant = EtudiantControle(matricule=form['matricule'],nom=form['nom'],prenoms=form['prenoms'],filiere_id=form['filiere'],niveau=form['niveau'],date_naissance=form['date_naissance'],statut=form['statut'],antenne=form['antenne'],photo=form['photo'])
+      db.session.add(etudiant)
+      db.session.commit()
+   except:
+      db.session.rollback()
+      print("error")
+
+   return jsonify(etudiant.to_json())
