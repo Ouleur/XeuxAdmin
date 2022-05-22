@@ -2,6 +2,7 @@
 *.pyc
 */__pycache__
 /app/static/uploads
+/app/static/qrcodes
 uwsgi.ini
 start.sh
 Dockerfile

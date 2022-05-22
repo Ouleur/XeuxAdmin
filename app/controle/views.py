@@ -28,7 +28,7 @@ def etudiant_controle():
       filiere = Filiere.query.get(request.form['filiere'])
       print(request.form)
       info = [request.form['antenne'],filiere.denomination,request.form['niveau']]
-      etudiants = EtudiantControle.query.filter_by(filiere_id=request.form['filiere']).filter_by(antenne=request.form['antenne']).all()
+      etudiants = EtudiantControle.query.filter_by(filiere_id=request.form['filiere']).filter_by(antenne=request.form['antenne']).filter_by(niveau=request.form['niveau']).all()
       etudiants_present = EtudiantControle.query.filter_by(filiere_id=request.form['filiere']).filter_by(antenne=request.form['antenne'],etat=True).filter_by(niveau=request.form['niveau']).all()
       # etudiants_data = [item.to_json() for item in etudiants]
       # for etudiant in etudiants:
