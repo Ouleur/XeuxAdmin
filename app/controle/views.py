@@ -73,12 +73,12 @@ def etudiant_resultat_controle(matricule):
       
       et.nom = request.form['nom']
       et.card_id = request.form['card_id']
-      et.prenom = request.form['prenoms']
+      et.prenoms = request.form['prenoms']
       et.niveau = request.form['niveau']
       et.antenne = request.form['antenne']
       et.filiere_id = request.form['filiere']
       et.groupe = request.form['groupe']
-      et.date_naissance = request.form['date_naissance_edit']
+      et.date_naissance = request.form['date_edit']
       db.session.add(et)
       db.session.commit()
       
