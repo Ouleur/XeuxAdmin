@@ -38,7 +38,7 @@ def etudiant_resultat():
    uploads_dir = current_app.config['UPLOADS_DIR']
    filieres = Filiere.query.all()
    form_filieres = [(item.id, item.denomination) for item in filieres]
-   antennes = ['ABIDJAN','BOUAKE','ABOISSO','KORHOGO',"ABENGOUROU"]
+   antennes = ['ABIDJAN','BOUAKE','ABOISSO','KORHOGO',"ABENGOUROU","DALOA"]
    groupes = ['Groupe A','Groupe B','Groupe C','Groupe D',"Groupe E","Groupe F","Groupe G","Groupe H","Groupe I","Groupe J","Groupe K"]
    niveau = ['Licence 1','Licence 2','Licence 3']
    etudiant = session['etudiant']
