@@ -167,8 +167,7 @@ def rapport():
 FROM 
 	public.filieres,
 	public.etudiants_cotrole,
-	(SELECT count(public.etudiants_cotrole.id) as nombre, 
-		public.etudiants_cotrole.groupe,public.etudiants_cotrole.filiere_id, 
+	(SELECT count(public.etudiants_cotrole.id) as nombre,public.etudiants_cotrole.filiere_id, 
 		public.etudiants_cotrole.niveau, 
 		public.etudiants_cotrole.antenne  
 	from 
@@ -181,7 +180,6 @@ FROM
 	and
 	 	public.etudiants_cotrole.etat='true'
 	 group by 
-	 	public.etudiants_cotrole.groupe , 
 	 	public.etudiants_cotrole.filiere_id, 
 	 	public.etudiants_cotrole.niveau, 
 	 	public.etudiants_cotrole.antenne
@@ -198,15 +196,12 @@ and
 group by  
 	public.filieres.denomination, 
 	public.etudiants_cotrole.niveau, 
-	public.etudiants_cotrole.groupe, 
-	public.etudiants_cotrole.groupe, 
 	public.filieres.id, 
 	nb_group.nombre, 
 	nb_group.antenne 
 order by 
 	public.filieres.denomination, 
-	public.etudiants_cotrole.niveau,  
-	public.etudiants_cotrole.groupe asc
+	public.etudiants_cotrole.niveau asc
       
       """
       
