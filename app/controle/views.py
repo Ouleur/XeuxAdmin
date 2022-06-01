@@ -152,20 +152,61 @@ def rapport():
    form.antenne.choices = ['ABIDJAN','ABENGOUROU','ABOISSO','BOUAKE','DALOA','KORHOGO']
  
    print(form.validate_on_submit())
-
+   presences  = []
    if request.method== 'POST':
-      if not form.date_debut.data:
-         flash('Veuillez chosir une date svp')
-         return redirect(url_for('controle.rapport'))
+      # if not form.date_debut.data:
+      #    flash('Veuillez chosir une date svp')
+      #    return redirect(url_for('controle.rapport'))
    
-      sql = f"""SELECT public.filieres.denomination, public.etudiants.niveau,public.etudiants.groupe, public.etudiants.date, count(public.etudiants.id), nb_group.nombre, nb_group.antenne
-	FROM public.presences,public.filieres,public.etudiants,   (SELECT count(public.etudiants.id) as nombre, public.etudiants.groupe,public.etudiants.filiere_id, public.etudiants.niveau, public.etudiants.antenne  from public.etudiants, public.filieres where public.etudiants.filiere_id =public.filieres.id and public.etudiants.antenne  = '{form.antenne.data}' group by public.etudiants.groupe , public.etudiants.filiere_id, public.etudiants.niveau, public.etudiants.antenne) as nb_group
-	
-	where  public.filieres.id= public.presences.filiere_id and public.etudiants.groupe = nb_group.groupe and public.etudiants.filiere_id = nb_group.filiere_id and public.etudiants.niveau = nb_group.niveau
-	
-	group by  public.filieres.denomination, public.etudiants.niveau, public.etudiants.groupe, public.etudiants.groupe, public.etudiants.date, public.filieres.id, nb_group.nombre, nb_group.antenne
-	
-	order by public.filieres.denomination, public.presences.niveau,  public.etudiants.groupe asc;
+      sql = f"""SELECT 
+	public.filieres.denomination, 
+	public.etudiants_cotrole.niveau, 
+	nb_group.antenne,
+	count(public.etudiants_cotrole.id), 
+	nb_group.nombre
+FROM 
+	public.filieres,
+	public.etudiants_cotrole,
+	(SELECT count(public.etudiants_cotrole.id) as nombre, 
+		public.etudiants_cotrole.groupe,public.etudiants_cotrole.filiere_id, 
+		public.etudiants_cotrole.niveau, 
+		public.etudiants_cotrole.antenne  
+	from 
+	 	public.etudiants_cotrole, 
+	 	public.filieres 
+	where 
+	 	public.etudiants_cotrole.filiere_id =public.filieres.id 
+	 and 
+	 	public.etudiants_cotrole.antenne  = '{form.antenne.data}'
+	and
+	 	public.etudiants_cotrole.etat='true'
+	 group by 
+	 	public.etudiants_cotrole.groupe , 
+	 	public.etudiants_cotrole.filiere_id, 
+	 	public.etudiants_cotrole.niveau, 
+	 	public.etudiants_cotrole.antenne
+	) 
+as 
+	nb_group
+where  
+	public.filieres.id= public.etudiants_cotrole.filiere_id 
+
+and 
+	public.etudiants_cotrole.filiere_id = nb_group.filiere_id 
+and 
+	public.etudiants_cotrole.niveau = nb_group.niveau
+group by  
+	public.filieres.denomination, 
+	public.etudiants_cotrole.niveau, 
+	public.etudiants_cotrole.groupe, 
+	public.etudiants_cotrole.groupe, 
+	public.filieres.id, 
+	nb_group.nombre, 
+	nb_group.antenne 
+order by 
+	public.filieres.denomination, 
+	public.etudiants_cotrole.niveau,  
+	public.etudiants_cotrole.groupe asc
       
       """
       
