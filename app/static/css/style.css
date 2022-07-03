@@ -19,3 +19,7 @@
     z-index: 1000;
     position: absolute;
   }
+  .photo-btn {
+    margin: auto;
+    width: 150px !important;
+  }
