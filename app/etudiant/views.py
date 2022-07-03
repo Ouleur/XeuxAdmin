@@ -53,19 +53,14 @@ def etudiant_resultat():
                data.save(os.path.join(uploads_dir, filename))
             et.photo = filename
             
-
-      et.nom = request.form['nom']
-      et.card_id = request.form['card_id']
-      et.prenom = request.form['prenoms']
-      et.niveau = request.form['niveau']
-      et.antenne = request.form['antenne']
-      et.filiere_id = request.form['filiere']
-      et.groupe = request.form['groupe']
+      print(request.form)
       et.date_naissance = request.form['date_naissance_edit']
+      et.lieu_naissance = request.form['lieu_naissance']
       db.session.add(et)
       db.session.commit()
       session.pop('etudiant')
       session['etudiant'] = et.to_json()
+      print(etudiant)
       return redirect(url_for('etudiant.etudiant_resultat'))
    
    return render_template('etudiant_result.html', etudiant=etudiant, filieres=form_filieres, niveau=niveau, groupes=groupes,antennes=antennes)
