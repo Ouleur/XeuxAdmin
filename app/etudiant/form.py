@@ -8,6 +8,7 @@ class EtudiantForm(FlaskForm):
     matricule = StringField('Matricule',[DataRequired(message="Saisissez une matricule SVP.")])
     nom = StringField('Nom',[DataRequired(message="Saisissez une nom SVP.")])
     prenoms = StringField('Prenoms',[DataRequired(message="Saisissez un Prenoms SVP.")])
+    lieu_naissance = StringField('Lieu de naissance',[DataRequired(message="Saisissez un Lieu de naissance SVP.")])
     date_naissance = DateField('Date de naissance',[DataRequired(message="Saisissez une Date de naissance SVP.")])
     filiere = SelectField("Filiere",choices=[])
     niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)

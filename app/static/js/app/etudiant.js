@@ -22,6 +22,8 @@ if(document.querySelector('input[name=date_edit]')){
       document.querySelector('input[name=date_naissance_edit]').defaultValue = `${result[2]}/${result[1]}/${result[0]}`
     })
 }
+
+
 var photo;
   
   $('#image').on('input', function () {
@@ -42,6 +44,11 @@ var photo;
   $("#avatar").click(function () {
     document.getElementById('image').click();
   });
+
+  $(".photo-btn").click(function () {
+    document.getElementById('image').click();
+  });
+  
 
   infos_et = document.querySelector('#etudiant_infos')
 

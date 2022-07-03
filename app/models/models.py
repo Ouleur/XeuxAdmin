@@ -248,6 +248,7 @@ class EtudiantControle(baseModel,db.Model):
     card_id = db.Column(db.String(255))
     niveau = db.Column(db.String(255))
     date_naissance = db.Column(db.String(255))
+    lieu_naissance = db.Column(db.String(255))
     antenne = db.Column(db.String(255))
     photo = db.Column(db.String(255))
     qrcode = db.Column(db.String(255))
@@ -296,6 +297,7 @@ class EtudiantVerif(baseModel,db.Model):
     card_id = db.Column(db.String(255))
     niveau = db.Column(db.String(255))
     date_naissance = db.Column(db.String(255))
+    lieu_naissance = db.Column(db.String(255))
     antenne = db.Column(db.String(255))
     photo = db.Column(db.String(255))
     qrcode = db.Column(db.String(255))
@@ -321,6 +323,7 @@ class EtudiantVerif(baseModel,db.Model):
             "antenne":self.antenne,
             "groupe":self.groupe,
             "date_naissance":self.date_naissance,
+            "lieu_naissance":self.lieu_naissance,
             "photo" : self.photo,
             "qrcode" : self.qrcode,
             "etat": self.etat,
