@@ -94,7 +94,7 @@ def etudiant_add():
       
    qrcode = generate_qr(form['matricule'])
    try:
-      etudiant = EtudiantVerif(matricule=form['matricule'],nom=form['nom'],prenoms=form['prenoms'],filiere_id=form['filiere'],niveau=form['niveau'],date_naissance=form['date_naissance'],statut=form['statut'],antenne=form['antenne'],photo=form['photo'])
+      etudiant = EtudiantVerif(qrcode=qrcode,matricule=form['matricule'],nom=form['nom'],prenoms=form['prenoms'],filiere_id=form['filiere'],niveau=form['niveau'],date_naissance=form['date_naissance'],statut=form['statut'],antenne=form['antenne'],photo=form['photo'])
       db.session.add(etudiant)
       db.session.commit()
    except:
