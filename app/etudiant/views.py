@@ -1,4 +1,5 @@
 from genericpath import exists
+from posixpath import split
 from flask import render_template,session, redirect, url_for,flash,make_response,request, g, jsonify
 from sqlalchemy import false
 from . import etudiant
@@ -47,8 +48,9 @@ def etudiant_resultat():
       et = EtudiantVerif.query.filter_by(id=etudiant['id']).first()
       print(et.id)
       if request.files['image']:
+            print(request.files['image'].content_type)
             data = request.files['image']
-            filename = secure_filename(data.filename)
+            filename = secure_filename("{}.{}".format(et.matricule,(request.files['image'].filename.split('.')[-1])))
             if not exists(os.path.join(uploads_dir, filename)):
                data.save(os.path.join(uploads_dir, filename))
             et.photo = filename
