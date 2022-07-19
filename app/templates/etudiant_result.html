@@ -76,17 +76,17 @@
                                   <div class="col-sm-6">
                                       <label for="filiere">Date de naissance</label>
                                       <input type="hidden" name="date_naissance_edit" value="{{etudiant.date_naissance}}">
-                                      <input class="form-control form-control-user" type="text" placeholder="Ex: 23/08/1981" name="date_edit" id='date'>
+                                      <input class="form-control form-control-user" type="text" placeholder="Ex: 23/08/1981" name="date_edit" id='date' required>
                                     </div>
                                   
                                   <div class="col-sm-6">
                                     <label for="lieu_naissance">Lieu de naissance</label>
                                     {% if etudiant.lieu_naissance!=None %}
                                     <input type="hidden" name="lieu_naissance_edit" value="{{etudiant.lieu_naissance}}">
-                                    <input class="form-control form-control-user" type="text" name="lieu_naissance" value="{{etudiant.lieu_naissance}}">
+                                    <input class="form-control form-control-user" type="text" name="lieu_naissance" value="{{etudiant.lieu_naissance}}" required>
                                     {% else %}
                                     <input type="hidden" name="lieu_naissance_edit" value="">
-                                    <input class="form-control form-control-user" type="text" placeholder="Votre lieu de naissance" name="lieu_naissance" value="">
+                                    <input class="form-control form-control-user" type="text" placeholder="Votre lieu de naissance" name="lieu_naissance" value="" required>
                                     {% endif %}
                                   </div>
           
@@ -96,7 +96,7 @@
                             </div>
                             <div class="modal-footer" style="padding: 5px !important;"> 
           
-                                <button type="submit" class=" btn btn-primary text-xs" >Modifier</button>
+                                <button type="submit" class=" btn btn-primary text-xs" >Enregistrer</button>
       
                             </div>
                         </form>
