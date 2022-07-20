@@ -117,7 +117,7 @@ def qrcode_generate():
    return redirect(url_for('etudiant.etudiant_resultat'))
 
 
-@etudiant.route('/etudiant/new', methods=['POST','GET'])
+@etudiant.route('/etudiant/new2022', methods=['POST','GET'])
 def etudiant_new():
    uploads_dir = current_app.config['UPLOADS_DIR']
    filieres = Filiere.query.all()
