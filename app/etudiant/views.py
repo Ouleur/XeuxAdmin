@@ -15,7 +15,7 @@ from sqlalchemy.exc import IntegrityError
 
 
 
-@etudiant.route('/etudiant/infos2022', methods=['POST','GET'])
+@etudiant.route('/etudiant/infos', methods=['POST','GET'])
 def etudiant_infos():
    form = EtudiantForm(request.form)
    
