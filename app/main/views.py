@@ -522,10 +522,10 @@ def update_etudiant():
             try:
                etudiant = Etudiant.query.filter_by(matricule=row['Matricule'].strip()).first()
                if etudiant:
-                  etudiant.matricule=row['Matricule']
-                  etudiant.niveau=row['Niveau']
-                  etudiant.antenne=row['Antenne']
-                  etudiant.groupe=row['Groupe']
+                  etudiant.matricule=row['Matricule'] if row['Matricule'] else etudiant.matricule
+                  etudiant.niveau=row['Niveau'] if row['Niveau'] else etudiant.niveau
+                  etudiant.antenne=row['Antenne'] if row['Antenne'] else etudiant.antenne
+                  etudiant.groupe=row['Groupe'] if row['Groupe'] else etudiant.groupe
                   db.session.add(etudiant)
                   db.session.commit()
                else:
