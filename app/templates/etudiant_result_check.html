@@ -24,81 +24,82 @@
               <div class="row">
                 <div class="col-sm-2">
                   <div class="row">
-                    {% if not etudiant.photo %}
+                    {% if etudiant.photo == None %}
                     <img src="{{url_for('static', filename='img/rev1.jpg')}}" id="avatar" alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
                     {% else %}
-                    <img src="{{url_for('static', filename='uploads/' + etudiant.photo)}}" class="mb-2" id="avatar" alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
+                    <img src="{{url_for('static', filename='uploads/' + etudiant.photo)}}" class="mb-2"  alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
                     {%endif%}
                   </div>
                   <div class="row">
-                    {% if etudiant.qrcode == None %}
-                    
-                    <form action="{{url_for('etudiant.qrcode_generate')}}" method="post">
-                      <button type="submit" class="btn btn-primary text-xs">Génerer un qrcode</button>
-                    </form>
-                    {% else %}
-                    <img src="{{url_for('static', filename='qrcodes/' + etudiant.qrcode)}}" class="mb-2" id="avatar" alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
+                    {% if etudiant.qrcode != None %}
+                      <img src="{{url_for('static', filename='qrcodes/' + etudiant.qrcode)}}" class="mb-2"  alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
                     {%endif%}
                   </div>
                 </div>
                   <div class="col-sm-10">
                       <h3 class="text-center">Informations de l'etudiant</h3>
-                      <form class="" method="POST" action="{{ url_for('etudiant.etudiant_resultat') }}" enctype="multipart/form-data">
+                      <form class="" method="POST" action="" enctype="multipart/form-data">
                         <input type="file" name="image" style="display: none;" id="image">
                             <div class="modal-body">
                                 <div class="form-group row">
                                     <input type="hidden" name="id" value="{{etudiant.id}}">
                                   <div class="col-sm-6">
                                     <label for="matricule">Matricule</label>
-                                    <label class="form-control form-control-user" for="matricule">{{etudiant.matricule}}</label>
-                                    <!-- <input readonly type="text" class="form-control form-control-user" name="matricule" value="{{etudiant.matricule}}"> -->
+                                    <input style="background-color: #eaecf400;" readonly type="text" class="form-control form-control-user" name="matricule" value="{{etudiant.matricule}}">
                                   </div>
           
                                   <div class="col-sm-6">
                                     <label for="id_carte">ID Carte</label>
-                                    <label class="form-control form-control-user" for="card_id">{{etudiant.card_id}}</label>
+                                    <input style="background-color: #eaecf400;" readonly type="text" name="card_id" class="form-control form-control-user" value="{{etudiant.card_id}}">
                                   </div>
           
                                   <div class="col-sm-6">
                                     <label for="nom">Nom</label>
-                                    <label class="form-control form-control-user" for="nom">{{etudiant.nom}}</label>
+                                    <input style="background-color: #eaecf400;" readonly type="text" class="form-control form-control-user" name="nom" value="{{etudiant.nom}}">
           
                                   </div>
                   
                                   <div class="col-sm-6">
                                     <label for="prenoms">Prénoms</label>
-                                    <label class="form-control form-control-user" for="prenoms">{{etudiant.prenoms}}</label>                                    
+                                    <input style="background-color: #eaecf400;" readonly type="text" class="form-control form-control-user" name="prenoms" value="{{etudiant.prenoms}}">
+                                    
                                   </div>
     
                                   <div class="col-sm-6">
                                     <label for="antenne">Antenne</label>
-                                    <label class="form-control form-control-user" for="prenoms">{{etudiant.antenne}}</label>                                    
+                                    <select style="background-color: #eaecf400;" readonly name="antenne" class="form-control form-control-user">
+                                      {%for antenne in antennes %}
+                                        {% if antenne == etudiant.antenne %}
+                                        <option value="{{antenne}}" selected>{{antenne}}</option>
+                                        {%endif%}
+                                        
+                                      {% endfor%}
+                                    </select>
                                   </div>
     
                                   <div class="col-sm-6">
                                     <label for="filiere">Filiere</label>
-                                    <label class="form-control form-control-user" for="prenoms">{{etudiant.filiere}}</label>                                    
+                                    <select style="background-color: #eaecf400;" readonly name="filiere" class="form-control form-control-user">
+                                      {%for filiere in filieres%}
+                                        {% if filiere[1] == etudiant.filiere %}
+                                        <option value="{{filiere[0]}}" selected>{{filiere[1]}}</option>
+                                        {%endif%}
+                                        
+                                      {% endfor%}
+                                    </select>
+                                    
                                   </div>
                                   <div class="col-sm-4">
                                       <label for="filiere">Date de naissance</label>
-                                      <input type="hidden" name="date_naissance_edit" value="{{etudiant.date_naissance}}">
-                                      <input class="form-control form-control-user" type="date" name="date_edit">
+                                      <input style="background-color: #eaecf400;" readonly type="text" name="date_naissance_edit" class="form-control form-control-user" value="{{etudiant.date_naissance}}">
                                     </div>
-                                  
-                                  <div class="col-sm-4">
-                                    <label for="lieu_naissance">Lieu de naissance</label>
-                                    <input type="hidden" name="lieu_naissance_edit" value="{{etudiant.lieu_naissance}}">
-                                    <input class="form-control form-control-user" type="text" name="lieu_naissance">
-                                  </div>
           
                                   <div class="col-sm-4">
                                     <label for="niveau">Niveau</label>
-                                    <select readonly name="niveau" class="form-control form-control-user">
+                                    <select style="background-color: #eaecf400;" readonly name="niveau" class="form-control form-control-user">
                                       {%for niveau in niveau %}
                                         {% if niveau == etudiant.niveau %}
                                         <option value="{{niveau}}" selected>{{niveau}}</option>
-                                        {%else%}
-                                        <option value="{{niveau}}">{{niveau}}</option>
                                         {%endif%}
                                         
                                       {% endfor%}
@@ -106,12 +107,10 @@
                                   </div>
                                   <div class="col-sm-4">
                                     <label for="groupe">Groupe</label>
-                                    <select name="groupe" class="form-control form-control-user">
+                                    <select style="background-color: #eaecf400;" readonly name="groupe" class="form-control form-control-user">
                                       {%for groupe in groupes %}
                                         {% if groupe == etudiant.groupe %}
                                         <option value="{{groupe}}" selected>{{groupe}}</option>
-                                        {%else%}
-                                        <option value="{{groupe}}">{{groupe}}</option>
                                         {%endif%}
                                         
                                       {% endfor%}
@@ -121,7 +120,6 @@
                             </div>
                             <div class="modal-footer" style="padding: 5px !important;"> 
           
-                                <button type="submit" class=" btn btn-primary text-xs" >Modifier</button>
       
                             </div>
                         </form>
