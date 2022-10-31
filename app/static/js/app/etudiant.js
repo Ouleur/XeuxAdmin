@@ -51,7 +51,7 @@ var photo;
   });
   
 
-  infos_et = document.querySelector('#etudiant_infos')
+infos_et = document.querySelector('#etudiant_infos')
 
 
 if(infos_et){
@@ -68,6 +68,32 @@ if(infos_et){
     
         if(response.ok){
             window.location.href = '/etudiant/result'
+        } else{
+            document.querySelector('#error_etudiant').style.display = 'block'
+        }
+    })
+    
+}
+
+
+
+infos_check_et = document.querySelector('#etudiant_check_infos')
+
+
+if(infos_check_et){
+  infos_check_et.addEventListener('submit', async function(e){
+        e.preventDefault()
+    
+        data = new FormData(this)
+    
+        const response = await fetch('/etudiant/etudiant_check_infos',{
+            method : 'POST',
+            body : data
+        })
+        const json = await response.json()
+    
+        if(response.ok){
+            window.location.href = '/etudiant/check_result'
         } else{
             document.querySelector('#error_etudiant').style.display = 'block'
         }

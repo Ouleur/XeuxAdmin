@@ -1,0 +1,73 @@
+{% extends "base_etudiant.html" %}
+
+{% block style%}
+    <style>
+        .main{
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+    </style>
+{% endblock%}
+
+{% block container %}
+  <div class="container-fluid main">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <!-- DataTales Example -->
+      
+      <!-- <div class="row"> -->
+        <div class="row">
+          <div class="card mb-4 ">
+            <div class="card-header" style="background-color: #4f0238 !important;">
+              <div class="row align-items-center">
+                <img src="{{url_for('static', filename='img/logo.png')}}" alt=""  width="50">
+                <h6 style="margin-left: 15px; color:white; font-weight: 700;">INFAS PRESENCE</h6>
+              </div>
+            </div>
+            <div id="collapseImportEtudiant" class="collapse show" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
+              <div class="card-body">
+               
+                  <form id="etudiant_check_infos" method="post">
+                      <div class="modal-body">
+                          <div class="form-group row" style="justify-content: center; align-items: center;">
+                              <div class="col-sm-12">
+                              <label for="date">Entrer votre Matricule</label>
+                              <input type="text" name="matricule" class="form-control form-control-user">
+                              
+                            </div>
+                            <div class="col-sm-12 mt-2">
+                            
+                             <button  class="btn btn-primary text-xs">Rechercher</button>
+                              
+                            </div>
+                          </div>
+                      </div>
+                      
+                  </form>
+  
+                  <div class="row  justify-content-center">
+                    <div id="error_etudiant" style="display: none;">
+                      <a href=""><button type="submit" class=" btn btn-lg btn-block btn-danger" >Aucun Etudiant pour ce matricule. Veuillez contacter votre informaticien local</button></a>
+                    </div>
+                  </div>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+
+   
+  </div>
+{% endblock %}
+
