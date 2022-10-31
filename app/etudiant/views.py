@@ -182,7 +182,7 @@ def etudiant_new():
             data.save(os.path.join(uploads_dir, filename))
       
          qrcode = generate_qr(form.matricule.data)
-         etudiant = EtudiantVerif(matricule=form.matricule.data,nom=form.nom.data,prenoms=form.prenoms.data,filiere_id=form.filiere.data,niveau=form.niveau.data,date_naissance=datetime.strftime(form.date_naissance.data, '%d/%m/%Y'),card_id=form.id_carte.data,antenne=form.antenne.data,groupe=form.groupe.data, photo=filename, qrcode=qrcode)
+         etudiant = EtudiantVerif(matricule=form.matricule.data,nom=form.nom.data,prenoms=form.prenoms.data,filiere_id=form.filiere.data,niveau=form.niveau.data,lieu_naissance=form.lieu_naissance.data,date_naissance=datetime.strftime(form.date_naissance.data, '%d/%m/%Y'),card_id=form.id_carte.data,antenne=form.antenne.data,groupe=form.groupe.data, photo=filename, qrcode=qrcode)
          db.session.add(etudiant)
          db.session.commit()
 

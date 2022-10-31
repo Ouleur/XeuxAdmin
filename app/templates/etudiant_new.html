@@ -45,14 +45,18 @@
                             <input type="file" name="image" style="display: none;" id="image">
                               <div class="form-group row">
                                   {{ form.id(class_='form-control form-control-user',placeholder="id",type="text",value="",hidden="true")}}
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                   <label for="matricule">Matricule</label>
                                   {{ form.matricule(class_='form-control form-control-user',placeholder="Matricule",type="text",value="")}}
                                 </div>
         
                                 <div class="col-sm-4">
                                   <label for="groupe">Date de naissance</label>
-                                  {{ form.date_naissance(class_='form-control form-control-user', type="date", placeholder="Groupe",value="")}}
+                                  {{ form.date_naissance(class_='form-control form-control-user', type="date", placeholder="",value="")}}
+                                </div>
+                                <div class="col-sm-4">
+                                  <label for="groupe">Lieu  de naissance</label>
+                                  {{ form.lieu_naissance(class_='form-control form-control-user', type="text", placeholder="Lieu de naissance",value="")}}
                                 </div>
         
                                 <div class="col-sm-6">
