@@ -1,6 +1,6 @@
 from genericpath import exists
 from posixpath import split
-from flask import render_template,session, redirect, url_for,flash,make_response,request, g, jsonify
+from flask import Markup,render_template,session, redirect, url_for,flash,make_response,request, g, jsonify
 from sqlalchemy import false
 from . import etudiant
 from ..utilities import *
@@ -186,7 +186,7 @@ def etudiant_new():
          db.session.add(etudiant)
          db.session.commit()
 
-         flash('Hello {} {}, votre enregistrement a été éffectué !<br><a href="/etudiant/etudiant_check_infos">Cliquez ici pour verifier</a>'.format(form.nom.data,form.prenoms.data))
+         flash(Markup('Hello {} {}, votre enregistrement a été éffectué !<br><a href="/etudiant/etudiant_check_infos">Cliquez ici pour verifier</a>'.format(form.nom.data,form.prenoms.data)))
          return redirect(url_for('etudiant.etudiant_new'))
 
       else:
