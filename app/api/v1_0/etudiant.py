@@ -48,21 +48,21 @@ def enroll_etudiant(mtle,card_id):
 
 @api.route('/etudiant/add', methods=['POST','GET'])
 def etudiant_add():
-   form =request.get_json() or {}
-   print(form)
-   form = form["root"]
-   try: 
-      filiere = Filiere.query.filter_by(denomination=form['filiere']).first()
-   except:
-      filiere = Filiere.query.filter_by(id=form['filiere_id']).first()
+    form =request.get_json() or {}
+    print(form)
+    form = form["root"]
+    try: 
+        filiere = Filiere.query.filter_by(denomination=form['filiere']).first()
+    except:
+        filiere = Filiere.query.filter_by(id=form['filiere_id']).first()
 
-   if filiere:
-      form['filiere'] =  filiere.id
-   else:
-      filiere = Filiere(denomination=form['filiere'])
-      db.session.add(filiere)
-      db.session.commit()
-      form['filiere'] =  filiere.id
+    if filiere:
+        form['filiere'] =  filiere.id
+    else:
+        filiere = Filiere(denomination=form['filiere'])
+        db.session.add(filiere)
+        db.session.commit()
+        form['filiere'] =  filiere.id
 
 
 
@@ -73,13 +73,8 @@ def etudiant_add():
    #    if not exists(os.path.join(uploads_dir, filename)):
    #       data.save(os.path.join(uploads_dir, filename))
       
-   try:
-      etudiant = Etudiant(matricule=form['matricule'],nom=form['nom'],prenoms=form['prenoms'],filiere_id=form['filiere'],niveau=form['niveau'],date_naissance=form['date_naissance'],statut=form['statut'],antenne=form['antenne'],photo=form['photo'])
-      db.session.add(etudiant)
-      db.session.commit()
-      return jsonify(etudiant.to_json())
-   except:
-      db.session.rollback()
-      print("error")
-
-      return jsonify({"msg":"error"})
+#    try:  
+    etudiant = Etudiant(matricule=form['matricule'],nom=form['nom'],prenoms=form['prenoms'],filiere_id=form['filiere'],niveau=form['niveau'],date_naissance=form['date_naissance'],statut=form['statut'],antenne=form['antenne'],photo=form['photo'])
+    db.session.add(etudiant)
+    db.session.commit()
+    return jsonify(etudiant.to_json())
