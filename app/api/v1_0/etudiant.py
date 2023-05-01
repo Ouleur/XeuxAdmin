@@ -78,3 +78,20 @@ def etudiant_add():
     db.session.add(etudiant)
     db.session.commit()
     return jsonify(etudiant.to_json())
+
+
+
+@api.route('/etudiant/update', methods=['POST','GET'])
+def etudiant_add():
+    form =request.get_json() or {}
+    print(form)
+    form = form["root"]
+   
+    etudiant = Etudiant.query.filter_by(matricule=form['MATRICULE']).first()
+    if etudiant:
+        etudiant.nom = form['NOM']
+        etudiant.prenoms = form['PRENOM']
+        etudiant.groupe = form['groupe']
+        db.session.commit()
+
+    return jsonify(etudiant.to_json())
