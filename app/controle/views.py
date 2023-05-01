@@ -221,7 +221,10 @@ def etudiant_add():
    form =request.get_json() or {}
    print(form)
    form = form["root"]
-   filiere = Filiere.query.filter_by(denomination=form['filiere']).first()
+   try: 
+      filiere = Filiere.query.filter_by(denomination=form['filiere']).first()
+   except:
+      filiere = Filiere.query.filter_by(id=form['filiere_id']).first()
 
    if filiere:
       form['filiere'] =  filiere.id
