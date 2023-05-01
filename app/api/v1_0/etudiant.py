@@ -82,7 +82,7 @@ def etudiant_add():
 
 
 @api.route('/etudiant/update', methods=['POST','GET'])
-def etudiant_add():
+def etudiant_update():
     form =request.get_json() or {}
     print(form)
     form = form["root"]
