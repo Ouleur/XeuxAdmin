@@ -77,8 +77,9 @@ def etudiant_add():
       etudiant = Etudiant(matricule=form['matricule'],nom=form['nom'],prenoms=form['prenoms'],filiere_id=form['filiere'],niveau=form['niveau'],date_naissance=form['date_naissance'],statut=form['statut'],antenne=form['antenne'],photo=form['photo'])
       db.session.add(etudiant)
       db.session.commit()
+      return jsonify(etudiant.to_json())
    except:
       db.session.rollback()
       print("error")
 
-   return jsonify(etudiant.to_json())
+      return jsonify({"msg":"error"})
