@@ -93,5 +93,8 @@ def etudiant_update():
         etudiant.prenoms = form['PRENOM']
         etudiant.groupe = form['groupe']
         db.session.commit()
+        return jsonify(etudiant.to_json())
+    else:
+        form["Error"] ="Yes"
+        return jsonify(form)
 
-    return jsonify(etudiant.to_json())
