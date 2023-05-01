@@ -1,7 +1,7 @@
 from flask import jsonify, request, current_app, url_for
 from . import api
 from ... import db
-from ...models import Etudiant
+from ...models import Etudiant,Filiere
 from flask import g, jsonify,request
 from .errors import forbidden,unauthorized
 from flask_httpauth import HTTPBasicAuth
@@ -44,3 +44,41 @@ def enroll_etudiant(mtle,card_id):
         return jsonify({ 'statut': "Succes" ,'etudiant':etudiant.to_json()})    
     return jsonify({ 'statut': "Echec" })
     
+
+
+@api.route('/etudiant/add', methods=['POST','GET'])
+def etudiant_add():
+   form =request.get_json() or {}
+   print(form)
+   form = form["root"]
+   try: 
+      filiere = Filiere.query.filter_by(denomination=form['filiere']).first()
+   except:
+      filiere = Filiere.query.filter_by(id=form['filiere_id']).first()
+
+   if filiere:
+      form['filiere'] =  filiere.id
+   else:
+      filiere = Filiere(denomination=form['filiere'])
+      db.session.add(filiere)
+      db.session.commit()
+      form['filiere'] =  filiere.id
+
+
+
+   # filename = None
+   # if request.files['image']:
+   #    data = request.files['image']
+   #    filename = secure_filename(data.filename)
+   #    if not exists(os.path.join(uploads_dir, filename)):
+   #       data.save(os.path.join(uploads_dir, filename))
+      
+   try:
+      etudiant = Etudiant(matricule=form['matricule'],nom=form['nom'],prenoms=form['prenoms'],filiere_id=form['filiere'],niveau=form['niveau'],date_naissance=form['date_naissance'],statut=form['statut'],antenne=form['antenne'],photo=form['photo'])
+      db.session.add(etudiant)
+      db.session.commit()
+   except:
+      db.session.rollback()
+      print("error")
+
+   return jsonify(etudiant.to_json())
