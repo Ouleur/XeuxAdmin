@@ -98,3 +98,20 @@ def etudiant_update():
         form["Error"] ="Yes"
         return jsonify(form)
 
+
+
+@api.route('/etudiant/update_id_card', methods=['POST','GET'])
+def etudiant_update_id_card():
+    form =request.get_json() or {}
+    print(form)
+    form = form["root"]
+   
+    etudiant = Etudiant.query.filter_by(matricule=form['matricule']).first()
+    if etudiant:
+        etudiant.card_id = form['card_id']
+        db.session.commit()
+        return jsonify(etudiant.to_json())
+    else:
+        form["Error"] ="Yes"
+        return jsonify(form)
+
