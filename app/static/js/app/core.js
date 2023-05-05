@@ -356,6 +356,7 @@ $(document).ready(async function(){
      $("#dataTablePresence").dataTable({
         destroy : true,
         responsive: true,
+        dom: 'Bfrtip',
         buttons: [
             'excel', 'csv'
         ]
@@ -391,6 +392,7 @@ $("#formPresence").on('submit',async function(e){
         $("#dataTablePresence").dataTable({
            destroy : true,
            data : json.data,
+           dom: 'Bfrtip',
            buttons: [
             'excel', 'csv'
             ],
@@ -426,7 +428,12 @@ $('#dataTablePresence')
          el.classList.add('abs')
         }
     })
-    }).DataTable()
+    }).DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'excel', 'csv'
+            ],
+        })
 
 
 
