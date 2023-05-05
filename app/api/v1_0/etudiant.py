@@ -82,7 +82,7 @@ def etudiant_add():
 
 
 @api.route('/etudiant/update', methods=['POST','GET'])
-def etudiant_add():
+def etudiant_update():
     form =request.get_json() or {}
     print(form)
     form = form["root"]
@@ -93,5 +93,25 @@ def etudiant_add():
         etudiant.prenoms = form['PRENOM']
         etudiant.groupe = form['groupe']
         db.session.commit()
+        return jsonify(etudiant.to_json())
+    else:
+        form["Error"] ="Yes"
+        return jsonify(form)
 
-    return jsonify(etudiant.to_json())
+
+
+@api.route('/etudiant/update_id_card', methods=['POST','GET'])
+def etudiant_update_id_card():
+    form =request.get_json() or {}
+    print(form)
+    form = form["root"]
+   
+    etudiant = Etudiant.query.filter_by(matricule=form['matricule']).first()
+    if etudiant:
+        etudiant.card_id = form['card_id']
+        db.session.commit()
+        return jsonify(etudiant.to_json())
+    else:
+        form["Error"] ="Yes"
+        return jsonify(form)
+
