@@ -314,8 +314,6 @@ function deleteEquipement(id){
 
 
 function init(){
-    
-
     Swal.fire({
       title: 'Etes vous sûre ?',
       text: "Vous ne pourriez plus revenir en arrière  !",
@@ -325,16 +323,15 @@ function init(){
       cancelButtonColor: '#d33',
       confirmButtonText: 'Oui, effectuer la suppression!'
     }).then((result) => {
-      if (result.isConfirmed) {
-          fetch("/xeux/init").then(function(response){
-              Swal.fire(
+        if (result.isConfirmed) {
+            fetch("/xeux/init").then(function(response){
+                Swal.fire(
                   'Supprimé !',
                   'L\'enregistrement a bien été  Supprimé .',
                   'Success'
                 )
-          });
-        
-      }
+            });
+        }
     })
   
 }
@@ -347,23 +344,21 @@ $(document).ready(async function(){
         language : {
             "info": "page _PAGE_ sur _PAGES_",
         },
+        dom: 'Bfrtip',
         'ajax' : '/etudiant/api',
         buttons: [
             'excel', 'csv'
         ]
     })
 
-     $("#dataTablePresence").dataTable({
+    $("#dataTablePresence").dataTable({
         destroy : true,
         responsive: true,
         dom: 'Bfrtip',
         buttons: [
             'excel', 'csv'
         ]
-     });
-
-        
-    
+    });
 })
 
  
@@ -415,7 +410,6 @@ $("#formPresence").on('submit',async function(e){
 
 
 $('#dataTablePresence')
-    
     .on('draw.dt', function(){
         children = document.querySelectorAll("table td");
 
@@ -428,15 +422,71 @@ $('#dataTablePresence')
          el.classList.add('abs')
         }
     })
-    }).DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            'excel', 'csv'
-            ],
-        })
+}).DataTable()
 
 
 
 
 
+infos_edit = document.querySelector('#etudiant_edit')
+if(infos_edit){
+  infos_edit.addEventListener('submit', async function(e){
+      e.preventDefault()
+  
+      data = new FormData(this)
+  
+      const response = await fetch('/etudiant_edit_json',{
+          method : 'POST',
+          body : data
+      })
+      json_val = await response.json()
+      json_val = json_val['data']
+      console.log(json_val['matricule'])
+      if(response.ok){
+        document.querySelector('#id').value = json_val.id
+        document.querySelector('#matricule').value = json_val.matricule
+        document.querySelector('#id_carte').value = json_val.card_id
+        document.querySelector('#nom').value = json_val.nom
+        document.querySelector('#prenoms').value = json_val.prenoms
+        document.querySelector('#antenne').value = json_val.antenne
+        document.querySelector('#niveau').value = json_val.niveau
+        document.querySelector('#filiere').value = json_val.filiere_id
+        document.querySelector('#groupe').value = json_val.groupe
+      } else{
+          document.querySelector('#error_etudiant').style.display = 'block'
+      }
+  })
+  
+}
 
+
+infos_edit_update = document.querySelector('#etudiant_edit')
+if(infos_edit_update){
+  infos_edit.addEventListener('submit', async function(e){
+      e.preventDefault()
+  
+      data = new FormData(this)
+  
+      const response = await fetch('/etudiant_edit_json_update',{
+          method : 'POST',
+          body : data
+      })
+      json_val = await response.json()
+      
+      if(response.ok){
+        document.querySelector('#id').value = ""
+        document.querySelector('#matricule').value = ""
+        document.querySelector('#id_carte').value = ""
+        document.querySelector('#nom').value = ""
+        document.querySelector('#prenoms').value = ""
+        document.querySelector('#antenne').value = ""
+        document.querySelector('#niveau').value = ""
+        document.querySelector('#filiere').value = ""
+        document.querySelector('#groupe').value = ""
+          document.querySelector('#succes_etudiant').style.display = 'block'
+        } else{
+          document.querySelector('#error_etudiant').style.display = 'block'
+      }
+  })
+  
+}

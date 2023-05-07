@@ -555,9 +555,51 @@ def delete_etudiant(eid):
    etudiant = Etudiant.query.filter_by(id=eid).first()
    db.session.delete(etudiant)
    return jsonify({'result':"etudiant supprimé !"})
-### CRUD Off etudiant ###
 
 
+@main.route('/etudiant_edit', methods=['POST','GET'])
+def etudiant_edit():
+   form = EtudiantForm(request.form)
+   filieres = Filiere.query.all()
+
+   form.filiere.choices = [(item.id, item.denomination) for item in filieres]
+
+      # return redirect(url_for('etudiant.etudiant_resultat'))
+   return render_template('etudiant_edit.html',form=form)
+
+@main.route('/etudiant_edit_json', methods=['POST','GET'])
+def etudiant_edit_json():
+   
+   etudiant = Etudiant.query.filter_by(matricule=request.form['matricule']).first()
+   if etudiant:
+      print()
+      return jsonify({'message' : 'succes','data':etudiant.to_json()}), 200
+   else:
+      return jsonify({'message' : 'matricule invalide'}), 404 
+
+
+@main.route('/etudiant_edit_json_update', methods=['POST','GET'])
+def etudiant_edit_json_update():
+   form = EtudiantForm(request.form)
+   filieres = Filiere.query.all()
+
+   form.filiere.choices = [(item.id, item.denomination) for item in filieres]
+   if form.matricule.data:
+      etudiant = Etudiant.query.filter_by(matricule=form.matricule.data).first()
+      if etudiant:
+         etudiant.nom = form.nom.data
+         etudiant.prenoms = form.prenoms.data
+         etudiant.id_carte = form.id_carte.data
+         etudiant.antenne = form.antenne.data
+         etudiant.niveau = form.niveau.data
+         etudiant.filiere = form.filiere.data
+         etudiant.groupe = form.groupe.data
+         db.session.commit()
+         
+   return render_template('etudiant_edit.html',form=form)
+      
+
+      # return redirect(url_for('etudiant.etudiant_resultat'))
 ### CRUD Off filiere ###
 @main.route('/filiereMatiere', methods=['POST','GET'])
 def filiereMatiere():
@@ -774,7 +816,6 @@ def init():
    return jsonify({ 'result': 'Delete OK' })
 
 ### CRUD Off device ###
-
 @main.route('/profil', methods=['POST','GET'])
 @login_required
 def profil():
