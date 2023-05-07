@@ -460,7 +460,7 @@ if(infos_edit){
 }
 
 
-infos_edit_update = document.querySelector('#etudiant_edit')
+infos_edit_update = document.querySelector('#etudiant_edit_update')
 if(infos_edit_update){
   infos_edit.addEventListener('submit', async function(e){
       e.preventDefault()
