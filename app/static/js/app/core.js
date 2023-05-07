@@ -459,34 +459,3 @@ if(infos_edit){
   
 }
 
-
-infos_edit_update = document.querySelector('#etudiant_edit_update')
-if(infos_edit_update){
-  infos_edit.addEventListener('submit', async function(e){
-      e.preventDefault()
-  
-      data = new FormData(this)
-  
-      const response = await fetch('/etudiant_edit_json_update',{
-          method : 'POST',
-          body : data
-      })
-      json_val = await response.json()
-      
-      if(response.ok){
-        document.querySelector('#id').value = ""
-        document.querySelector('#matricule').value = ""
-        document.querySelector('#id_carte').value = ""
-        document.querySelector('#nom').value = ""
-        document.querySelector('#prenoms').value = ""
-        document.querySelector('#antenne').value = ""
-        document.querySelector('#niveau').value = ""
-        document.querySelector('#filiere').value = ""
-        document.querySelector('#groupe').value = ""
-          document.querySelector('#succes_etudiant').style.display = 'block'
-        } else{
-          document.querySelector('#error_etudiant').style.display = 'block'
-      }
-  })
-  
-}
