@@ -23,6 +23,10 @@ class FiliereForm(FlaskForm):
     denomination = StringField('Denomination',[DataRequired(message="Saisissez la Denomination SVP.")])
     submit = SubmitField('Enregistrer') 
 
+class MatriculeForm(FlaskForm):
+    matricule = StringField('Matricule',[DataRequired(message="Matricule")])
+    submit = SubmitField('Enregistrer') 
+
 class MatiereForm(FlaskForm):
     id = StringField('id')
     denomination = StringField('Denomination',[DataRequired(message="Saisissez la Denomination SVP.")])
@@ -43,7 +47,7 @@ class EtudiantForm(FlaskForm):
     matricule = StringField('Matricule',[DataRequired(message="Saisissez une matricule SVP.")])
     nom = StringField('Nom',[DataRequired(message="Saisissez une nom SVP.")])
     prenoms = StringField('Prenoms',[DataRequired(message="Saisissez un Prenoms SVP.")])
-    date_naissance = DateField('Date de naissance',[DataRequired(message="Saisissez une Date de naissance SVP.")])
+    date_naissance = DateField('Date de naissance',[])
     filiere = SelectField("Filiere",choices=[])
     niveau = SelectField("Niveau",choices=['Licence 1','Licence 2','Licence 3'],coerce=str)
     antenne = SelectField("Antenne",choices=['ABIDJAN','BOUAKE','ABOISSO','KORHOGO',"ABENGOUROU"],coerce=str)

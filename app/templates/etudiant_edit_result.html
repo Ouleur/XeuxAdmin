@@ -1,0 +1,112 @@
+{% extends "base_etudiant.html" %}
+
+{% block container %}
+
+<div class="container-fluid mt-5">
+  {% for message in get_flashed_messages() %}
+  <div class="alert alert-danger">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      {{ message }}
+  </div>
+  {% endfor %}
+  <!-- DataTales Example -->
+  <div id="accordion" class="">  
+    <!-- <div class="row"> -->
+      <div class="card shadow mb-4 ">
+          <div class="card-header py-3" id="headingImportEtudiant" style="background-color: #4f0238 !important;">
+            
+            <h5 class="m-0 font-weight-bold text-white collapsed" data-toggle="collapse" data-target="#collapseImportEtudiant" aria-expanded="false" aria-controls="collapseImportEtudiant">
+             <span>{{etudiant.nom}} </span> <span>{{etudiant.prenoms}} </span>
+            </h5>
+          </div>
+          <div id="collapseImportEtudiant" class="collapse show" aria-labelledby="headingImportEtudiant" data-parent="#accordion">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-2">
+                  <div class="row">
+                    {% if not etudiant.photo %}
+                    <img src="{{url_for('static', filename='img/rev1.jpg')}}" id="avatar" alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
+                    {% else %}
+                    <img src="{{url_for('static', filename='uploads/' + etudiant.photo)}}" class="mb-2" id="avatar" alt="" style="float: left; width: 150px; height: 150px; cursor: pointer; object-fit: cover;">
+                    {%endif%}
+                  </div>
+                  <div class="row">
+                    <button type="submit" class="btn btn-primary text-xs photo-btn" style="width: 150px !important;">Votre photo ICI</button>          
+                  </div>
+                </div>
+                  <div class="col-sm-10">
+                      <h3 class="text-center">Informations de l'etudiant</h3>
+                      <form class="" method="POST" action="{{ url_for('etudiant.etudiant_resultat') }}" enctype="multipart/form-data">
+                        <input type="file" name="image" style="display: none;" id="image">
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <input type="hidden" name="id" value="{{etudiant.id}}">
+                                  <div class="col-sm-6">
+                                    <label for="matricule">Matricule</label>
+                                    <label class="form-control form-control-user" for="matricule">{{etudiant.matricule}}</label>
+                                    <!-- <input readonly type="text" class="form-control form-control-user" name="matricule" value="{{etudiant.matricule}}"> -->
+                                  </div>
+
+                                  <div class="col-sm-6">
+                                    <label for="nom">Nom</label>
+                                    <label class="form-control form-control-user" for="nom">{{etudiant.nom}}</label>
+          
+                                  </div>
+                  
+                                  <div class="col-sm-6">
+                                    <label for="prenoms">Prénoms</label>
+                                    <label class="form-control form-control-user" for="prenoms">{{etudiant.prenoms}}</label>                                    
+                                  </div>
+    
+                                  <div class="col-sm-6">
+                                    <label for="antenne">Antenne</label>
+                                    <label class="form-control form-control-user" for="prenoms">{{etudiant.antenne}}</label>                                    
+                                  </div>
+    
+                                  <div class="col-sm-6">
+                                    <label for="filiere">Filiere</label>
+                                    <label class="form-control form-control-user" for="prenoms">{{etudiant.filiere}}</label>                                    
+                                  </div>
+                                  <div class="col-sm-4">
+                                    <label for="niveau">Niveau</label>
+                                    <label class="form-control form-control-user" for="niveaua">{{etudiant.niveau}}</label>
+
+                                    </select>
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <label for="filiere">Date de naissance</label>
+                                      <input type="hidden" name="date_naissance_edit" value="{{etudiant.date_naissance}}">
+                                      <input class="form-control form-control-user" type="text" placeholder="Ex: 23/08/1981" name="date_edit" id='date' required>
+                                    </div>
+                                  
+                                  <div class="col-sm-6">
+                                    <label for="lieu_naissance">Lieu de naissance</label>
+                                    {% if etudiant.lieu_naissance!=None %}
+                                    <input type="hidden" name="lieu_naissance_edit" value="{{etudiant.lieu_naissance}}">
+                                    <input class="form-control form-control-user" type="text" name="lieu_naissance" value="{{etudiant.lieu_naissance}}" required>
+                                    {% else %}
+                                    <input type="hidden" name="lieu_naissance_edit" value="">
+                                    <input class="form-control form-control-user" type="text" placeholder="Votre lieu de naissance" name="lieu_naissance" value="" required>
+                                    {% endif %}
+                                  </div>
+          
+                                  
+                                  
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="padding: 5px !important;"> 
+          
+                                <button type="submit" class=" btn btn-primary text-xs" >Enregistrer</button>
+      
+                            </div>
+                        </form>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+  </div>
+</div>
+
+{%endblock%}
