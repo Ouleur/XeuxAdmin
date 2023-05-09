@@ -384,7 +384,7 @@ $("#formPresence").on('submit',async function(e){
         document.querySelector('#dataTablePresence').innerHTML = ''
         
 
-        $("#").dataTable({
+        $("#dataTablePresence").dataTable({
            destroy : true,
            data : json.data,
            dom: 'Bfrtip',
@@ -430,7 +430,7 @@ $("#formPresence_unique").on('submit',async function(e){
         document.querySelector('#dataTablePresence').innerHTML = ''
         
 
-        $("#").dataTable({
+        $("#dataTablePresence").dataTable({
            destroy : true,
            data : json.data,
            dom: 'Bfrtip',
@@ -453,6 +453,7 @@ $("#formPresence_unique").on('submit',async function(e){
    
     
 })
+
 
 
 $('#dataTablePresence')
