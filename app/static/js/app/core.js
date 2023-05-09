@@ -384,7 +384,53 @@ $("#formPresence").on('submit',async function(e){
         document.querySelector('#dataTablePresence').innerHTML = ''
         
 
-        $("#dataTablePresence").dataTable({
+        $("#").dataTable({
+           destroy : true,
+           data : json.data,
+           dom: 'Bfrtip',
+           buttons: [
+            'excel', 'csv'
+            ],
+           columns: json.columns,
+       })
+       
+       
+    } else {
+        document.querySelector('#error_data').textContent = json.message
+        document.querySelector('.alert-warning').style.display = 'block'
+        
+        setTimeout(()=>{
+            document.querySelector('.alert-warning').style.display = 'none'
+        }, 3000)
+    }
+   
+   
+    
+})
+
+
+$("#formPresence_unique").on('submit',async function(e){
+    e.preventDefault()
+
+    
+    data = new FormData(this)
+    console.log(data.get('date_debut').split('-'))
+
+    
+
+    let response = await fetch('/presence_unique',{
+        method : 'POST',
+        body : data
+    })
+    json = await response.json()
+
+    if(response.ok){
+        
+        $("#dataTablePresence").DataTable().destroy()
+        document.querySelector('#dataTablePresence').innerHTML = ''
+        
+
+        $("#").dataTable({
            destroy : true,
            data : json.data,
            dom: 'Bfrtip',
