@@ -37,7 +37,7 @@ def presence():
    form.filiere.choices = [(item.id, item.denomination) for item in filieres]
    print(form.antenne.choices)
 
-   if current_user.is_antenne_administrator():
+   if current_user.antenne:
       form.antenne.choices = [current_user.antenne]
       print(form.antenne.choices)
    else:
@@ -334,7 +334,7 @@ def delete_presence():
 def rapport():
    
    form = RechercheForm()
-   if current_user.is_antenne_administrator():
+   if current_user.antenne:
       form.antenne.choices = [current_user.antenne]
       print(form.antenne.choices)
    else:
@@ -355,7 +355,7 @@ def rapport():
   
    print(form.antenne.choices)
 
-   if current_user.is_antenne_administrator():
+   if current_user.antenne:
       form.antenne.choices = [current_user.antenne]
       print(form.antenne.choices)
    else:
@@ -369,7 +369,7 @@ def rapport():
          flash('Veuillez chosir une date svp')
          return redirect(url_for('main.rapport'))
    
-      sql = f"""SELECT  public.filieres.denomination, public.presences.niveau,public.etudiants.groupe, public.presences.date, count(public.presences.id), nb_group.nombre, nb_group.antenne
+      sql = f"""SELECT public.filieres.denomination, public.presences.niveau,public.etudiants.groupe, public.presences.date, count(public.presences.id), nb_group.nombre, nb_group.antenne
 	FROM public.presences,public.filieres,public.etudiants,   (SELECT count(public.etudiants.id) as nombre, public.etudiants.groupe,public.etudiants.filiere_id, public.etudiants.niveau, public.etudiants.antenne  from public.etudiants, public.filieres where public.etudiants.filiere_id =public.filieres.id and public.etudiants.antenne  = '{form.antenne.data}' group by public.etudiants.groupe , public.etudiants.filiere_id, public.etudiants.niveau, public.etudiants.antenne) as nb_group
 	
 	where public.presences.date ='{form.date_debut.data}' and public.etudiants.antenne=nb_group.antenne and public.filieres.id= public.presences.filiere_id and public.etudiants.id=public.presences.etudiant_id and public.etudiants.groupe = nb_group.groupe and public.etudiants.filiere_id = nb_group.filiere_id and public.etudiants.niveau = nb_group.niveau
