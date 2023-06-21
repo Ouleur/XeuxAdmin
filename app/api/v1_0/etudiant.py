@@ -73,9 +73,9 @@ def etudiant_add():
    #       data.save(os.path.join(uploads_dir, filename))
       
 #    try:  
-    etd = Etudiant.query.filter_by(matricule=form['matricule']).all()
+    etd = Etudiant.query.filter_by(matricule=form['matricule'].replace(' ','')).first()
 
-    if len(etd)==0:
+    if etd:
         etudiant = Etudiant(matricule=form['matricule'],nom=form['nom'],prenoms=form['prenoms'],filiere_id=form['filiere'],niveau=form['niveau'],date_naissance=form['date_naissance'],etat=form['etat'],antenne=form['antenne'],photo=form['photo'])
         db.session.add(etudiant)
         db.session.commit()
