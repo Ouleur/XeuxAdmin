@@ -65,7 +65,6 @@ def etudiant_add():
         form['filiere'] =  filiere.id
 
 
-
    # filename = None
    # if request.files['image']:
    #    data = request.files['image']
@@ -74,10 +73,15 @@ def etudiant_add():
    #       data.save(os.path.join(uploads_dir, filename))
       
 #    try:  
-    etudiant = Etudiant(matricule=form['matricule'],nom=form['nom'],prenoms=form['prenoms'],filiere_id=form['filiere'],niveau=form['niveau'],date_naissance=form['date_naissance'],etat=form['etat'],antenne=form['antenne'],photo=form['photo'])
-    db.session.add(etudiant)
-    db.session.commit()
-    return jsonify(etudiant.to_json())
+    etd = Etudiant.query.filter_by(matricule=form['matricule']).all()
+
+    if len(etd)==0:
+        etudiant = Etudiant(matricule=form['matricule'],nom=form['nom'],prenoms=form['prenoms'],filiere_id=form['filiere'],niveau=form['niveau'],date_naissance=form['date_naissance'],etat=form['etat'],antenne=form['antenne'],photo=form['photo'])
+        db.session.add(etudiant)
+        db.session.commit()
+        return jsonify(etudiant.to_json())
+    else:
+        return jsonify({"Response":"Etudiant existe déja"})
 
 
 
