@@ -287,59 +287,6 @@ class EtudiantControle(baseModel,db.Model):
         return "<Etudiant {} {}>".format(self.prenoms,self.nom)
 
 
-class EtudiantStage(baseModel,db.Model):
-    __tablename__ = "etudiants_stage"
-    __table_args__ = (
-        db.UniqueConstraint('matricule', 'date_naissance', name='etudiant_stage_unique'),
-    )
-    nom = db.Column(db.String(255))
-    prenoms = db.Column(db.String(255))
-    matricule = db.Column(db.String(255))
-    card_id = db.Column(db.String(255))
-    niveau = db.Column(db.String(255))
-    date_naissance = db.Column(db.String(255))
-    lieu_naissance = db.Column(db.String(255))
-    antenne = db.Column(db.String(255))
-    photo = db.Column(db.String(255))
-    qrcode = db.Column(db.String(255))
-    groupe = db.Column(db.String(255))
-    etat = db.Column(db.Boolean, default=False, index=True)
-    statut = db.Column(db.String(255))
-    lieu_stage = db.Column(db.String(255))
-
-
-    filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
-    presences = db.relationship('PresenceStage', backref='etudiants_stage')
-    
-
-    def to_json(self):
-        filiere = Filiere.query.filter_by(id=self.filiere_id).first()
-        etudiant_json = {
-            "id":self.id,
-            "nom":self.nom,
-            "prenoms":self.prenoms,
-            "matricule":self.matricule,
-            "niveau":self.niveau,
-            "card_id":self.card_id,
-            "filiere_id":filiere.id,
-            "filiere":filiere.denomination,
-            "antenne":self.antenne,
-            "groupe":self.groupe,
-            "date_naissance":self.date_naissance,
-            "photo" : self.photo,
-            "qrcode" : self.qrcode,
-            "etat": self.etat,
-            "statut":self.statut,
-            "lieu_stage":self.lieu_stage
-        } 
-
-        return etudiant_json
-
-    def __repr__(self):
-        return "<Etudiant {} {}>".format(self.prenoms,self.nom)
-
-
-
 class EtudiantVerif(baseModel,db.Model):
     __tablename__ = "etudiants_verif"
     __table_args__ = (

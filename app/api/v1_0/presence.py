@@ -1,7 +1,7 @@
 from flask import jsonify, request, current_app, url_for
 from . import api
 from ... import db
-from ...models import User,Etudiant,Presence,EtudiantControle
+from ...models import User,Etudiant,Presence,EtudiantControle,PresenceStage
 from flask import g, jsonify
 from sqlalchemy.exc import IntegrityError
 from .errors import forbidden,unauthorized
@@ -157,7 +157,7 @@ def upload_stage_file():
                     etudiant = Etudiant.query.filter(Etudiant.card_id==row['ID_card']).first()
                     
                 if etudiant:
-                    presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"],date=row["Date"].split(" ")[0])
+                    presence = PresenceStage(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"],date=row["Date"].split(" ")[0])
                     try:
                         db.session.add(presence)
                         db.session.commit()
