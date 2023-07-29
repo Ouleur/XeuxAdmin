@@ -208,6 +208,7 @@ class Etudiant(baseModel,db.Model):
     filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
     
     presences = db.relationship('Presence', backref='etudiants')
+    presencesStage = db.relationship('PresenceStage', backref='etudiants')
     # services = db.relationship('Service', backref='entreprises')
     # tickets = db.relationship('Ticket', backref='entreprises')
 
@@ -284,6 +285,59 @@ class EtudiantControle(baseModel,db.Model):
 
     def __repr__(self):
         return "<Etudiant {} {}>".format(self.prenoms,self.nom)
+
+
+class EtudiantStage(baseModel,db.Model):
+    __tablename__ = "etudiants_stage"
+    __table_args__ = (
+        db.UniqueConstraint('matricule', 'date_naissance', name='etudiant_stage_unique'),
+    )
+    nom = db.Column(db.String(255))
+    prenoms = db.Column(db.String(255))
+    matricule = db.Column(db.String(255))
+    card_id = db.Column(db.String(255))
+    niveau = db.Column(db.String(255))
+    date_naissance = db.Column(db.String(255))
+    lieu_naissance = db.Column(db.String(255))
+    antenne = db.Column(db.String(255))
+    photo = db.Column(db.String(255))
+    qrcode = db.Column(db.String(255))
+    groupe = db.Column(db.String(255))
+    etat = db.Column(db.Boolean, default=False, index=True)
+    statut = db.Column(db.String(255))
+    lieu_stage = db.Column(db.String(255))
+
+
+    filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
+    presences = db.relationship('PresenceStage', backref='etudiants_stage')
+    
+
+    def to_json(self):
+        filiere = Filiere.query.filter_by(id=self.filiere_id).first()
+        etudiant_json = {
+            "id":self.id,
+            "nom":self.nom,
+            "prenoms":self.prenoms,
+            "matricule":self.matricule,
+            "niveau":self.niveau,
+            "card_id":self.card_id,
+            "filiere_id":filiere.id,
+            "filiere":filiere.denomination,
+            "antenne":self.antenne,
+            "groupe":self.groupe,
+            "date_naissance":self.date_naissance,
+            "photo" : self.photo,
+            "qrcode" : self.qrcode,
+            "etat": self.etat,
+            "statut":self.statut,
+            "lieu_stage":self.lieu_stage
+        } 
+
+        return etudiant_json
+
+    def __repr__(self):
+        return "<Etudiant {} {}>".format(self.prenoms,self.nom)
+
 
 
 class EtudiantVerif(baseModel,db.Model):
@@ -406,6 +460,54 @@ class Presence(baseModel,db.Model):
     def __repr__(self):
         return "<Presence %r>" % self.titre
 
+
+class PresenceStage(baseModel,db.Model):
+    __tablename__ = "presences_stage"
+    __table_args__ = (
+        db.UniqueConstraint('etudiant_id', 'date', name='presence_stage_unique'),
+    )
+    etudiant_id = db.Column(db.Integer, db.ForeignKey('etudiants.id'))
+    etd_nom = db.Column(db.String(255))
+    etd_prenoms = db.Column(db.String(255))
+    etd_mtle = db.Column(db.String(255))
+    filiere_id = db.Column(db.Integer, db.ForeignKey('filieres.id'))
+    device_id = db.Column(db.Integer, db.ForeignKey('devices.id'))
+    niveau = db.Column(db.String(255))
+    groupe = db.Column(db.String(255))
+    annee_academic_id = db.Column(db.Integer, db.ForeignKey('anneeAcademics.id'))
+    date = db.Column(db.DateTime(), default=datetime.utcnow)
+    date_badge = db.Column(db.DateTime(), default=datetime.utcnow)
+
+
+    # entreprise_id = db.Column(db.Integer, db.ForeignKey('entreprises.id'))
+    # agence_id = db.Column(db.Integer, db.ForeignKey('agences.id'))
+    
+
+    def to_json(self):
+
+        etudiant = etudiant.query.filter_by(id=etudiant_stage_id).first()
+        filiere = filiere.query.filter_by(id=filiere_id).first()
+        device = device.query.filter_by(id=device_id).first()
+        annee_academic = annee_academic.query.filter_by(id=annee_academic_id).first()
+
+        json_presence= {
+            'id': self.id,
+            'etudiant_id': self.etudiant_stage_id,
+            'etudiant':etudiant,
+            'filiere_id': self.filiere_id,
+            'filiere': filiere,
+            'niveau': self.niveau,
+            'groupe': self.groupe,
+            'device_id': self.device_id,
+            'device': device,
+            'annee_academic_id': self.annee_academic_id,
+            'annee_academic':annee_academic,
+            'date_badge':date_badge
+        }
+        return json_presence
+
+    def __repr__(self):
+        return "<Presence %r>" % self.titre
 
 class Matiere(baseModel,db.Model):
     __tablename__ = "matieres"

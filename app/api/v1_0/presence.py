@@ -1,7 +1,7 @@
 from flask import jsonify, request, current_app, url_for
 from . import api
 from ... import db
-from ...models import User,Etudiant,Presence
+from ...models import User,Etudiant,Presence,EtudiantControle
 from flask import g, jsonify
 from sqlalchemy.exc import IntegrityError
 from .errors import forbidden,unauthorized
@@ -70,7 +70,7 @@ def add_mtle_presence(mtle):
         db.session.commit()
 
         return jsonify({"Message":"Vous êtes présent !!"})
-    return jsonify({"Message":"Une erreur s'est produite!!"})
+    return jsonify({"Message":"Une erreur s'est produite !!"})
     
 #Create presence
 @api.route('/upload_file',methods=['POST','GET'])
@@ -102,3 +102,76 @@ def add_file_presence():
         url = ""
 
     return jsonify({"Message":"Vous êtes présent !!"})
+
+
+
+#Create presence
+@api.route('/upload_controle_file',methods=['POST','GET'])
+def upload_controle_file():
+    uploaded_file = request.files['file']
+    image=file_upload('POST',request,'file','one')
+    if image:
+        with open(current_app.config['UPLOADS_DIR']+image, newline='') as csvfile:
+            csv.delimiter = ';'
+            # stream = io.StringIO(csvfile.stream.read().decode("UTF8"), newline=None)
+            reader = csv.DictReader(csvfile)
+            
+            for row in reader:
+                if row['Matricule']:
+                    
+                    etudiant = EtudiantControle.query.filter_by(matricule=row['Matricule']).first()
+   
+                    if etudiant:
+                        etudiant.etat = True
+                        db.session.add(etudiant)
+                        db.session.commit()
+                        
+                        return jsonify({'message' : 'success'})
+                    else :
+                        return jsonify({'message' : 'Matricule non valide'}), 404
+                    
+                            # pass
+            # os.remove(current_app.config['UPLOADS_DIR']+fi)
+    else:
+        return jsonify({"Message":"Erreur aucun fichier reçu !!"})
+
+
+    return jsonify({"Message":"Vous êtes présent !!"})
+
+
+#Create presence
+@api.route('/upload_stage_file',methods=['POST','GET'])
+def upload_stage_file():
+    uploaded_file = request.files['file']
+    image=file_upload('POST',request,'file','one')
+    if image:
+        with open(current_app.config['UPLOADS_DIR']+image, newline='') as csvfile:
+            csv.delimiter = ';'
+            # stream = io.StringIO(csvfile.stream.read().decode("UTF8"), newline=None)
+            reader = csv.DictReader(csvfile)
+            
+            for row in reader:
+                if row['Matricule']:
+                    etudiant = Etudiant.query.filter(Etudiant.matricule==row['Matricule']).first()
+                else:
+                    etudiant = Etudiant.query.filter(Etudiant.card_id==row['ID_card']).first()
+                    
+                if etudiant:
+                    presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"],date=row["Date"].split(" ")[0])
+                    try:
+                        db.session.add(presence)
+                        db.session.commit()
+                    except IntegrityError as error:
+                        db.session.rollback()
+
+                    return jsonify({"Message":"Vous êtes présent !!"})
+                return jsonify({"Message":"Une erreur s'est produite!!"})
+                    
+                            # pass
+            # os.remove(current_app.config['UPLOADS_DIR']+fi)
+    else:
+        return jsonify({"Message":"Erreur aucun fichier reçu !!"})
+
+
+    return jsonify({"Message":"Vous êtes présent !!"})
+
