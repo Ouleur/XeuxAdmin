@@ -253,3 +253,6 @@ def etudiant_add():
       print("error")
 
    return jsonify(etudiant.to_json())
+
+
+   

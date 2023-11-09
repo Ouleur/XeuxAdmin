@@ -32,7 +32,7 @@ def home():
 def presence():
    filieres = Filiere.query.all()
    annee_academics = AnneeAcademic.query.all()
-   month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Novembre", "Decembre"]
+   month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre","Octobre", "Novembre", "Decembre"]
    form = RechercheForm()
    form.filiere.choices = [(item.id, item.denomination) for item in filieres]
    print(form.antenne.choices)
@@ -66,7 +66,8 @@ def presence():
       if not data['date_debut']:
          return jsonify({'message' : "Veuillez choisir une date svp"}), 404
       date_debut = datetime.strptime(data['date_debut'], '%Y-%m-%d')
-      presences['columns'].append({'title' : f'{date_debut.day}-{month[int(date_debut.month) -1]}'})
+      print(date_debut.month)
+      presences['columns'].append({'title' : f'{date_debut.day}-{month[int(date_debut.month)-1]}'})
       # y,m,d = str(data['date_debut']).split('-')
       if data['date_fin']:
 
