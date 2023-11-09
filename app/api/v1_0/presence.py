@@ -52,26 +52,29 @@ def add_card_presence():
     return jsonify({"Message":"Une erreur s'est produite!!"})
 
 #Create presence
-@api.route('/add_mtle_presence/<mtle>',methods=['POST','GET'])
-def add_mtle_presence(mtle):
+@api.route('/add_presence',methods=['POST','GET'])
+def add_mtle_presence():
 
     #recherche du matricule 
     ###### OU ######
     #recherche de la Card ID
-    etudiant = Etudiant.query.filter_by(matricule=request.json['matricule']).first()
-
+    data = request.get_json() or {}
+    print(data)
     
+    if data['Matricule']:
+        etudiant = Etudiant.query.filter(Etudiant.matricule==data['Matricule']).first()
+    else:
+        etudiant = Etudiant.query.filter(Etudiant.card_id==data['ID_card']).first()
+                 
     if etudiant:
-        #Etudiant trouver 
-        #Creation de la presence
-        presence = Presence(etudiant_id="",filiere_id="1",matiere_id="1",device_id="1",niveau="1",annee_academic_id="1")
-        #revoie des informations de l'Etudian
+        presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"],date=row["Date"].split(" ")[0])
         db.session.add(presence)
         db.session.commit()
 
-        return jsonify({"Message":"Vous êtes présent !!"})
-    return jsonify({"Message":"Une erreur s'est produite !!"})
+        return jsonify({"Message":"Vous êtes présent !!","statut":"Succes"})
+    return jsonify({"Message":"Cette carte n'est pas valide","statut":"Echoue"})
     
+
 #Create presence
 @api.route('/upload_file',methods=['POST','GET'])
 def add_file_presence():
