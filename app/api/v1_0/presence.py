@@ -67,7 +67,7 @@ def add_mtle_presence():
         etudiant = Etudiant.query.filter(Etudiant.card_id==data['ID_card']).first()
                  
     if etudiant:
-        presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=row["Date"],date=row["Date"].split(" ")[0])
+        presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=data["Date"],date=data["Date"].split(" ")[0])
         db.session.add(presence)
         db.session.commit()
 
