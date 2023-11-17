@@ -103,7 +103,7 @@ def etudiant_update():
         return jsonify(form)
 
 @api.route('/etudiant/update_group', methods=['POST','GET'])
-def etudiant_update():
+def update_group():
     form =request.get_json() or {}
     print(form)
     form = form["root"]
