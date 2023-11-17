@@ -533,12 +533,12 @@ def update_etudiant():
                   db.session.add(etudiant)
                   db.session.commit()
                else:
-                  msg+="{},{},{},{},{},{},{},\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Niveau'],row['Antenne'],row['Groupe'], row['Filiere'])
+                  msg+="{},{},\n".format(row['Matricule'],row['Groupe'])
                   # msg += row
 
             except IntegrityError as error:
                db.session.rollback()
-               msg+="{},{},{},{},{},{},{},\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Niveau'],row['Antenne'],row['Groupe'], row['Filiere'])
+               msg+="{},{},\n".format(row['Matricule'],row['Groupe'])
                # msg += row
          if msg!="":   
             flash("{} {}".format(erreur,msg))
