@@ -71,7 +71,7 @@ def add_mtle_presence():
         presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=data["Date"],date=data["Date"].split(" ")[0])
     
         url = 'https://www.app-infas.net/scolarite/api/presence'
-        myobj = {'matricule': presence.matricule}
+        myobj = {'matricule': etudiant.matricule}
 
         x = requests.post(url, json = myobj)
 
