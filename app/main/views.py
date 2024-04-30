@@ -32,7 +32,7 @@ def home():
 def presence():
    filieres = Filiere.query.all()
    annee_academics = AnneeAcademic.query.all()
-   month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Novembre", "Decembre"]
+   month = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre","Octobre", "Novembre", "Decembre"]
    form = RechercheForm()
    form.filiere.choices = [(item.id, item.denomination) for item in filieres]
    print(form.antenne.choices)
@@ -66,7 +66,8 @@ def presence():
       if not data['date_debut']:
          return jsonify({'message' : "Veuillez choisir une date svp"}), 404
       date_debut = datetime.strptime(data['date_debut'], '%Y-%m-%d')
-      presences['columns'].append({'title' : f'{date_debut.day}-{month[int(date_debut.month) -1]}'})
+      print(date_debut.month)
+      presences['columns'].append({'title' : f'{date_debut.day}-{month[int(date_debut.month)-1]}'})
       # y,m,d = str(data['date_debut']).split('-')
       if data['date_fin']:
 
@@ -526,18 +527,18 @@ def update_etudiant():
                etudiant = Etudiant.query.filter_by(matricule=row['Matricule'].strip()).first()
                if etudiant:
                   etudiant.matricule=row['Matricule'] if row['Matricule'] else etudiant.matricule
-                  etudiant.niveau=row['Niveau'] if row['Niveau'] else etudiant.niveau
-                  etudiant.antenne=row['Antenne'] if row['Antenne'] else etudiant.antenne
+                  # etudiant.niveau=row['Niveau'] if row['Niveau'] else etudiant.niveau
+                  # etudiant.antenne=row['Antenne'] if row['Antenne'] else etudiant.antenne
                   etudiant.groupe=row['Groupe'] if row['Groupe'] else etudiant.groupe
                   db.session.add(etudiant)
                   db.session.commit()
                else:
-                  msg+="{},{},{},{},{},{},{},\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Niveau'],row['Antenne'],row['Groupe'], row['Filiere'])
+                  msg+="{},{},\n".format(row['Matricule'],row['Groupe'])
                   # msg += row
 
             except IntegrityError as error:
                db.session.rollback()
-               msg+="{},{},{},{},{},{},{},\n".format(row['Matricule'],row['Nom'],row['Prenoms'],row['Niveau'],row['Antenne'],row['Groupe'], row['Filiere'])
+               msg+="{},{},\n".format(row['Matricule'],row['Groupe'])
                # msg += row
          if msg!="":   
             flash("{} {}".format(erreur,msg))
