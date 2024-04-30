@@ -12,6 +12,7 @@ import io
 import os
 from ...utilities import *
 import requests
+from datetime import datetime
 
 
 auth = HTTPBasicAuth()
@@ -71,7 +72,12 @@ def add_mtle_presence():
         presence = Presence(etudiant_id=etudiant.id,filiere_id=etudiant.filiere_id,niveau=etudiant.niveau,date_badge=data["Date"],date=data["Date"].split(" ")[0])
     
         url = 'https://www.app-infas.net/scolarite/api/presence'
-        myobj = {'matricule': etudiant.matricule}
+        date_object = datetime.strptime(data["Date"], "%Y/%m/%d")
+
+        myobj = {
+            'matricule': etudiant.matricule,
+            'dateUpdate':date_object.strftime("%d/%m/%Y")
+        }
 
         x = requests.post(url, json = myobj)
 
